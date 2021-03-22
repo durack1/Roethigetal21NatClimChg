@@ -9,6 +9,8 @@
 %                     and updated contents
 % PJD 20 Mar 2021   - Updated K test from >250 to >200 (205K recorded CanESM5, 209K GISS-E2-1-G)
 % PJD 21 Mar 2021   - Added contour ranges for mrro; Complete run through without badLists
+% PJD 21 Mar 2021   - Added test for missing files
+%                   TO-DO: Deal with mrro scaling
 
 % Cleanup workspace and command window
 clear, clc, close all
