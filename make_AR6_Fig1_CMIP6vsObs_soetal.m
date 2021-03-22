@@ -213,12 +213,12 @@ exps = dir([outDir,'ncs/',dataDate,'/CMIP6/']);
 exps(ismember( {exps.name}, {'.', '..'})) = [];
 expFlags = [exps.isdir];
 exps = exps(expFlags);
-for exp = 1:length(exps)
+for exp = 8:length(exps)
     vars = dir(fullfile(outDir,'ncs',dataDate,'CMIP6',exps(exp).name));
     vars(ismember( {vars.name}, {'.', '..'})) = [];
     varFlags = [vars.isdir];
     vars = vars(varFlags);
-    for var = 1:length(vars) % Cycle through variables
+    for var = 2:length(vars) % Cycle through variables
         fprintf('Sub folder #%0d = %s : %s\n', exp, exps(exp).name, vars(var).name);
         switch var
             case 1 % mrro
@@ -269,6 +269,13 @@ for exp = 1:length(exps)
         models = strtrim(models);
         temp = regexp(models,'\n','split'); clear models status
         models = unique(temp); clear temp
+
+        % Test for no files
+        null = strfind(models,': No such file or directory');
+        if ~isempty(null{1})
+            disp('is empty, continuing')
+            continue
+        end
 
         % Truncate using dupe list
         ind = NaN(50,1); y = 1;
