@@ -7,6 +7,8 @@
 
 % PJD  1 Mar 2021   - Copied from /export/durack1/git/Roethigetal21NatClimChg/make_AR6_Fig3p23_CMIP6minusWOA18_thetaoAndso.m
 %                     and updated contents
+% PJD 20 Mar 2021   - Updated K test from >250 to >200 (205K recorded CanESM5, 209K GISS-E2-1-G)
+% PJD 21 Mar 2021   - Added contour ranges for mrro; Complete run through without badLists
 
 % Cleanup workspace and command window
 clear, clc, close all
@@ -16,12 +18,18 @@ outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
 dataDate = '210226';
 
 % Setup plotting scales
+mcont1 = 0:.25:10; % 0:1:30 map [min -6.5e-5, median 8.9e-7, max 7.3e-4]
+mcont2 = mcont1; % colourbar labels
+mcont3 = 0:.125:10; % colourbar colour increments
+mscaler = 1e5;
 ptcont1 = -2.5:2.5:30;
-ptcont2 = -2.5:2.5:30;
+ptcont2 = ptcont1;
 ptcont3 = -2.5:1.25:30;
+ptscaler = 1;
 scont1 = 30.25:0.5:39.75;
 scont2 = 30:0.5:40;
 scont3 = 30:0.25:40;
+sscaler = 1;
 sscale = [1 1]; gscale = [0.3 0.5]; ptscale = [3 3];
 fonts = 7; fonts_c = 6; fonts_ax = 6; fonts_lab = 10;
 
@@ -43,7 +51,7 @@ if purge
     delete([outDir,datestr(now,'yymmdd'),'*_cmip*.png']);
     delete([outDir,datestr(now,'yymmdd'),'_WOA18*.png']);
     delete([outDir,datestr(now,'yymmdd'),'_cmip*.png']);
-    delete([outDir,datestr(now,'yymmdd'),'_CMIP5*.mat']);
+    delete([outDir,datestr(now,'yymmdd'),'_CMIP6*.mat']);
     delete([outDir,'ncs/',dataDate,'/CMIP*/*/woaGrid/*/',datestr(now,'yymmdd'),'*.png']);
 end
 
@@ -55,11 +63,9 @@ disp(['HOSTNAME: ',aHostLongname])
 a = getGitInfo('/export/durack1/git/export_fig/') ;
 disp([upper('export_fig hash: '),a.hash])
 a = getGitInfo('/export/durack1/git/Roethigetal21NatClimChg/') ;
-disp([upper('Roethigetal21NatClimChg hash: '),a.hash])
-clear a
+disp([upper('Roethigetal21NatClimChg hash: '),a.hash]); clear a
 
 %% Load WOA18 data
-%{
 %woaDir = os_path([obsDir,'WOA18/210201_woa/']); % decav 1955-2017 averaged decades
 %infile = os_path([woaDir,'woa18_decav_t00_01.nc']);
 woaDir = os_path([obsDir,'WOA18/210206_woa81B0/']); % 1981-2010 averaged climatology
@@ -129,7 +135,7 @@ set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
 set(ax2,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
     'ylim',[0 5500],'ytick',0:500:5500,'yticklabel',{'0','500','1000','1500','2000','2500','3000','3500','4000','4500','5000','5500'},'yminort','on', ...
     'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
-export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_thetao_mean'],'-png')
+%export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_thetao_mean'],'-png')
 %export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_thetao_mean'],'-eps')
 clear ax1 ax2 hh1
 
@@ -152,374 +158,277 @@ set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
 set(ax2,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
     'ylim',[0 5500],'ytick',0:500:5500,'yticklabel',{'0','500','1000','1500','2000','2500','3000','3500','4000','4500','5000','5500'},'yminort','on', ...
     'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
-export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_so_mean'],'-png')
+%export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_so_mean'],'-png')
 %export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_so_mean'],'-eps')
 clear ax1 ax2 hh1
 
 disp('** WOA18 processing complete.. **')
-%}
 
 %% Declare bad lists
-badListCM6So = { }
+badListCM6Mrro = { };
+
+badListCM6Sos = { };
 {
-    'CAS.FGOALS-f3-L.r1i1p1f1.mon.so.ocean.glb-l-gn.v20191007' ; % rotated pole
-    'CAS.FGOALS-f3-L.r2i1p1f1.mon.so.ocean.glb-l-gn.v20191008'
-    'CAS.FGOALS-f3-L.r3i1p1f1.mon.so.ocean.glb-l-gn.v20191008'
-    'CAS.FGOALS-g3.r1i1p1f1.mon.so.ocean.glb-l-gn.v20191012' ; % rotated pole
-    'CAS.FGOALS-g3.r2i1p1f1.mon.so.ocean.glb-l-gn.v20191013'
-    'CAS.FGOALS-g3.r5i1p1f1.mon.so.ocean.glb-l-gn.v20191012'
-    'E3SM-Project.E3SM-1-0.r1i1p1f1.mon.so.ocean.glb-l-gr.v20190826' ; % mask/missing values
-    'E3SM-Project.E3SM-1-0.r2i1p1f1.mon.so.ocean.glb-l-gr.v20190830'
-    'E3SM-Project.E3SM-1-0.r5i1p1f1.mon.so.ocean.glb-l-gr.v20200429'
-    'INM.INM-CM4-8.r1i1p1f1.mon.so.ocean.glb-l-gr1.v20190530' ; % deep structure, subsurface patchiness
-    'INM.INM-CM5-0.r1i1p1f1.mon.so.ocean.glb-l-gr1.v20190610'
-    'INM.INM-CM5-0.r2i1p1f1.mon.so.ocean.glb-l-gr1.v20190704'
-    'INM.INM-CM5-0.r3i1p1f1.mon.so.ocean.glb-l-gr1.v20190703'
-    'INM.INM-CM5-0.r4i1p1f1.mon.so.ocean.glb-l-gr1.v20190704'
-    'INM.INM-CM5-0.r5i1p1f1.mon.so.ocean.glb-l-gr1.v20190705'
-    'INM.INM-CM5-0.r6i1p1f1.mon.so.ocean.glb-l-gr1.v20190709'
-    'INM.INM-CM5-0.r7i1p1f1.mon.so.ocean.glb-l-gr1.v20190709'
-    'INM.INM-CM5-0.r8i1p1f1.mon.so.ocean.glb-l-gr1.v20190709'
-    'INM.INM-CM5-0.r9i1p1f1.mon.so.ocean.glb-l-gr1.v20190710'
-    'INM.INM-CM5-0.r10i1p1f1.mon.so.ocean.glb-l-gr1.v20190712'
-    'NCAR.CESM2.r1i1p1f1.mon.so.ocean.glb-l-gn.v20190308' % Values extend through depth - coord issue?
-    'NCAR.CESM2.r2i1p1f1.mon.so.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r3i1p1f1.mon.so.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r4i1p1f1.mon.so.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r5i1p1f1.mon.so.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r6i1p1f1.mon.so.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r7i1p1f1.mon.so.ocean.glb-l-gn.v20190311'
-    'NCAR.CESM2.r8i1p1f1.mon.so.ocean.glb-l-gn.v20190311'
-    'NCAR.CESM2.r9i1p1f1.mon.so.ocean.glb-l-gn.v20190311'
-    'NCAR.CESM2.r10i1p1f1.mon.so.ocean.glb-l-gn.v20190313'
-    'NCAR.CESM2.r11i1p1f1.mon.so.ocean.glb-l-gn.v20190514'
-    'NCAR.CESM2-FV2.r1i1p1f1.mon.so.ocean.glb-l-gn.v20191120' % Values extend through depth - coord issue?
-    'NCAR.CESM2-FV2.r2i1p1f1.mon.so.ocean.glb-l-gn.v20200226'
-    'NCAR.CESM2-FV2.r3i1p1f1.mon.so.ocean.glb-l-gn.v20200226'
-    'NCAR.CESM2-WACCM.r1i1p1f1.mon.so.ocean.glb-l-gn.v20190808' % Values extend through depth - coord issue?
-    'NCAR.CESM2-WACCM.r2i1p1f1.mon.so.ocean.glb-l-gn.v20190808'
-    'NCAR.CESM2-WACCM.r3i1p1f1.mon.so.ocean.glb-l-gn.v20190808'
-    'NCAR.CESM2-WACCM-FV2.r1i1p1f1.mon.so.ocean.glb-l-gn.v20191120' % Values extend through depth - coord issue?
-    'NCAR.CESM2-WACCM-FV2.r2i1p1f1.mon.so.ocean.glb-l-gn.v20200226'
-    'NCAR.CESM2-WACCM-FV2.r3i1p1f1.mon.so.ocean.glb-l-gn.v20200226'
-    'NCC.NorESM2-LM.r1i1p1f1.mon.so.ocean.glb-l-gn.v20190815' ; % Problem > 1000 m - missing value/coord issue?
-    'NCC.NorESM2-LM.r2i1p1f1.mon.so.ocean.glb-l-gn.v20190920'
-    'NCC.NorESM2-LM.r3i1p1f1.mon.so.ocean.glb-l-gn.v20190920'
-    'NCC.NorESM2-MM.r2i1p1f1.mon.so.ocean.glb-l-gn.v20200218' ; % Problem > 1000 m - missing value/coord issue?
-    'NCC.NorESM2-MM.r3i1p1f1.mon.so.ocean.glb-l-gn.v20200702'
+    'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
+    'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007'
+    'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191107' ; % rotated pole, thetao too
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191126'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r41i1p1f1.mon.sos.ocean.glb-2d-gn.v20191012'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r51i1p1f1.mon.sos.ocean.glb-2d-gn.v20191013'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.sos.ocean.glb-l-gr.v20190826' ; % mask/missing_value? thetao too
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.sos.ocean.glb-l-gr.v20190830'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r3i1p1f1.mon.sos.ocean.glb-l-gr.v20190827'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r4i1p1f1.mon.sos.ocean.glb-l-gr.v20190909'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r5i1p1f1.mon.sos.ocean.glb-l-gr.v20200429'
+    'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-l-gr1.v20190530' ; % Values over Russia/grid (same for so/thetao)
     };
-badListCM6Thetao = { }
+
+badListCM6Tas = { };
 {
-    'CAS.FGOALS-f3-L.r1i1p1f1.mon.thetao.ocean.glb-l-gn.v20191007' ; % rotated pole
-    'CAS.FGOALS-f3-L.r2i1p1f1.mon.thetao.ocean.glb-l-gn.v20191008'
-    'CAS.FGOALS-f3-L.r3i1p1f1.mon.thetao.ocean.glb-l-gn.v20191008'
-    'CAS.FGOALS-g3.r1i1p1f1.mon.thetao.ocean.glb-l-gn.v20191012' ; % rotated pole
-    'CAS.FGOALS-g3.r4i1p1f1.mon.thetao.ocean.glb-l-gn.v20191012'
-    'CAS.FGOALS-g3.r5i1p1f1.mon.thetao.ocean.glb-l-gn.v20191012'
-    'E3SM-Project.E3SM-1-0.r1i1p1f1.mon.thetao.ocean.glb-l-gr.v20190826' ; % mask/missing_value?
-    'E3SM-Project.E3SM-1-0.r2i1p1f1.mon.thetao.ocean.glb-l-gr.v20190830'
-    'E3SM-Project.E3SM-1-0.r5i1p1f1.mon.thetao.ocean.glb-l-gr.v20200429'
-    'INM.INM-CM4-8.r1i1p1f1.mon.thetao.ocean.glb-l-gr1.v20190530' ; % Values over Russia/grid (same for so)
-    'NCAR.CESM2.r1i1p1f1.mon.thetao.ocean.glb-l-gn.v20190308' % Values extend through depth - coord issue? (same for so)
-    'NCAR.CESM2.r2i1p1f1.mon.thetao.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r3i1p1f1.mon.thetao.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r4i1p1f1.mon.thetao.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r5i1p1f1.mon.thetao.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r6i1p1f1.mon.thetao.ocean.glb-l-gn.v20190308'
-    'NCAR.CESM2.r7i1p1f1.mon.thetao.ocean.glb-l-gn.v20190311'
-    'NCAR.CESM2.r8i1p1f1.mon.thetao.ocean.glb-l-gn.v20190311'
-    'NCAR.CESM2.r9i1p1f1.mon.thetao.ocean.glb-l-gn.v20190311'
-    'NCAR.CESM2.r10i1p1f1.mon.thetao.ocean.glb-l-gn.v20190313'
-    'NCAR.CESM2.r11i1p1f1.mon.thetao.ocean.glb-l-gn.v20190514'
-    'NCAR.CESM2-FV2.r1i1p1f1.mon.thetao.ocean.glb-l-gn.v20191120' % Values extend through depth AND grid/masking at surface - coord issue?
-    'NCAR.CESM2-FV2.r2i1p1f1.mon.thetao.ocean.glb-l-gn.v20200226'
-    'NCAR.CESM2-FV2.r3i1p1f1.mon.thetao.ocean.glb-l-gn.v20200226'
-    'NCAR.CESM2-WACCM.r1i1p1f1.mon.thetao.ocean.glb-l-gn.v20190808' % Values extend through depth - coord issue? (same for so)
-    'NCAR.CESM2-WACCM.r2i1p1f1.mon.thetao.ocean.glb-l-gn.v20190808'
-    'NCAR.CESM2-WACCM.r3i1p1f1.mon.thetao.ocean.glb-l-gn.v20190808'
-    'NCAR.CESM2-WACCM-FV2.r1i1p1f1.mon.thetao.ocean.glb-l-gn.v20191120' % Values extend through depth - coord issue? (same for so)
-    'NCAR.CESM2-WACCM-FV2.r2i1p1f1.mon.thetao.ocean.glb-l-gn.v20200226'
-    'NCAR.CESM2-WACCM-FV2.r3i1p1f1.mon.thetao.ocean.glb-l-gn.v20200226'
-    'NCC.NorESM2-LM.r1i1p1f1.mon.thetao.ocean.glb-l-gn.v20190815' ; % Problem > 1000 m - missing value/coord issue?
-    'NCC.NorESM2-LM.r2i1p1f1.mon.thetao.ocean.glb-l-gn.v20190920'
-    'NCC.NorESM2-LM.r3i1p1f1.mon.thetao.ocean.glb-l-gn.v20190920'
-    'NCC.NorESM2-MM.r1i1p1f1.mon.so.ocean.glb-l-gn.v20191108' ; % Problem > 1000 m - missing value/coord issue? (same for so)
-    'NCC.NorESM2-MM.r2i1p1f1.mon.so.ocean.glb-l-gn.v20200218'
-    'NCC.NorESM2-MM.r3i1p1f1.mon.so.ocean.glb-l-gn.v20200702'
-};
-badListCM5So = { }
-{
-    'ICHEC.EC-EARTH.r2i1p1.mon.so.ocean.glb-z1-gu.1' ; % mask
-    'ICHEC.EC-EARTH.r3i1p1.mon.so.ocean.glb-z1-gu.1'
-    'ICHEC.EC-EARTH.r5i1p1.mon.so.ocean.glb-z1-gu.1'
-    'ICHEC.EC-EARTH.r6i1p1.mon.so.ocean.glb-z1-gu.1'
-    'ICHEC.EC-EARTH.r7i1p1.mon.so.ocean.glb-z1-gu.1'
-    'ICHEC.EC-EARTH.r9i1p1.mon.so.ocean.glb-z1-gu.1'
-    'ICHEC.EC-EARTH.r10i1p1.mon.so.ocean.glb-z1-gu.1'
-    'ICHEC.EC-EARTH.r11i1p1.mon.so.ocean.glb-z1-gu.v20120403'
-    'ICHEC.EC-EARTH.r12i1p1.mon.so.ocean.glb-z1-gu.1'
-    'ICHEC.EC-EARTH.r14i1p1.mon.so.ocean.glb-z1-gu.1'
-    'INM.inmcm4.r1i1p1.mon.so.ocean.glb-z1-gu.1' ; % weird values through depth
-    'MIROC.MIROC4h.r1i1p1.mon.so.ocean.glb-z1-gu.1' ; % weird values through depth
-    'MIROC.MIROC4h.r2i1p1.mon.so.ocean.glb-z1-gu.1'
-    'MIROC.MIROC4h.r3i1p1.mon.so.ocean.glb-z1-gu.1'
-    'MIROC.MIROC5.r1i1p1.mon.so.ocean.glb-z1-gu.1' ; % mask an values through depth
-    'MIROC.MIROC5.r2i1p1.mon.so.ocean.glb-z1-gu.1'
-    'MIROC.MIROC5.r3i1p1.mon.so.ocean.glb-z1-gu.1'
-    'MIROC.MIROC5.r4i1p1.mon.so.ocean.glb-z1-gu.1'
-    'MIROC.MIROC5.r5i1p1.mon.so.ocean.glb-z1-gu.1'
-    'MRI.MRI-CGCM3.r1i1p1.mon.so.ocean.glb-z1-gu.v20120510' ; % mask an values through depth
-    'MRI.MRI-CGCM3.r2i1p1.mon.so.ocean.glb-z1-gu.v20120510'
-    'MRI.MRI-CGCM3.r3i1p1.mon.so.ocean.glb-z1-gu.v20120510'
-    'MRI.MRI-CGCM3.r4i1p2.mon.so.ocean.glb-z1-gu.v20120510'
-    'MRI.MRI-CGCM3.r5i1p2.mon.so.ocean.glb-z1-gu.v20120510'
+    'CMIP6.CMIP.historical.NIMS-KMA.KACE-1-0-G.r3i1p1f1.mon.tas.atmos.glb-z1-gr.v20190919' ; % Land surface >30C
     };
-badListCM5Thetao = { }
+
+badListCM6Tos = { };
 {
-    'ICHEC.EC-EARTH.r2i1p1.mon.thetao.ocean.glb-l-gu.1' ; % mask
-    'ICHEC.EC-EARTH.r3i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'ICHEC.EC-EARTH.r5i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'ICHEC.EC-EARTH.r6i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'ICHEC.EC-EARTH.r7i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'ICHEC.EC-EARTH.r9i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'ICHEC.EC-EARTH.r10i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'ICHEC.EC-EARTH.r11i1p1.mon.thetao.ocean.glb-l-gu.v20120403'
-    'ICHEC.EC-EARTH.r12i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'ICHEC.EC-EARTH.r14i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'INM.inmcm4.r1i1p1.mon.thetao.ocean.glb-l-gu.1' ; % weird values through depth
-    'MIROC.MIROC4h.r1i1p1.mon.thetao.ocean.glb-l-gu.1' ; % weird values through depth
-    'MIROC.MIROC4h.r2i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'MIROC.MIROC4h.r3i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'MIROC.MIROC5.r1i1p1.mon.thetao.ocean.glb-l-gu.1' ; % weird values through depth
-    'MIROC.MIROC5.r2i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'MIROC.MIROC5.r3i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'MIROC.MIROC5.r4i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'MIROC.MIROC5.r5i1p1.mon.thetao.ocean.glb-l-gu.1'
-    'MRI.MRI-CGCM3.r1i1p1.mon.thetao.ocean.glb-l-gu.v20120510' ; % mask an values through depth
-    'MRI.MRI-CGCM3.r2i1p1.mon.thetao.ocean.glb-l-gu.v20120510'
-    'MRI.MRI-CGCM3.r3i1p1.mon.thetao.ocean.glb-l-gu.v20120510'
-    'MRI.MRI-CGCM3.r4i1p2.mon.thetao.ocean.glb-l-gu.v20120510'
-    'MRI.MRI-CGCM3.r5i1p2.mon.thetao.ocean.glb-l-gu.v20120510'
+    'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
+    'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007'
+    'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191107' ; % rotated pole, thetao too
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191126'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200811'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r41i1p1f1.mon.tos.ocean.glb-2d-gn.v20200811'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r51i1p1f1.mon.tos.ocean.glb-2d-gn.v20200811'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r61i1p1f1.mon.tos.ocean.glb-2d-gn.v20200811'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.sos.ocean.glb-l-gr.v20190826' ; % mask/missing_value? thetao too
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.sos.ocean.glb-l-gr.v20190830'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r5i1p1f1.mon.sos.ocean.glb-l-gr.v20200429'
+    'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191120' ; % Masking Atlantic/Southern O/Pac
+    'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
+    'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
     };
 
 %% Process models
-for mipVar = 1:4 % Cycle through all mip_eras and variables
-    switch mipVar
-        case 1 % CMIP5 thetao
-            inVar = '*thetao';
-            inVarName = 'thetao';
-            ncVar = 'thetao_mean_WOAGrid';
-            badList = badListCM5Thetao;
-            outData = os_path([outDir,'ncs/',dataDate,'/CMIP5/historical-1980-2006/woaGrid/']);
-            mipEra = 'cmip5';
-            cmip5TimePeriod = '1980-2005';
-            cont1 = ptcont1;
-            cont2 = ptcont2;
-            cont3 = ptcont3;
-        case 2 % CMIP5 so
-            inVar = '*.so.';
-            inVarName = 'so';
-            ncVar = 'so_mean_WOAGrid';
-            badList = badListCM5So;
-            outData = os_path([outDir,'ncs/',dataDate,'/CMIP5/historical-1980-2006/woaGrid/']);
-            mipEra = 'cmip5';
-            cont1 = scont1;
-            cont2 = scont2;
-            cont3 = scont3;
-        case 3 % CMIP6 thetao
-            inVar = '*thetao';
-            inVarName = 'thetao';
-            ncVar = 'thetao_mean_WOAGrid';
-            badList = badListCM6Thetao;
-            outData = os_path([outDir,'ncs/',dataDate,'/CMIP6/historical-1980-2011/woaGrid/']);
-            mipEra = 'cmip6';
-            cmip6TimePeriod = '1980-2010';
-            cont1 = ptcont1;
-            cont2 = ptcont2;
-            cont3 = ptcont3;
-        case 4 % CMIP6 so
-            inVar = '*.so.';
-            inVarName = 'so';
-            ncVar = 'so_mean_WOAGrid';
-            badList = badListCM6So;
-            outData = os_path([outDir,'ncs/',dataDate,'/CMIP6/historical-1980-2011/woaGrid/']);
-            mipEra = 'cmip6';
-            cont1 = scont1;
-            cont2 = scont2;
-            cont3 = scont3;
-    end
-
-    % Deal with directory creation/cleanup
-    pngDir = fullfile(outData,inVarName);
-    if exist(pngDir,'dir')
-        rmdir(pngDir,'s');
-    end
-    mkdir(pngDir);
-
-    % Now process
-    disp([mipEra,' ',inVarName,' starting..'])
-    [~, models] = unix(['\ls -1 ',outData,inVar,'*woaClim.nc']);
-    models = strtrim(models);
-    temp = regexp(models,'\n','split'); clear models status
-    models = unique(temp); clear temp
-
-    % Truncate using dupe list
-    ind = NaN(50,1); y = 1;
-    for x = 1:length(models)
-        splits = strfind(models{x},'/');
-        mod = models{x}(splits(end)+1:end);
-        separators = strfind(mod,'.');
-        mod = mod(separators(3)+1:separators(11)-1);
-        %disp(['mod:',mod])
-        match = strfind(badList,mod);
-        match = find(~cellfun(@isempty,match), 1);
-        if ~isempty(match)
-            ind(y) = x;
-            y = y + 1;
-            disp(['drop: ',mod])
+exps = dir([outDir,'ncs/',dataDate,'/CMIP6/']);
+exps(ismember( {exps.name}, {'.', '..'})) = [];
+expFlags = [exps.isdir];
+exps = exps(expFlags);
+for exp = 1:length(exps)
+    vars = dir(fullfile(outDir,'ncs',dataDate,'CMIP6',exps(exp).name));
+    vars(ismember( {vars.name}, {'.', '..'})) = [];
+    varFlags = [vars.isdir];
+    vars = vars(varFlags);
+    for var = 1:length(vars) % Cycle through variables
+        fprintf('Sub folder #%0d = %s : %s\n', exp, exps(exp).name, vars(var).name);
+        switch var
+            case 1 % mrro
+                badList = badListCM6Mrro;
+                cont1 = mcont1;
+                cont2 = mcont2;
+                cont3 = mcont3;
+                scale = mscaler; % -6 to 40e-5
+                clMap = 26; % red-blue (no white)
+            case 2 % sos
+                badList = badListCM6Sos;
+                cont1 = scont1;
+                cont2 = scont2;
+                cont3 = scont3;
+                scale = sscaler; % 30 to 40
+                clMap = 27; % blue-red (no white)
+            case 3 % tas
+                badList = badListCM6Tas;
+                cont1 = ptcont1;
+                cont2 = ptcont2;
+                cont3 = ptcont3;
+                scale = ptscaler; % -2.5 to 30
+                clMap = 27;
+            case 4 % tos
+                badList = badListCM6Tos;
+                cont1 = ptcont1;
+                cont2 = ptcont2;
+                cont3 = ptcont3;
+                scale = ptscaler; % -2.5 to 30
+                clMap = 27;
         end
-    end
-    % Truncate using ind list
-    ind = ind(~isnan(ind));
-    ind = ismember(1:length(models),ind); % Logic is create index of files in bad_list
-    models(ind) = [];
-    clear bad_list ind match splits x y
+        inVar = vars(var).name;
+        ncVar = [inVar,'_mean_WOAGrid'];
+        mipEra = 'CMIP6';
+        timePeriod = extractAfter(exps(exp).name,'-');
+        outData = fullfile(outDir,'ncs',dataDate,'CMIP6',exps(exp).name,vars(var).name,'woaGrid');
 
-    % Build matrix of model results
-    varTmp = NaN(length(models),length(t_depth),length(t_lat),length(t_lon));
-    varTmp_model_names = cell(length(models),1);
-    count = 1; ens_count = 1;
-    ensemble = NaN(50,length(t_depth),length(t_lat),length(t_lon));
-    for x = 1:(length(models)-1)
-        % Test for multiple realisations and generate ensemble mean
-        model_ind = strfind(models{x},'.'); temp = models{x};
-        %model1 = temp((model_ind(1)+1):(model_ind(2)-1)); clear temp
-        model1 = temp((model_ind(4)+1):(model_ind(5)-1)); clear temp
-        model_ind = strfind(models{x+1},'.'); temp = models{x+1};
-        model2 = temp((model_ind(4)+1):(model_ind(5)-1)); clear temp
+        % Deal with directory creation/cleanup
+        pngDir = fullfile(outData,inVar);
+        if exist(pngDir,'dir')
+            rmdir(pngDir,'s');
+        end
+        mkdir(pngDir);
 
-        % Plot model fields for bug-tracking - 2D and global zonal mean
-        tmp1 = getnc(models{x},ncVar); temp = models{x};
-        tmp1 = tmp1(:,:,[181:360,1:180]); % Correct lon offset issue
-        ind = strfind(temp,'/'); tmp1name = regexprep(temp((ind(end)+1):end),'.nc','');
-        tmp2 = getnc(models{x+1},ncVar); temp = models{x+1};
-        tmp2 = tmp2(:,:,[181:360,1:180]); % Correct lon offset issue
-        ind = strfind(temp,'/'); tmp2name = regexprep(temp((ind(end)+1):end),'.nc','');
-        clear temp
-        % Plot model 1
-        close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
-        ax1 = subplot(1,2,1);
-        pcolor(t_lon,t_lat,squeeze(tmp1(1,:,:))); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); hold all
-        contour(t_lon,t_lat,squeeze(tmp1(1,:,:)),cont1,'color','k');
-        ax2 = subplot(1,2,2);
-        pcolor(t_lat,t_depth,nanmean(tmp1,3)); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); axis ij; hold all
-        contour(t_lat,t_depth,nanmean(tmp1,3),cont1,'color','k');
-        hh1 = colorbarf_nw('horiz',cont3,cont2);
-        set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
-        set(ax1,'Position',[0.03 0.19 0.45 0.8]);
-        set(ax2,'Position',[0.54 0.19 0.45 0.8]);
-        set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
-        set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-        'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
-        'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-        set(ax2,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-        'ylim',[0 5500],'ytick',0:500:5500,'yticklabel',{'0','500','1000','1500','2000','2500','3000','3500','4000','4500','5000','5500'},'yminort','on', ...
-        'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
-        export_fig([pngDir,'/',datestr(now,'yymmdd'),'_',tmp1name],'-png')
-        close all
-        clear handle ax1 ax2 hh1 tmp1 ind tmp1name
+        % Now process
+        disp([mipEra,' ',inVar,' starting..'])
+        [~, models] = unix(['\ls -1 ',fullfile(outData,'*woaClim.nc')]);
+        models = strtrim(models);
+        temp = regexp(models,'\n','split'); clear models status
+        models = unique(temp); clear temp
 
-        % Plot model 2
-        close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
-        ax1 = subplot(1,2,1);
-        pcolor(t_lon,t_lat,squeeze(tmp2(1,:,:))); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); hold all
-        contour(t_lon,t_lat,squeeze(tmp2(1,:,:)),cont1,'color','k');
-        ax2 = subplot(1,2,2);
-        pcolor(t_lat,t_depth,nanmean(tmp2,3)); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); axis ij; hold all
-        contour(t_lat,t_depth,nanmean(tmp2,3),cont1,'color','k');
-        hh1 = colorbarf_nw('horiz',cont3,cont2);
-        set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
-        set(ax1,'Position',[0.03 0.19 0.45 0.8]);
-        set(ax2,'Position',[0.54 0.19 0.45 0.8]);
-        set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
-        set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-        'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
-        'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-        set(ax2,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-        'ylim',[0 5500],'ytick',0:500:5500,'yticklabel',{'0','500','1000','1500','2000','2500','3000','3500','4000','4500','5000','5500'},'yminort','on', ...
-        'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
-        export_fig([pngDir,'/',datestr(now,'yymmdd'),'_',tmp2name],'-png');
-        close all
-        clear handle ax1 ax2 hh1 tmp2 tmp2name
-
-        if x == (length(models)-1) && ~strcmp(model1,model2)
-            % Process final fields - if different
-            infile = models{x};
-            unit_test = getnc(infile,ncVar);
-            unit_test = unit_test(:,:,[181:360,1:180]); % Correct lon offset issue
-            if min(min(unit_test(1,:,:))) > 250; unit_test = unit_test-273.15; end
-            varTmp(count,:,:,:) = unit_test;
-            varTmp_model_names{count} = model1;
-            count = count + 1;
-            infile = models{x+1};
-            unit_test = getnc(infile,ncVar);
-            unit_test = unit_test(:,:,[181:360,1:180]); % Correct lon offset issue
-            if min(min(unit_test(1,:,:))) > 250; unit_test = unit_test-273.15; end
-            varTmp(count,:,:,:) = unit_test;
-            varTmp_model_names{count} = model2;
-        elseif x == (length(models)-1) && strcmp(model1,model2)
-            % Process final fields - if same
-            infile = models{x};
-            unit_test = getnc(infile,ncVar);
-            unit_test = unit_test(:,:,[181:360,1:180]); % Correct lon offset issue
-            if min(min(unit_test(1,:,:))) > 250; unit_test = unit_test-273.15; end
-            ensemble(ens_count,:,:,:) = unit_test;
-            ens_count = ens_count + 1;
-            infile = models{x+1};
-            unit_test = getnc(infile,ncVar);
-            unit_test = unit_test(:,:,[181:360,1:180]); % Correct lon offset issue
-            if min(min(unit_test(1,:,:))) > 250; unit_test = unit_test-273.15; end
-            ensemble(ens_count,:,:,:) = unit_test;
-            % Write to matrix
-            varTmp(count,:,:,:) = squeeze(nanmean(ensemble));
-            varTmp_model_names{count} = model1;
-        elseif ~strcmp(model1,model2)
-            disp([num2str(x,'%03d'),' ',inVarName,' different count: ',num2str(count),' ',model1,' ',model2])
-            % If models are different
-            if ens_count > 1
-                varTmp(count,:,:,:) = squeeze(nanmean(ensemble));
-                varTmp_model_names{count} = model1;
-                count = count + 1;
-                % Reset ensemble stuff
-                ens_count = 1;
-                ensemble = NaN(20,length(t_depth),length(t_lat),length(t_lon));
-            else
-                infile = models{x};
-                unit_test = getnc(infile,ncVar);
-                unit_test = unit_test(:,:,[181:360,1:180]); % Correct lon offset issue
-                if min(min(unit_test(1,:,:))) > 250; unit_test = unit_test-273.15; end
-                varTmp(count,:,:,:) = unit_test;
-                varTmp_model_names{count} = model1;
-                count = count + 1;
+        % Truncate using dupe list
+        ind = NaN(50,1); y = 1;
+        for x = 1:length(models)
+            splits = strfind(models{x},'/');
+            mod = models{x}(splits(end)+1:end);
+            separators = strfind(mod,'.');
+            mod = mod(separators(3)+1:separators(11)-1);
+            %disp(['mod:',mod])
+            match = strfind(badList,mod);
+            match = find(~cellfun(@isempty,match), 1);
+            if ~isempty(match)
+                ind(y) = x;
+                y = y + 1;
+                disp(['drop: ',mod])
             end
-        else
-            disp([num2str(x,'%03d'),' ',inVarName,' same      count: ',num2str(count),' ',model1,' ',model2])
-            % If models are the same
-            infile = models{x};
-            unit_test = getnc(infile,ncVar);
-            unit_test = unit_test(:,:,[181:360,1:180]); % Correct lon offset issue
-            if min(unit_test(:)) > 250; unit_test = unit_test-273.15; end
-            ensemble(ens_count,:,:,:) = unit_test;
-            ens_count = ens_count + 1;
         end
-    end
-    % Trim excess values
-    varTmp((count+1):end,:,:,:) = [];
-    %varTmp_model_names((count+1):end) = [];
-    clear count ens_count ensemble in_path infile model* unit_test x
+        % Truncate using ind list
+        ind = ind(~isnan(ind));
+        ind = ismember(1:length(models),ind); % Logic is create index of files in bad_list
+        models(ind) = [];
+        clear bad_list ind match splits x y
 
-    % Cludgey fix for bad data
-    %{
+        % Build matrix of model results
+        varTmp = NaN(length(models),length(t_lat),length(t_lon));
+        varTmp_model_names = cell(length(models),1);
+        count = 1; ens_count = 1;
+        ensemble = NaN(50,length(t_lat),length(t_lon));
+        catchArray = NaN(3,length(models));
+        for x = 1:(length(models)-1)
+            % Test for multiple realisations and generate ensemble mean
+            model_ind = strfind(models{x},'.'); temp = models{x};
+            %model1 = temp((model_ind(1)+1):(model_ind(2)-1)); clear temp
+            model1 = temp((model_ind(4)+1):(model_ind(5)-1)); clear temp
+            model_ind = strfind(models{x+1},'.'); temp = models{x+1};
+            model2 = temp((model_ind(4)+1):(model_ind(5)-1)); clear temp
+
+            % Plot model fields for bug-tracking - 2D and global zonal mean
+            tmp1 = getnc(models{x},[inVar,'_CdmsRegrid']); temp = models{x};
+            tmp1 = tmp1(:,[181:360,1:180]); % Correct lon offset issue
+            ind = strfind(temp,'/'); tmp1name = regexprep(temp((ind(end)+1):end),'.nc','');
+            % Start validation
+            if strcmp(model1,'blah blah')
+                disp(['model:',models{x}])
+                tmp = nanmin(tmp1(:));
+                disp(['min:   ',num2str(tmp)]); catchArray(1,x) = tmp;
+                tmp = nanmedian(tmp1(:));
+                disp(['median:',num2str(tmp)]); catchArray(2,x) = tmp;
+                tmp = nanmax(tmp1(:));
+                disp(['max:   ',num2str(tmp)]); catchArray(3,x) = tmp; clear tmp
+                if x == length(models)-1
+                    disp('Evaluate catchArray')
+                    keyboard % Evaluate catchArray
+                end
+            end
+            tmp2 = getnc(models{x+1},[inVar,'_CdmsRegrid']); temp = models{x+1};
+            tmp2 = tmp2(:,[181:360,1:180]); % Correct lon offset issue
+            ind = strfind(temp,'/'); tmp2name = regexprep(temp((ind(end)+1):end),'.nc','');
+            clear temp
+            % Deal with tas in K
+            if min(tmp1(:)) > 200
+                disp('Fix K units')
+                tmp1 = tmp1-273.15;
+                tmp2 = tmp2-273.15;
+            end
+            % Plot model 1 and 2 and scale (mrro)
+            for flip = 1:2
+                switch flip
+                    case 1
+                        mod = tmp1*scale; clear tmp1
+                        modName = tmp1name; clear tmp1name
+                    case 2
+                        mod = tmp2*scale; clear tmp2
+                        modName = tmp2name; clear tmp2name
+                end
+            % Create canvas and plot
+            close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
+            ax1 = subplot(1,1,1);
+            pcolor(t_lon,t_lat,squeeze(mod)); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
+            contour(t_lon,t_lat,squeeze(mod),cont1,'color','k');
+            hh1 = colorbarf_nw('horiz',cont3,cont2);
+            set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
+            set(ax1,'Position',[0.04 0.19 0.94 0.8]);
+            set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
+            set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
+                'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
+                'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
+            export_fig([pngDir,'/',datestr(now,'yymmdd'),'_',modName],'-png')
+            close all
+            clear handle ax1 ax2 hh1 mod ind modName
+            end
+
+            if x == (length(models)-1) && ~strcmp(model1,model2)
+                % Process final fields - if different
+                infile = models{x};
+                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
+                if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
+                varTmp(count,:,:) = unit_test;
+                varTmp_model_names{count} = model1;
+                count = count + 1;
+                infile = models{x+1};
+                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
+                if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
+                varTmp(count,:,:) = unit_test;
+                varTmp_model_names{count} = model2;
+            elseif x == (length(models)-1) && strcmp(model1,model2)
+                % Process final fields - if same
+                infile = models{x};
+                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
+                if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
+                ensemble(ens_count,:,:) = unit_test;
+                ens_count = ens_count + 1;
+                infile = models{x+1};
+                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
+                if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
+                ensemble(ens_count,:,:) = unit_test;
+                % Write to matrix
+                varTmp(count,:,:) = squeeze(nanmean(ensemble));
+                varTmp_model_names{count} = model1;
+            elseif ~strcmp(model1,model2)
+                disp([num2str(x,'%03d'),' ',inVar,' different count: ',num2str(count),' ',model1,' ',model2])
+                % If models are different
+                if ens_count > 1
+                    varTmp(count,:,:) = squeeze(nanmean(ensemble));
+                    varTmp_model_names{count} = model1;
+                    count = count + 1;
+                    % Reset ensemble stuff
+                    ens_count = 1;
+                    ensemble = NaN(20,length(t_lat),length(t_lon));
+                else
+                    infile = models{x};
+                    unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                    unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
+                    if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
+                    varTmp(count,:,:) = unit_test;
+                    varTmp_model_names{count} = model1;
+                    count = count + 1;
+                end
+            else
+                disp([num2str(x,'%03d'),' ',inVar,' same      count: ',num2str(count),' ',model1,' ',model2])
+                % If models are the same
+                infile = models{x};
+                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
+                if min(unit_test(:)) > 200; unit_test = unit_test-273.15; end
+                ensemble(ens_count,:,:) = unit_test;
+                ens_count = ens_count + 1;
+            end
+        end
+        % Trim excess values
+        varTmp((count+1):end,:,:,:) = [];
+        %varTmp_model_names((count+1):end) = [];
+        clear count ens_count ensemble in_path infile model* unit_test x
+
+        % Cludgey fix for bad data
+        %{
     thetao(thetao < -3) = NaN;
     thetao(thetao > 35) = NaN;
     for x = 18:31
@@ -546,49 +455,43 @@ for mipVar = 1:4 % Cycle through all mip_eras and variables
         level(index) = NaN;
         thetao(:,x,:,:) = level;
     end
-    %}
+        %}
 
-    % Mask marginal seas
-    for mod = 1:size(varTmp,1)
-        for x = 1:length(t_depth)
-            varTmp(mod,x,:,:) = squeeze(varTmp(mod,x,:,:)).*basins3_NaN_ones;
-        end
-    end; clear mod x
+        % Mask marginal seas
+        for mod = 1:size(varTmp,1)
+            varTmp(mod,:,:) = squeeze(varTmp(mod,:,:)).*basins3_NaN_ones;
+        end; clear mod
 
-    % Calculate ensemble mean
-    varTmp_mean = squeeze(nanmean(varTmp,1)); % Generate mean amongst models
+        % Calculate ensemble mean
+        varTmp_mean = squeeze(nanmean(varTmp,1)); % Generate mean amongst models
 
-    % CMIP potential temperature
-    close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
-    ax1 = subplot(1,2,1);
-    pcolor(t_lon,t_lat,squeeze(varTmp_mean(1,:,:))); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); hold all
-    contour(t_lon,t_lat,squeeze(varTmp_mean(1,:,:)),cont1,'color','k');
-    ax2 = subplot(1,2,2);
-    pcolor(t_lat,t_depth,nanmean(varTmp_mean,3)); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); axis ij; hold all
-    contour(t_lat,t_depth,nanmean(varTmp_mean,3),cont1,'color','k');
-    hh1 = colorbarf_nw('horiz',cont3,cont2);
-    set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
-    set(ax1,'Position',[0.03 0.19 0.45 0.8]);
-    set(ax2,'Position',[0.54 0.19 0.45 0.8]);
-    set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
-    set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-        'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
-        'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-    set(ax2,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-        'ylim',[0 5500],'ytick',0:500:5500,'yticklabel',{'0','500','1000','1500','2000','2500','3000','3500','4000','4500','5000','5500'},'yminort','on', ...
-        'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
-    export_fig([outDir,datestr(now,'yymmdd'),'_',mipEra,'_',inVarName,'_mean'],'-png')
-    clear handle ax1 ax2 hh1 cont1 cont2 cont3 inVar ncVar badList
-    % Calculate zonal means
-    eval([inVarName,'_',mipEra,' = varTmp;']);
-    eval([inVarName,'_',mipEra,'_mean = varTmp_mean;']);
-    eval([inVarName,'_',mipEra,'_mean_zonal = squeeze(nanmean(varTmp_mean,3));']); % Generate zonal mean
-    eval([inVarName,'_',mipEra,'_modelNames = varTmp_model_names;']); % Generate model name lookup
-    clear varTmp varTmp_mean varTmp_model_names
-    %varTmp_mean_zonal = squeeze(nanmean(varTmp_mean,3)); % Generate zonal mean
-    disp([mipEra,' ',inVarName,' done..'])
-    clear mipEra mipVar inVarName
+        % CMIP potential temperature
+        close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
+
+        % multi-model mean - create canvas and plot
+        close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
+        ax1 = subplot(1,1,1);
+        pcolor(t_lon,t_lat,varTmp_mean); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
+        contour(t_lon,t_lat,varTmp_mean,cont1,'color','k');
+        hh1 = colorbarf_nw('horiz',cont3,cont2);
+        set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
+        set(ax1,'Position',[0.04 0.19 0.94 0.8]);
+        set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
+        set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
+            'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
+            'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
+        export_fig([outDir,datestr(now,'yymmdd'),'_',mipEra,'_',exps(exp).name,'_',inVar,'_mean'],'-png')
+        clear handle ax1 ax2 hh1 cont1 cont2 cont3 ncVar badList
+        % Calculate zonal means
+        eval([inVar,'_',mipEra,' = varTmp;']);
+        eval([inVar,'_',mipEra,'_mean = varTmp_mean;']);
+        eval([inVar,'_',mipEra,'_modelNames = varTmp_model_names;']); % Generate model name lookup
+        clear varTmp varTmp_mean varTmp_model_names
+        disp([mipEra,' ',inVar,' done..'])
+        clear mipEra mipVar inVar
+    end
 end
+
 disp('** Model processing complete.. **')
 
 %% Save WOA18 and CMIP5/6 ensemble matrices to file
