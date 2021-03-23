@@ -10,6 +10,7 @@
 % PJD 20 Mar 2021   - Updated K test from >250 to >200 (205K recorded CanESM5, 209K GISS-E2-1-G)
 % PJD 21 Mar 2021   - Added contour ranges for mrro; Complete run through without badLists
 % PJD 21 Mar 2021   - Added test for missing files
+% PJD 23 Mar 2021   - Update badLists
 %                   TO-DO: Deal with mrro scaling
 
 % Cleanup workspace and command window
@@ -485,6 +486,14 @@ badListCM6Tos = {
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
     'CMIP6.ScenarioMIP.ssp119.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200527' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200219'
+    'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200219'
+    'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191229' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191229'
+    'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200101'
+    'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20200101'  
+    'CMIP6.ScenarioMIP.ssp126.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 
 %% Process models
