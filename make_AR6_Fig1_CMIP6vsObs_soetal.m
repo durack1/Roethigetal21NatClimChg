@@ -10,7 +10,8 @@
 % PJD 20 Mar 2021   - Updated K test from >250 to >200 (205K recorded CanESM5, 209K GISS-E2-1-G)
 % PJD 21 Mar 2021   - Added contour ranges for mrro; Complete run through without badLists
 % PJD 21 Mar 2021   - Added test for missing files
-% PJD 23 Mar 2021   - Update badLists
+% PJD 23 Mar 2021   - Updated badLists
+% PJD 24 Mar 2021   - Update run through ssp460 (ind: 7) tos partial - tos exclusion list incomplete
 %                   TO-DO: Deal with mrro scaling
 
 % Cleanup workspace and command window
@@ -168,6 +169,7 @@ clear ax1 ax2 hh1
 disp('** WOA18 processing complete.. **')
 
 %% Declare bad lists
+%% mrro
 badListCM6Mrro = {
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
@@ -538,7 +540,7 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r8i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r8i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r9i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
-    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r9i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'    
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r9i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r10i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r10i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r11i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
@@ -601,10 +603,30 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r9i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r10i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp370.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
-    'CMIP6.ScenarioMIP.ssp370.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108'   
+    'CMIP6.ScenarioMIP.ssp370.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108'
     'CMIP6.ScenarioMIP.ssp370.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp434.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp434.CCCma.CanESM5.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp434.CCCma.CanESM5.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp434.CCCma.CanESM5.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp434.CCCma.CanESM5.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp434.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190506-blah' ; % no Antarctica
+    'CMIP6.ScenarioMIP.ssp434.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp434.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp460.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp460.CCCma.CanESM5.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp460.CCCma.CanESM5.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp460.CCCma.CanESM5.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp460.CCCma.CanESM5.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp460.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190506-blah' ; % no Antarctica
+    'CMIP6.ScenarioMIP.ssp460.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp460.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp460.NASA-GISS.GISS-E2-1-G.r2i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp460.NASA-GISS.GISS-E2-1-G.r3i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp460.NASA-GISS.GISS-E2-1-G.r4i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp460.NASA-GISS.GISS-E2-1-G.r5i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
     };
-
+%% sos
 badListCM6Sos = {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007'
@@ -646,12 +668,22 @@ badListCM6Sos = {
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r5i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp434.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp460.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200527' ; % rotated pole, thetao too
+    'ssp534-over missing'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200222'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191230'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200102'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191230'
+    'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
-
+%% tas
 badListCM6Tas = {
     'CMIP6.CMIP.historical.NIMS-KMA.KACE-1-0-G.r3i1p1f1.mon.tas.atmos.glb-z1-gr.v20190919' ; % Land surface >30C
     };
-
+%% tos
 badListCM6Tos = {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007'
@@ -695,6 +727,17 @@ badListCM6Tos = {
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r5i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp434.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp460.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200527' ; % rotated pole, thetao too
+    'ssp534-over missing'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200222'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200222'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191229' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191230'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200102'
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20191230'
+    'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 
 %% Process models
@@ -702,12 +745,12 @@ exps = dir([outDir,'ncs/',dataDate,'/CMIP6/']);
 exps(ismember( {exps.name}, {'.', '..'})) = [];
 expFlags = [exps.isdir];
 exps = exps(expFlags);
-for exp = 8:length(exps)
+for exp = 1:length(exps)
     vars = dir(fullfile(outDir,'ncs',dataDate,'CMIP6',exps(exp).name));
     vars(ismember( {vars.name}, {'.', '..'})) = [];
     varFlags = [vars.isdir];
     vars = vars(varFlags);
-    for var = 2:length(vars) % Cycle through variables
+    for var = 1:length(vars) % Cycle through variables
         fprintf('Sub folder #%0d = %s : %s\n', exp, exps(exp).name, vars(var).name);
         switch var
             case 1 % mrro
