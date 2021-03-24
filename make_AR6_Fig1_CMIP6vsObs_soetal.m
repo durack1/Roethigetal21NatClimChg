@@ -520,6 +520,89 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-MM.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20200702'
     'CMIP6.ScenarioMIP.ssp245.NOAA-GFDL.GFDL-CM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp245.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp370.AS-RCEC.TaiESM1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20201014' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r4i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r5i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r6i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r6i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r7i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r7i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r8i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r8i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r9i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r9i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'    
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r10i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r10i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r11i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r11i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r12i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r12i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r13i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r13i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r14i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r14i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r15i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r15i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r16i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r16i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r17i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r17i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r18i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r18i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r19i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r19i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r20i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r20i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r21i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r21i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r22i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r22i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r23i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r23i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r24i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r24i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r25i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5.r25i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5-CanOE.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5-CanOE.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5-CanOE.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190603' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM5-0.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190618' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM5-0.r2i1p1f1.mon.mrro.land.glb-2d-gr1.v20190712'
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM5-0.r3i1p1f1.mon.mrro.land.glb-2d-gr1.v20190715'
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM5-0.r4i1p1f1.mon.mrro.land.glb-2d-gr1.v20190723'
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM5-0.r5i1p1f1.mon.mrro.land.glb-2d-gr1.v20190722'
+    'CMIP6.ScenarioMIP.ssp370.IPSL.IPSL-CM5A2-INCA.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20201218' ; % lats bound to 90
+    'CMIP6.ScenarioMIP.ssp370.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190119-blah' ; % no Antarctica
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r1i1p3f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r1i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r2i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r2i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r2i1p3f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r3i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r3i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r3i1p3f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r4i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r4i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r5i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r6i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r7i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r8i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r9i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r10i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp370.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp370.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108'   
+    'CMIP6.ScenarioMIP.ssp370.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     };
 
 badListCM6Sos = {
@@ -550,10 +633,19 @@ badListCM6Sos = {
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20200221'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200220'
-    'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20200101'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20200221'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200221'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r5i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 
 badListCM6Tas = {
@@ -594,6 +686,15 @@ badListCM6Tos = {
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20200101'
     'CMIP6.ScenarioMIP.ssp245.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200221'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200221'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r5i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 
 %% Process models
