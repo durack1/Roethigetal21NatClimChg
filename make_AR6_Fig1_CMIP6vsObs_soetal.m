@@ -12,7 +12,11 @@
 % PJD 21 Mar 2021   - Added test for missing files
 % PJD 23 Mar 2021   - Updated badLists
 % PJD 24 Mar 2021   - Update run through ssp460 (ind: 7) tos partial - tos exclusion list incomplete
-%                   TO-DO: Deal with mrro scaling
+% PJD 24 Mar 2021   - Deal with mrro log scaling
+%                   https://www.mathworks.com/matlabcentral/answers/100066-how-do-i-create-a-logarithmic-scale-colormap-or-colorbar#answer_365558
+% PJD 25 Mar 2021   - Update ssp534-over sos
+%                   TO-DO: Update to latest 210324 processed files (currently 210226)
+
 
 % Cleanup workspace and command window
 clear, clc, close all
@@ -117,60 +121,58 @@ end
 clear t_mean pres pres_mat x
 
 % Generate zonal means
-pt_mean_zonal    = nanmean(pt_mean,3);
-s_mean_zonal    = nanmean(s_mean,3);
+pt_mean_zonal = nanmean(pt_mean,3);
+pt_mean_zonal2 = mean(pt_mean,3,'omitnan');
+s_mean_zonal = nanmean(s_mean,3);
 
-% WOA18 potential temperature
-close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
-ax1 = subplot(1,2,1);
-pcolor(t_lon,t_lat,squeeze(pt_mean(1,:,:))); shading flat; caxis([ptcont1(1) ptcont1(end)]); clmap(27); hold all
-contour(t_lon,t_lat,squeeze(pt_mean(1,:,:)),ptcont1,'color','k');
-ax2 = subplot(1,2,2);
-pcolor(t_lat,t_depth,nanmean(pt_mean,3)); shading flat; caxis([ptcont1(1) ptcont1(end)]); clmap(27); axis ij; hold all
-contour(t_lat,t_depth,nanmean(pt_mean,3),ptcont1,'color','k');
-hh1 = colorbarf_nw('horiz',ptcont3,ptcont2);
-set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
-set(ax1,'Position',[0.03 0.19 0.45 0.8]);
-set(ax2,'Position',[0.54 0.19 0.45 0.8]);
-set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
-set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-    'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
-    'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-set(ax2,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-    'ylim',[0 5500],'ytick',0:500:5500,'yticklabel',{'0','500','1000','1500','2000','2500','3000','3500','4000','4500','5000','5500'},'yminort','on', ...
-    'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
-%export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_thetao_mean'],'-png')
-%export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_thetao_mean'],'-eps')
-clear ax1 ax2 hh1
+% Plot 1 thetao and 2 so
+for flip = 1:2
+    switch flip
+        case 1
+            wmean = squeeze(pt_mean(1,:,:));
+            wzmean = mean(pt_mean,3,'omitnan');
+            cont1 = ptcont1;
+            cont2 = ptcont2;
+            cont3 = ptcont3;
+            varName = '_thetao_';
+        case 2
+            wmean = squeeze(s_mean(1,:,:));
+            wzmean = mean(s_mean,3,'omitnan');
+            cont1 = scont1;
+            cont2 = scont2;
+            cont3 = scont3;
+            varName = '_so_';
+    end
 
-% WOA18 salinity
-close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
-ax1 = subplot(1,2,1);
-pcolor(t_lon,t_lat,squeeze(s_mean(1,:,:))); shading flat; caxis([scont1(1) scont1(end)]); clmap(27); hold all
-contour(t_lon,t_lat,squeeze(s_mean(1,:,:)),scont1,'color','k');
-ax2 = subplot(1,2,2);
-pcolor(t_lat,t_depth,nanmean(s_mean,3)); shading flat; caxis([scont3(1) scont3(end)]); clmap(27); axis ij; hold all
-contour(t_lat,t_depth,nanmean(s_mean,3),scont3,'color','k');
-hh1 = colorbarf_nw('horiz',scont3,scont2);
-set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
-set(ax1,'Position',[0.03 0.19 0.45 0.8]);
-set(ax2,'Position',[0.54 0.19 0.45 0.8]);
-set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
-set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-    'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
-    'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-set(ax2,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-    'ylim',[0 5500],'ytick',0:500:5500,'yticklabel',{'0','500','1000','1500','2000','2500','3000','3500','4000','4500','5000','5500'},'yminort','on', ...
-    'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
-%export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_so_mean'],'-png')
-%export_fig([outDir,datestr(now,'yymmdd'),'_WOA18_so_mean'],'-eps')
-clear ax1 ax2 hh1
-
+    % WOA18
+    close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
+    ax1 = subplot(1,2,1);
+    pcolor(t_lon,t_lat,wmean); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); hold all
+    contour(t_lon,t_lat,wmean,cont1,'color','k');
+    ax2 = subplot(1,2,2);
+    pcolor(t_lat,t_depth,wzmean); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); axis ij; hold all
+    contour(t_lat,t_depth,wzmean,cont1,'color','k');
+    hh1 = colorbarf_nw('horiz',cont3,cont2);
+    set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
+    set(ax1,'Position',[0.03 0.19 0.45 0.8]);
+    set(ax2,'Position',[0.54 0.19 0.45 0.8]);
+    set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
+    set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
+        'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
+        'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
+    set(ax2,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
+        'ylim',[0 5500],'ytick',0:500:5500,'yticklabel',{'0','500','1000','1500','2000','2500','3000','3500','4000','4500','5000','5500'},'yminort','on', ...
+        'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
+    %export_fig([outDir,datestr(now,'yymmdd'),'_WOA18',varName,'mean'],'-png')
+    %export_fig([outDir,datestr(now,'yymmdd'),'_WOA18',varName,'mean'],'-eps')
+    clear ax1 ax2 hh1
+end
 disp('** WOA18 processing complete.. **')
 
 %% Declare bad lists
 %% mrro
-badListCM6Mrro = {
+badListCM6Mrro = { };
+t1 = {
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.CCCma.CanESM5.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
@@ -627,7 +629,8 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp460.NASA-GISS.GISS-E2-1-G.r5i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
     };
 %% sos
-badListCM6Sos = {
+badListCM6Sos = { };
+t2 = {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007'
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008'
@@ -670,7 +673,7 @@ badListCM6Sos = {
     'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.ScenarioMIP.ssp434.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp460.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200527' ; % rotated pole, thetao too
-    'ssp534-over missing'
+    'CMIP6.ScenarioMIP.ssp534-over.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200222'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229'
@@ -680,11 +683,13 @@ badListCM6Sos = {
     'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 %% tas
-badListCM6Tas = {
+badListCM6Tas = { };
+t3 = {
     'CMIP6.CMIP.historical.NIMS-KMA.KACE-1-0-G.r3i1p1f1.mon.tas.atmos.glb-z1-gr.v20190919' ; % Land surface >30C
     };
 %% tos
-badListCM6Tos = {
+badListCM6Tos = { };
+t4 = {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007'
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008'
@@ -752,36 +757,55 @@ for exp = 1:length(exps)
     vars = vars(varFlags);
     for var = 1:length(vars) % Cycle through variables
         fprintf('Sub folder #%0d = %s : %s\n', exp, exps(exp).name, vars(var).name);
-        switch var
-            case 1 % mrro
-                badList = badListCM6Mrro;
-                cont1 = mcont1;
-                cont2 = mcont2;
-                cont3 = mcont3;
-                scale = mscaler; % -6 to 40e-5
-                clMap = 26; % red-blue (no white)
-            case 2 % sos
-                badList = badListCM6Sos;
-                cont1 = scont1;
-                cont2 = scont2;
-                cont3 = scont3;
-                scale = sscaler; % 30 to 40
-                clMap = 27; % blue-red (no white)
-            case 3 % tas
-                badList = badListCM6Tas;
-                cont1 = ptcont1;
-                cont2 = ptcont2;
-                cont3 = ptcont3;
-                scale = ptscaler; % -2.5 to 30
-                clMap = 27;
-            case 4 % tos
-                badList = badListCM6Tos;
-                cont1 = ptcont1;
-                cont2 = ptcont2;
-                cont3 = ptcont3;
-                scale = ptscaler; % -2.5 to 30
-                clMap = 27;
+        % mrro - test variable match
+        if strcmp(vars(var).name,'mrro')
+            disp(['mrro ',vars(var).name])
+            badList = badListCM6Mrro;
+            scale = mscaler; % -6 to 40e-5 - inflate to 1e5
+            clMap = 26; % red-blue (no white)
+            cMin = 0; cMax = 40;
+            % preallocate Ticks and TickLabels
+            num_of_ticks = 40;
+            [cont3,cont2] = deal(zeros(1,num_of_ticks));
+            % distribute Ticks and TickLabels
+            for n = 1:1:num_of_ticks
+                cont3(n) = log10(round(cMax)/num_of_ticks*n); % ticks
+                cont2(n) = round(cMax)/num_of_ticks*n; % tickLabels
+            end
+            cont1 = cont2;
         end
+        % sos - test variable match
+        if strcmp(vars(var).name,'sos')
+            disp(['sos ',vars(var).name])
+
+            badList = badListCM6Sos;
+            cont1 = scont1;
+            cont2 = scont2;
+            cont3 = scont3;
+            scale = sscaler; % 30 to 40
+            clMap = 27; % blue-red (no white)
+        end
+        % tas - test variable match
+        if strcmp(vars(var).name,'tas')
+            disp(['tas ',vars(var).name])
+            badList = badListCM6Tas;
+            cont1 = ptcont1;
+            cont2 = ptcont2;
+            cont3 = ptcont3;
+            scale = ptscaler; % -2.5 to 30
+            clMap = 27;
+        end
+        % tos - test variable match
+        if strcmp(vars(var).name,'tos')
+            disp(['tos ',vars(var).name])
+            badList = badListCM6Tos;
+            cont1 = ptcont1;
+            cont2 = ptcont2;
+            cont3 = ptcont3;
+            scale = ptscaler; % -2.5 to 30
+            clMap = 27;
+        end
+
         inVar = vars(var).name;
         ncVar = [inVar,'_mean_WOAGrid'];
         mipEra = 'CMIP6';
@@ -883,21 +907,25 @@ for exp = 1:length(exps)
                         mod = tmp2*scale; clear tmp2
                         modName = tmp2name; clear tmp2name
                 end
-            % Create canvas and plot
-            close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
-            ax1 = subplot(1,1,1);
-            pcolor(t_lon,t_lat,squeeze(mod)); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
-            contour(t_lon,t_lat,squeeze(mod),cont1,'color','k');
-            hh1 = colorbarf_nw('horiz',cont3,cont2);
-            set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
-            set(ax1,'Position',[0.04 0.19 0.94 0.8]);
-            set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
-            set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
-                'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
-                'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-            export_fig([pngDir,'/',datestr(now,'yymmdd'),'_',modName],'-png')
-            close all
-            clear handle ax1 ax2 hh1 mod ind modName
+                % Create canvas and plot
+                close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
+                ax1 = subplot(1,1,1);
+                if strcmp(vars(var).name,'mrro')
+                    pcolor(t_lon,t_lat,squeeze(mod)); shading flat; caxis([0 log10(cMax)]); clmap(clMap); hold all
+                else
+                    pcolor(t_lon,t_lat,squeeze(mod)); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
+                    contour(t_lon,t_lat,squeeze(mod),cont1,'color','k'); % don't contour log scale
+                end
+                hh1 = colorbarf_nw('horiz',cont3,cont2);
+                set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
+                set(ax1,'Position',[0.04 0.19 0.94 0.8]);
+                set(hh1,'Position',[0.06 0.075 0.9 0.03],'fontsize',fonts_c);
+                set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
+                    'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
+                    'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
+                export_fig([pngDir,'/',datestr(now,'yymmdd'),'_',modName],'-png')
+                close all
+                clear handle ax1 ax2 hh1 mod ind modName
             end
 
             if x == (length(models)-1) && ~strcmp(model1,model2)
@@ -968,32 +996,32 @@ for exp = 1:length(exps)
 
         % Cludgey fix for bad data
         %{
-    thetao(thetao < -3) = NaN;
-    thetao(thetao > 35) = NaN;
-    for x = 18:31
-        % Truncate big stuff
-        level = squeeze(thetao(:,x,:,:));
-        index = level > 10;
-        level(index) = NaN;
-        thetao(:,x,:,:) = level;
-        if x >= 23
+        thetao(thetao < -3) = NaN;
+        thetao(thetao > 35) = NaN;
+        for x = 18:31
+            % Truncate big stuff
             level = squeeze(thetao(:,x,:,:));
-            index = level > 5;
+            index = level > 10;
+            level(index) = NaN;
+            thetao(:,x,:,:) = level;
+            if x >= 23
+                level = squeeze(thetao(:,x,:,:));
+                index = level > 5;
+                level(index) = NaN;
+                thetao(:,x,:,:) = level;
+            end
+            if x >= 26
+                level = squeeze(thetao(:,x,:,:));
+                index = level > 2.5;
+                level(index) = NaN;
+                thetao(:,x,:,:) = level;
+            end
+            % truncate small stuff
+            level = squeeze(thetao(:,x,:,:));
+            index = level < -3;
             level(index) = NaN;
             thetao(:,x,:,:) = level;
         end
-        if x >= 26
-            level = squeeze(thetao(:,x,:,:));
-            index = level > 2.5;
-            level(index) = NaN;
-            thetao(:,x,:,:) = level;
-        end
-        % truncate small stuff
-        level = squeeze(thetao(:,x,:,:));
-        index = level < -3;
-        level(index) = NaN;
-        thetao(:,x,:,:) = level;
-    end
         %}
 
         % Mask marginal seas
@@ -1010,8 +1038,12 @@ for exp = 1:length(exps)
         % multi-model mean - create canvas and plot
         close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
         ax1 = subplot(1,1,1);
-        pcolor(t_lon,t_lat,varTmp_mean); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
-        contour(t_lon,t_lat,varTmp_mean,cont1,'color','k');
+        if strcmp(vars(var).name,'mrro')
+            pcolor(t_lon,t_lat,varTmp_mean); shading flat; caxis([0 log10(cMax)]); clmap(clMap); hold all
+        else
+            pcolor(t_lon,t_lat,varTmp_mean); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
+            contour(t_lon,t_lat,varTmp_mean,cont1,'color','k'); % don't contour log scale
+        end
         hh1 = colorbarf_nw('horiz',cont3,cont2);
         set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
         set(ax1,'Position',[0.04 0.19 0.94 0.8]);
@@ -1022,11 +1054,13 @@ for exp = 1:length(exps)
         export_fig([outDir,datestr(now,'yymmdd'),'_',mipEra,'_',exps(exp).name,'_',inVar,'_mean'],'-png')
         clear handle ax1 ax2 hh1 cont1 cont2 cont3 ncVar badList
         % Calculate zonal means
-        eval([inVar,'_',mipEra,' = varTmp;']);
-        eval([inVar,'_',mipEra,'_mean = varTmp_mean;']);
-        eval([inVar,'_',mipEra,'_modelNames = varTmp_model_names;']); % Generate model name lookup
+        keyboard
+        varName = [inVar,'_',mipEra,'_',strrep(exps(exp).name,'-','_')];
+        eval([varName,' = varTmp;']);
+        eval([varName,'_mean = varTmp_mean;']);
+        eval([varName,'_modelNames = varTmp_model_names;']); % Generate model name lookup
         clear varTmp varTmp_mean varTmp_model_names
-        disp([mipEra,' ',inVar,' done..'])
+        disp([inVar,' ',mipEra,' ',exps(exp).name,' done..'])
         clear mipEra mipVar inVar
     end
 end
@@ -1035,22 +1069,24 @@ disp('** Model processing complete.. **')
 
 %% Save WOA18 and CMIP5/6 ensemble matrices to file
 % Rename obs
+keyboard
 so_woa18_mean = s_mean; clear s_mean
 so_woa18_mean_zonal = s_mean_zonal; clear s_mean_zonal
 thetao_woa18_mean = pt_mean; clear pt_mean
 thetao_woa18_mean_zonal = pt_mean_zonal; clear pt_mean_zonal
-save([outDir,datestr(now,'yymmdd'),'_CMIP5And6andWOA18_thetaoAndso.mat'],'so_woa18_mean','thetao_woa18_mean', ...
-                                                                     'so_woa18_mean_zonal','thetao_woa18_mean_zonal', ...
-                                                                     'so_cmip6_modelNames','thetao_cmip6_modelNames', ...
-                                                                     'so_cmip6','thetao_cmip6', ...
-                                                                     'so_cmip6_mean','thetao_cmip6_mean', ...
-                                                                     'so_cmip6_mean_zonal','thetao_cmip6_mean_zonal', ...
-                                                                     'so_cmip5_modelNames','thetao_cmip5_modelNames', ...
-                                                                     'so_cmip5','thetao_cmip5', ...
-                                                                     'so_cmip5_mean','thetao_cmip5_mean', ...
-                                                                     'so_cmip5_mean_zonal','thetao_cmip5_mean_zonal', ...
-                                                                     't_depth','t_lat','t_lon', ...
-                                                                     'cmip6TimePeriod','cmip5TimePeriod');
+save([outDir,datestr(now,'yymmdd'),'_CMIP6.mat'], ...
+    'so_woa18_mean','thetao_woa18_mean', ...
+    'so_woa18_mean_zonal','thetao_woa18_mean_zonal', ...
+    'so_cmip6_modelNames','thetao_cmip6_modelNames', ...
+    'so_cmip6','thetao_cmip6', ...
+    'so_cmip6_mean','thetao_cmip6_mean', ...
+    'so_cmip6_mean_zonal','thetao_cmip6_mean_zonal', ...
+    'so_cmip5_modelNames','thetao_cmip5_modelNames', ...
+    'so_cmip5','thetao_cmip5', ...
+    'so_cmip5_mean','thetao_cmip5_mean', ...
+    'so_cmip5_mean_zonal','thetao_cmip5_mean_zonal', ...
+    't_depth','t_lat','t_lon', ...
+    'cmip6TimePeriod','cmip5TimePeriod');
 disp('** All data written to *.mat.. **')
 
 %% Or load WOA18 and CMIP5/6 ensemble matrices from saved file
@@ -1260,7 +1296,7 @@ for mipEra = 1:2
         so_mean_anom_zonal = nanmean((so_mean_anom.*mask),3);
         so_mean_zonal = nanmean((so_mean.*mask),3);
         % Check values
-        %{
+%{
         close all
         figure(2); pcolor(t_lat,t_depth,thetao_mean_anom_zonal); shading flat; axis ij; caxis([-4 4]); title('thetao\_anom'); colorbar; clmap(27)
         figure(3); pcolor(t_lat,t_depth,pt_mean_zonal); shading flat; axis ij; caxis([-3 35]); title('pt\_mean'); colorbar; clmap(27)
@@ -1275,7 +1311,7 @@ for mipEra = 1:2
         close figure 3
         close figure 4
         close figure 5
-        %}
+%}
 
         % Set label xy pairs
         idLab = [-88,4650];
