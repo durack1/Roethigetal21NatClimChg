@@ -165,7 +165,7 @@ for flip = 1:2
         'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
     %export_fig([outDir,datestr(now,'yymmdd'),'_WOA18',varName,'mean'],'-png')
     %export_fig([outDir,datestr(now,'yymmdd'),'_WOA18',varName,'mean'],'-eps')
-    clear ax1 ax2 hh1
+    clear ax1 ax2 hh1 wmean wzmean cont1 cont2 cont3 varName
 end
 disp('** WOA18 processing complete.. **')
 
@@ -765,14 +765,15 @@ for exp = 1:length(exps)
             clMap = 26; % red-blue (no white)
             cMin = 0; cMax = 40;
             % preallocate Ticks and TickLabels
-            num_of_ticks = 40;
-            [cont3,cont2] = deal(zeros(1,num_of_ticks));
+            numTicks = 40;
+            [cont3,cont2] = deal(zeros(1,numTicks));
             % distribute Ticks and TickLabels
-            for n = 1:1:num_of_ticks
-                cont3(n) = log10(round(cMax)/num_of_ticks*n); % ticks
-                cont2(n) = round(cMax)/num_of_ticks*n; % tickLabels
+            for n = 1:1:numTicks
+                cont3(n) = log10(round(cMax)/numTicks*n); % ticks
+                cont2(n) = round(cMax)/numTicks*n; % tickLabels
             end
             cont1 = cont2;
+            clear numTicks
         end
         % sos - test variable match
         if strcmp(vars(var).name,'sos')
@@ -831,7 +832,7 @@ for exp = 1:length(exps)
         if ~isempty(null{1})
             disp('is empty, continuing')
             continue
-        end
+        end; clear null
 
         % Truncate using dupe list
         ind = NaN(50,1); y = 1;
@@ -860,7 +861,7 @@ for exp = 1:length(exps)
         varTmp_model_names = cell(length(models),1);
         count = 1; ens_count = 1;
         ensemble = NaN(50,length(t_lat),length(t_lon));
-        catchArray = NaN(3,length(models));
+        %catchArray = NaN(3,length(models)); % 'blah blah' test below
         for x = 1:(length(models)-1)
             % Test for multiple realisations and generate ensemble mean
             model_ind = strfind(models{x},'.'); temp = models{x};
@@ -1063,34 +1064,32 @@ for exp = 1:length(exps)
         disp([inVar,' ',mipEra,' ',exps(exp).name,' done..'])
         clear mipEra mipVar inVar
     end
+    clear var
 end
-
+clear exp expFlags varFlags
 disp('** Model processing complete.. **')
 
 %% Save WOA18 and CMIP5/6 ensemble matrices to file
 % Rename obs
 keyboard
 so_woa18_mean = s_mean; clear s_mean
-so_woa18_mean_zonal = s_mean_zonal; clear s_mean_zonal
 thetao_woa18_mean = pt_mean; clear pt_mean
-thetao_woa18_mean_zonal = pt_mean_zonal; clear pt_mean_zonal
-save([outDir,datestr(now,'yymmdd'),'_CMIP6.mat'], ...
+outFile = [outDir,datestr(now,'yymmdd'),'_CMIP6.mat'];
+delete(outFile)
+save(outFile, ...
     'so_woa18_mean','thetao_woa18_mean', ...
-    'so_woa18_mean_zonal','thetao_woa18_mean_zonal', ...
-    'so_cmip6_modelNames','thetao_cmip6_modelNames', ...
-    'so_cmip6','thetao_cmip6', ...
-    'so_cmip6_mean','thetao_cmip6_mean', ...
-    'so_cmip6_mean_zonal','thetao_cmip6_mean_zonal', ...
-    'so_cmip5_modelNames','thetao_cmip5_modelNames', ...
-    'so_cmip5','thetao_cmip5', ...
-    'so_cmip5_mean','thetao_cmip5_mean', ...
-    'so_cmip5_mean_zonal','thetao_cmip5_mean_zonal', ...
+    'mrro_CMIP6_*', ...
+    'sos_CMIP6_*', ...
+    'tas_CMIP6_*', ...
+    'tos_CMIP6_*', ...
     't_depth','t_lat','t_lon', ...
-    'cmip6TimePeriod','cmip5TimePeriod');
+    'aHostLongname','badList*','basins3_NaN_ones', ...
+    'dataDate','dataDir','exps', ...
+    'homeDir','obsDir','outData','outDir','vars');
 disp('** All data written to *.mat.. **')
 
 %% Or load WOA18 and CMIP5/6 ensemble matrices from saved file
-%load 210219_CMIP5And6andWOA18_thetaoAndso.mat
+%load 210325_CMIP6.mat
 
 %% Figure 3.23 global - thetao and so clim vs WOA18
 %{
