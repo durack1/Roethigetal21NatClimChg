@@ -17,13 +17,14 @@
 % PJD 25 Mar 2021   - Update ssp534-over sos
 % PJD 25 Mar 2021   - Updated to latest 210324 processed files (was 210226)
 % PJD 25 Mar 2021   - Corrected variable typo's ([inVar,'_CdmsRegrid']) for new data
+% PJD 25 Mar 2021   - Updated to latest 210325 processed files (was 210324, which had rogue files)
 
 % Cleanup workspace and command window
 clear, clc, close all
 % Initialise environment variables
 [homeDir,~,dataDir,obsDir,~,aHostLongname] = myMatEnv(2);
 outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
-dataDate = '210324';
+dataDate = '210325';
 dateFormat = datestr(now,'yymmdd');
 
 % Setup plotting scales
