@@ -124,7 +124,7 @@ clear t_mean pres pres_mat x
 % Generate zonal means
 pt_mean_zonal = nanmean(pt_mean,3);
 pt_mean_zonal2 = mean(pt_mean,3,'omitnan');
-s_mean_zonal = nanmean(s_mean,3);
+s_mean_zonal = mean(s_mean,3,'omitnan');
 
 % Plot 1 thetao and 2 so
 for flip = 1:2
@@ -135,14 +135,14 @@ for flip = 1:2
             cont1 = ptcont1;
             cont2 = ptcont2;
             cont3 = ptcont3;
-            varName = '_thetao_';
+            %varName = '_thetao_';
         case 2
             wmean = squeeze(s_mean(1,:,:));
             wzmean = mean(s_mean,3,'omitnan');
             cont1 = scont1;
             cont2 = scont2;
             cont3 = scont3;
-            varName = '_so_';
+            %varName = '_so_';
     end
 
     % WOA18
@@ -862,7 +862,7 @@ for exp = 1:length(exps)
         varTmp_model_names = cell(length(models),1);
         count = 1; ens_count = 1;
         ensemble = NaN(50,length(t_lat),length(t_lon));
-        %catchArray = NaN(3,length(models)); % 'blah blah' test below
+        catchArray = NaN(3,length(models)); % 'blah blah' test below
         for x = 1:(length(models)-1)
             % Test for multiple realisations and generate ensemble mean
             model_ind = strfind(models{x},'.'); temp = models{x};
@@ -878,11 +878,11 @@ for exp = 1:length(exps)
             % Start validation
             if strcmp(model1,'blah blah')
                 disp(['model:',models{x}])
-                tmp = nanmin(tmp1(:));
+                tmp = min(tmp1(:),'omitnan');
                 disp(['min:   ',num2str(tmp)]); catchArray(1,x) = tmp;
-                tmp = nanmedian(tmp1(:));
+                tmp = median(tmp1(:),'omitnan');
                 disp(['median:',num2str(tmp)]); catchArray(2,x) = tmp;
-                tmp = nanmax(tmp1(:));
+                tmp = max(tmp1(:),'omitnan');
                 disp(['max:   ',num2str(tmp)]); catchArray(3,x) = tmp; clear tmp
                 if x == length(models)-1
                     disp('Evaluate catchArray')
@@ -959,13 +959,13 @@ for exp = 1:length(exps)
                 if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                 ensemble(ens_count,:,:) = unit_test;
                 % Write to matrix
-                varTmp(count,:,:) = squeeze(nanmean(ensemble));
+                varTmp(count,:,:) = squeeze(mean(ensemble,'omitnan'));
                 varTmp_model_names{count} = model1;
             elseif ~strcmp(model1,model2)
                 disp([num2str(x,'%03d'),' ',inVar,' different count: ',num2str(count),' ',model1,' ',model2])
                 % If models are different
                 if ens_count > 1
-                    varTmp(count,:,:) = squeeze(nanmean(ensemble));
+                    varTmp(count,:,:) = squeeze(mean(ensemble,'omitnan'));
                     varTmp_model_names{count} = model1;
                     count = count + 1;
                     % Reset ensemble stuff
@@ -1032,7 +1032,7 @@ for exp = 1:length(exps)
         end; clear mod
 
         % Calculate ensemble mean
-        varTmp_mean = squeeze(nanmean(varTmp,1)); % Generate mean amongst models
+        varTmp_mean = squeeze(mean(varTmp,1,'omitnan')); % Generate mean amongst models
 
         % CMIP potential temperature
         close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
@@ -1041,10 +1041,10 @@ for exp = 1:length(exps)
         close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
         ax1 = subplot(1,1,1);
         if strcmp(vars(var).name,'mrro')
-            pcolor(t_lon,t_lat,varTmp_mean); shading flat; caxis([0 log10(cMax)]); clmap(clMap); hold all
+            pcolor(t_lon,t_lat,varTmp_mean*scale); shading flat; caxis([0 log10(cMax)]); clmap(clMap); hold all
         else
-            pcolor(t_lon,t_lat,varTmp_mean); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
-            contour(t_lon,t_lat,varTmp_mean,cont1,'color','k'); % don't contour log scale
+            pcolor(t_lon,t_lat,varTmp_mean*scale); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
+            contour(t_lon,t_lat,varTmp_mean*scale,cont1,'color','k'); % don't contour log scale
         end
         hh1 = colorbarf_nw('horiz',cont3,cont2);
         set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
