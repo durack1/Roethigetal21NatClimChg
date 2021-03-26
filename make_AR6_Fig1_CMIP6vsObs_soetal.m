@@ -15,15 +15,16 @@
 % PJD 24 Mar 2021   - Deal with mrro log scaling
 %                   https://www.mathworks.com/matlabcentral/answers/100066-how-do-i-create-a-logarithmic-scale-colormap-or-colorbar#answer_365558
 % PJD 25 Mar 2021   - Update ssp534-over sos
-%                   TO-DO: Update to latest 210324 processed files (currently 210226)
-
+% PJD 25 Mar 2021   - Updated to latest 210324 processed files (was 210226)
+% PJD 25 Mar 2021   - Corrected variable typo's ([inVar,'_CdmsRegrid']) for new data
 
 % Cleanup workspace and command window
 clear, clc, close all
 % Initialise environment variables
 [homeDir,~,dataDir,obsDir,~,aHostLongname] = myMatEnv(2);
 outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
-dataDate = '210226';
+dataDate = '210324';
+dateFormat = datestr(now,'yymmdd');
 
 % Setup plotting scales
 mcont1 = 0:.25:10; % 0:1:30 map [min -6.5e-5, median 8.9e-7, max 7.3e-4]
@@ -55,12 +56,12 @@ else % If batch job purge files
     purge = 1;
 end
 if purge
-    delete([outDir,datestr(now,'yymmdd'),'*_cmip*.eps']);
-    delete([outDir,datestr(now,'yymmdd'),'*_cmip*.png']);
-    delete([outDir,datestr(now,'yymmdd'),'_WOA18*.png']);
-    delete([outDir,datestr(now,'yymmdd'),'_cmip*.png']);
-    delete([outDir,datestr(now,'yymmdd'),'_CMIP6*.mat']);
-    delete([outDir,'ncs/',dataDate,'/CMIP*/*/woaGrid/*/',datestr(now,'yymmdd'),'*.png']);
+    delete([outDir,dateFormat,'*_cmip*.eps']);
+    delete([outDir,dateFormat,'*_cmip*.png']);
+    delete([outDir,dateFormat,'_WOA18*.png']);
+    delete([outDir,dateFormat,'_cmip*.png']);
+    delete([outDir,dateFormat,'_CMIP6*.mat']);
+    delete([outDir,'ncs/',dataDate,'/CMIP*/*/woaGrid/*/',dateFormat,'*.png']);
 end
 
 %% Print time to console, for logging
@@ -163,8 +164,8 @@ for flip = 1:2
     set(ax2,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
         'ylim',[0 5500],'ytick',0:500:5500,'yticklabel',{'0','500','1000','1500','2000','2500','3000','3500','4000','4500','5000','5500'},'yminort','on', ...
         'xlim',[-90 90],'xtick',-90:20:90,'xticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'xminort','on');
-    %export_fig([outDir,datestr(now,'yymmdd'),'_WOA18',varName,'mean'],'-png')
-    %export_fig([outDir,datestr(now,'yymmdd'),'_WOA18',varName,'mean'],'-eps')
+    %export_fig([outDir,dateFormat,'_WOA18',varName,'mean'],'-png')
+    %export_fig([outDir,dateFormat,'_WOA18',varName,'mean'],'-eps')
     clear ax1 ax2 hh1 wmean wzmean cont1 cont2 cont3 varName
 end
 disp('** WOA18 processing complete.. **')
@@ -871,7 +872,7 @@ for exp = 1:length(exps)
             model2 = temp((model_ind(4)+1):(model_ind(5)-1)); clear temp
 
             % Plot model fields for bug-tracking - 2D and global zonal mean
-            tmp1 = getnc(models{x},[inVar,'_CdmsRegrid']); temp = models{x};
+            tmp1 = getnc(models{x},inVar); temp = models{x};
             tmp1 = tmp1(:,[181:360,1:180]); % Correct lon offset issue
             ind = strfind(temp,'/'); tmp1name = regexprep(temp((ind(end)+1):end),'.nc','');
             % Start validation
@@ -888,7 +889,7 @@ for exp = 1:length(exps)
                     keyboard % Evaluate catchArray
                 end
             end
-            tmp2 = getnc(models{x+1},[inVar,'_CdmsRegrid']); temp = models{x+1};
+            tmp2 = getnc(models{x+1},inVar); temp = models{x+1};
             tmp2 = tmp2(:,[181:360,1:180]); % Correct lon offset issue
             ind = strfind(temp,'/'); tmp2name = regexprep(temp((ind(end)+1):end),'.nc','');
             clear temp
@@ -924,7 +925,7 @@ for exp = 1:length(exps)
                 set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
                     'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
                     'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-                export_fig([pngDir,'/',datestr(now,'yymmdd'),'_',modName],'-png')
+                export_fig([pngDir,'/',dateFormat,'_',modName],'-png')
                 close all
                 clear handle ax1 ax2 hh1 mod ind modName
             end
@@ -932,14 +933,14 @@ for exp = 1:length(exps)
             if x == (length(models)-1) && ~strcmp(model1,model2)
                 % Process final fields - if different
                 infile = models{x};
-                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = getnc(infile,inVar);
                 unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
                 if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                 varTmp(count,:,:) = unit_test;
                 varTmp_model_names{count} = model1;
                 count = count + 1;
                 infile = models{x+1};
-                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = getnc(infile,inVar);
                 unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
                 if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                 varTmp(count,:,:) = unit_test;
@@ -947,13 +948,13 @@ for exp = 1:length(exps)
             elseif x == (length(models)-1) && strcmp(model1,model2)
                 % Process final fields - if same
                 infile = models{x};
-                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = getnc(infile,inVar);
                 unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
                 if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                 ensemble(ens_count,:,:) = unit_test;
                 ens_count = ens_count + 1;
                 infile = models{x+1};
-                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = getnc(infile,inVar);
                 unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
                 if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                 ensemble(ens_count,:,:) = unit_test;
@@ -972,7 +973,7 @@ for exp = 1:length(exps)
                     ensemble = NaN(20,length(t_lat),length(t_lon));
                 else
                     infile = models{x};
-                    unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                    unit_test = getnc(infile,inVar);
                     unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
                     if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                     varTmp(count,:,:) = unit_test;
@@ -983,7 +984,7 @@ for exp = 1:length(exps)
                 disp([num2str(x,'%03d'),' ',inVar,' same      count: ',num2str(count),' ',model1,' ',model2])
                 % If models are the same
                 infile = models{x};
-                unit_test = getnc(infile,[inVar,'_CdmsRegrid']);
+                unit_test = getnc(infile,inVar);
                 unit_test = unit_test(:,[181:360,1:180]); % Correct lon offset issue
                 if min(unit_test(:)) > 200; unit_test = unit_test-273.15; end
                 ensemble(ens_count,:,:) = unit_test;
@@ -1052,10 +1053,9 @@ for exp = 1:length(exps)
         set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
             'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
             'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-        export_fig([outDir,datestr(now,'yymmdd'),'_',mipEra,'_',exps(exp).name,'_',inVar,'_mean'],'-png')
+        export_fig([outDir,dateFormat,'_',dataDate,'_',mipEra,'_',exps(exp).name,'_',inVar,'_mean'],'-png')
         clear handle ax1 ax2 hh1 cont1 cont2 cont3 ncVar badList
         % Calculate zonal means
-        keyboard
         varName = [inVar,'_',mipEra,'_',strrep(exps(exp).name,'-','_')];
         eval([varName,' = varTmp;']);
         eval([varName,'_mean = varTmp_mean;']);
@@ -1071,10 +1071,9 @@ disp('** Model processing complete.. **')
 
 %% Save WOA18 and CMIP5/6 ensemble matrices to file
 % Rename obs
-keyboard
 so_woa18_mean = s_mean; clear s_mean
 thetao_woa18_mean = pt_mean; clear pt_mean
-outFile = [outDir,datestr(now,'yymmdd'),'_CMIP6.mat'];
+outFile = [outDir,dateFormat,'_',dataDate,'_CMIP6.mat'];
 delete(outFile)
 save(outFile, ...
     'so_woa18_mean','thetao_woa18_mean', ...
@@ -1089,7 +1088,7 @@ save(outFile, ...
 disp('** All data written to *.mat.. **')
 
 %% Or load WOA18 and CMIP5/6 ensemble matrices from saved file
-%load 210325_CMIP6.mat
+%load 210325_210324_CMIP6.mat
 
 %% Figure 3.23 global - thetao and so clim vs WOA18
 %{
@@ -1200,8 +1199,8 @@ for mipEra = 1:2
     set(xlab4,'Position',[0 5600 1.0001]);
 
     % Print to file
-    export_fig([outDir,datestr(now,'yymmdd'),'_durack1_AR6WG1_Ch3_Fig3p23_',mipEraId,'minusWOA18_thetaoAndso_global'],'-png')
-    export_fig([outDir,datestr(now,'yymmdd'),'_durack1_AR6WG1_Ch3_Fig3p23_',mipEraId,'minusWOA18_thetaoAndso_global'],'-eps')
+    export_fig([outDir,dateFormat,'_durack1_AR6WG1_Ch3_Fig3p23_',mipEraId,'minusWOA18_thetaoAndso_global'],'-png')
+    export_fig([outDir,dateFormat,'_durack1_AR6WG1_Ch3_Fig3p23_',mipEraId,'minusWOA18_thetaoAndso_global'],'-eps')
 
     close all %set(gcf,'visi','on');
     clear ax* c h handle hh* xlab* ylab* mipEra
@@ -1502,8 +1501,8 @@ for mipEra = 1:2
     set(xlab16,'Position',[0 5686 1.0001]);
 
     % Print to file
-    export_fig([outDir,datestr(now,'yymmdd'),'_durack1_AR6WG1_Ch3_Fig3p23_',mipEraId,'minusWOA18_thetaoAndso_basin'],'-png')
-    export_fig([outDir,datestr(now,'yymmdd'),'_durack1_AR6WG1_Ch3_Fig3p23_',mipEraId,'minusWOA18_thetaoAndso_basin'],'-eps')
+    export_fig([outDir,dateFormat,'_durack1_AR6WG1_Ch3_Fig3p23_',mipEraId,'minusWOA18_thetaoAndso_basin'],'-png')
+    export_fig([outDir,dateFormat,'_durack1_AR6WG1_Ch3_Fig3p23_',mipEraId,'minusWOA18_thetaoAndso_basin'],'-eps')
 
     close all %set(gcf,'visi','on');
     clear ax* c h handle hh* xlab* ylab* mipEra
