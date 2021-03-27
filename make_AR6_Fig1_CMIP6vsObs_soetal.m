@@ -26,6 +26,7 @@ clear, clc, close all
 outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
 dataDate = '210325';
 dateFormat = datestr(now,'yymmdd');
+dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
 
 % Setup plotting scales
 mcont1 = 0:.25:10; % 0:1:30 map [min -6.5e-5, median 8.9e-7, max 7.3e-4]
@@ -1074,7 +1075,7 @@ disp('** Model processing complete.. **')
 % Rename obs
 so_woa18_mean = s_mean; clear s_mean
 thetao_woa18_mean = pt_mean; clear pt_mean
-outFile = [outDir,dateFormat,'_',dataDate,'_CMIP6.mat'];
+outFile = [outDir,dateFormatLong,'_',dataDate,'_CMIP6.mat'];
 delete(outFile)
 save(outFile, ...
     'so_woa18_mean','thetao_woa18_mean', ...

@@ -1,3 +1,10 @@
+Fri 26 Mar 2021 05:59:25 PM PDT
+
+(base) bash-4.2$ date
+Fri Mar 26 17:58:56 PDT 2021
+(base) bash-4.2$ ~/apps/MATLAB/R2021a/bin/matlab -batch "run('/export/durack1/git/Roethigetal21NatClimChg/make_AR6_Fig1_CMIP6vsObs_soetal'); exit;" > /work/durack1/Shared/210128_PaperPlots_Rothigetal/210326_1759_make_AR6.log
+
+
 Wed 24 Mar 2021 02:35:44 PM PDT
 
 (cdat821nompi) bash-4.2$ date
