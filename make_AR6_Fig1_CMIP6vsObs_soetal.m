@@ -71,6 +71,7 @@ disp(['TIME: ',datestr(now)])
 setenv('USERCREDENTIALS','Paul J. Durack; pauldurack@llnl.gov (durack1); +1 925 422 5208')
 disp(['CONTACT: ',getenv('USERCREDENTIALS')])
 disp(['HOSTNAME: ',aHostLongname])
+disp(['SOURCE DATA: ',fullfile(outDir,'ncs',dataDate)])
 a = getGitInfo('/export/durack1/git/export_fig/') ;
 disp([upper('export_fig hash: '),a.hash])
 a = getGitInfo('/export/durack1/git/Roethigetal21NatClimChg/') ;
