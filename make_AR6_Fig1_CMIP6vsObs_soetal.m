@@ -18,6 +18,8 @@
 % PJD 25 Mar 2021   - Updated to latest 210324 processed files (was 210226)
 % PJD 25 Mar 2021   - Corrected variable typo's ([inVar,'_CdmsRegrid']) for new data
 % PJD 25 Mar 2021   - Updated to latest 210325 processed files (was 210324, which had rogue files)
+% PJD 27 Mar 2021   - Added conditional basin masking {'sos','tos'} only
+% PJD 27 Mar 2021   - Revise and augment badLists from complete 210325 data
 
 % Cleanup workspace and command window
 clear, clc, close all
@@ -177,6 +179,7 @@ disp('** WOA18 processing complete.. **')
 %% mrro
 badListCM6Mrro = { };
 t1 = {
+    'CMIP6.CMIP.historical.AS-RCEC.TaiESM1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20200624' ; % no ocean masking
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.CCCma.CanESM5.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
@@ -226,6 +229,9 @@ t1 = {
     'CMIP6.CMIP.historical.CCCma.CanESM5.r38i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.CCCma.CanESM5.r39i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.CCCma.CanESM5.r40i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-CanOE.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
+    'CMIP6.CMIP.historical.CCCma.CanESM5-CanOE.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-CanOE.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.EC-Earth-Consortium.EC-Earth3-AerChem.r4i1p1f1.mon.mrro.land.glb-2d-gr.v20201214' ; % no ocean masking
     'CMIP6.CMIP.historical.EC-Earth-Consortium.EC-Earth3-CC.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20210113' ; % no ocean masking
     'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190530' ; % no ocean masking
@@ -289,7 +295,7 @@ t1 = {
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-G.r101i1p1f1.mon.mrro.land.glb-2d-gn.v20190815'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-G.r102i1p1f1.mon.mrro.land.glb-2d-gn.v20190815'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-G-CC.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190815'
-    'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190403'
+    'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190403' ; % no ocean masking
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20191003'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20191010'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r1i1p5f1.mon.mrro.land.glb-2d-gn.v20190905'
@@ -322,6 +328,9 @@ t1 = {
     'CMIP6.CMIP.historical.NCC.NorESM2-MM.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20200702'
     'CMIP6.CMIP.historical.NOAA-GFDL.GFDL-CM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     'CMIP6.CMIP.historical.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190726' ; % no ocean masking
+
+    'here'
+
     'CMIP6.ScenarioMIP.ssp119.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp119.CCCma.CanESM5.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp119.CCCma.CanESM5.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
@@ -1029,10 +1038,12 @@ for exp = 1:length(exps)
         end
         %}
 
-        % Mask marginal seas
-        for mod = 1:size(varTmp,1)
-            varTmp(mod,:,:) = squeeze(varTmp(mod,:,:)).*basins3_NaN_ones;
-        end; clear mod
+        % Mask marginal seas - conditional on variable
+        if sum(strcmp(inVar,{'sos','tos'})) > 0
+            for mod = 1:size(varTmp,1)
+                varTmp(mod,:,:) = squeeze(varTmp(mod,:,:)).*basins3_NaN_ones;
+            end; clear mod
+        end
 
         % Calculate ensemble mean
         varTmp_mean = squeeze(mean(varTmp,1,'omitnan')); % Generate mean amongst models
