@@ -19,7 +19,7 @@
 % PJD 25 Mar 2021   - Corrected variable typo's ([inVar,'_CdmsRegrid']) for new data
 % PJD 25 Mar 2021   - Updated to latest 210325 processed files (was 210324, which had rogue files)
 % PJD 27 Mar 2021   - Added conditional basin masking {'sos','tos'} only
-% PJD 27 Mar 2021   - Revise and augment badLists from complete 210325 data (mrro, )
+% PJD 27 Mar 2021   - Revise and augment badLists from complete 210325 data (mrro,sos,tas,tos)
 
 % Cleanup workspace and command window
 clear, clc, close all
@@ -29,6 +29,7 @@ outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
 dataDate = '210325';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
+badList = 1;
 
 % Setup plotting scales
 mcont1 = 0:.25:10; % 0:1:30 map [min -6.5e-5, median 8.9e-7, max 7.3e-4]
@@ -726,21 +727,21 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp585.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     };
 %% sos
-badListCM6Sos = { };
-t2 = {
+badListCM6Sos = {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007'
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008'
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191107' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191126'
-    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r41i1p1f1.mon.sos.ocean.glb-2d-gn.v20191012'
-    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r51i1p1f1.mon.sos.ocean.glb-2d-gn.v20191013'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191012'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191012'
+    'CMIP6.CMIP.historical.CAS.FGOALS-g3.r5i1p1f1.mon.sos.ocean.glb-2d-gn.v20191013'
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.sos.ocean.glb-l-gr.v20190826' ; % mask/missing_value? thetao too
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.sos.ocean.glb-l-gr.v20190830'
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r3i1p1f1.mon.sos.ocean.glb-l-gr.v20190827'
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r4i1p1f1.mon.sos.ocean.glb-l-gr.v20190909'
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r5i1p1f1.mon.sos.ocean.glb-l-gr.v20200429'
-    'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-l-gr1.v20190530' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-l-gr1.v20190530-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191120' ; % Masking Atlantic/Southern O/Pac
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20200226'
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200226'
@@ -751,7 +752,7 @@ t2 = {
     'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229'
     'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200101'
-    'CMIP6.ScenarioMIP.ssp126.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp126.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20200221'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200220'
@@ -759,6 +760,7 @@ t2 = {
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20200101'
+    'CMIP6.ScenarioMIP.ssp245.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20200221'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200221'
@@ -767,26 +769,25 @@ t2 = {
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r5i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
-    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.ScenarioMIP.ssp434.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp460.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200527' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp534-over.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
+    'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20200222'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200222'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191230'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200102'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191230'
-    'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 %% tas
-badListCM6Tas = { };
-t3 = {
+badListCM6Tas = {
     'CMIP6.CMIP.historical.NIMS-KMA.KACE-1-0-G.r3i1p1f1.mon.tas.atmos.glb-z1-gr.v20190919' ; % Land surface >30C
     };
 %% tos
-badListCM6Tos = { };
-t4 = {
+badListCM6Tos = {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007'
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008'
@@ -799,7 +800,7 @@ t4 = {
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.sos.ocean.glb-l-gr.v20190826' ; % mask/missing_value? thetao too
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.sos.ocean.glb-l-gr.v20190830'
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r5i1p1f1.mon.sos.ocean.glb-l-gr.v20200429'
-    'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-l-gr1.v20190530' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-l-gr1.v20190530-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191120' ; % Masking Atlantic/Southern O/Pac
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
@@ -811,7 +812,7 @@ t4 = {
     'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191229'
     'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200101'
     'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20200101'
-    'CMIP6.ScenarioMIP.ssp126.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp126.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200221'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200220'
@@ -819,7 +820,7 @@ t4 = {
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191229'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20200101'
-    'CMIP6.ScenarioMIP.ssp245.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp245.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200221'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200221'
@@ -828,10 +829,10 @@ t4 = {
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r5i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
-    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.ScenarioMIP.ssp434.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp460.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200527' ; % rotated pole, thetao too
-    'ssp534-over missing'
+    'CMIP6.ScenarioMIP.ssp534-over.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200222'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200222'
@@ -839,7 +840,7 @@ t4 = {
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191230'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200102'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20191230'
-    'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 
 %% Process models
@@ -857,7 +858,11 @@ for exp = 1:length(exps)
         % mrro - test variable match
         if strcmp(vars(var).name,'mrro')
             disp(['mrro ',vars(var).name])
-            badList = badListCM6Mrro;
+            if badList
+                badList = badListCM6Mrro;
+            else
+                badList = {};
+            end
             scale = mscaler; % -6 to 40e-5 - inflate to 1e5
             clMap = 26; % red-blue (no white)
             cMin = 0; cMax = 40;
@@ -875,8 +880,11 @@ for exp = 1:length(exps)
         % sos - test variable match
         if strcmp(vars(var).name,'sos')
             disp(['sos ',vars(var).name])
-
-            badList = badListCM6Sos;
+            if badList
+                badList = badListCM6Sos;
+            else
+                badList = {};
+            end
             cont1 = scont1;
             cont2 = scont2;
             cont3 = scont3;
@@ -886,7 +894,11 @@ for exp = 1:length(exps)
         % tas - test variable match
         if strcmp(vars(var).name,'tas')
             disp(['tas ',vars(var).name])
-            badList = badListCM6Tas;
+            if badList
+                badList = badListCM6Tas;
+            else
+                badList = {};
+            end
             cont1 = ptcont1;
             cont2 = ptcont2;
             cont3 = ptcont3;
@@ -896,7 +908,11 @@ for exp = 1:length(exps)
         % tos - test variable match
         if strcmp(vars(var).name,'tos')
             disp(['tos ',vars(var).name])
-            badList = badListCM6Tos;
+            if badList
+                badList = badListCM6Tos;
+            else
+                badList = {};
+            end
             cont1 = ptcont1;
             cont2 = ptcont2;
             cont3 = ptcont3;
@@ -911,7 +927,7 @@ for exp = 1:length(exps)
         outData = fullfile(outDir,'ncs',dataDate,'CMIP6',exps(exp).name,vars(var).name,'woaGrid');
 
         % Deal with directory creation/cleanup
-        pngDir = fullfile(outData,inVar);
+        pngDir = fullfile(outData,[inVar,'_badList']);
         if exist(pngDir,'dir')
             rmdir(pngDir,'s');
         end
