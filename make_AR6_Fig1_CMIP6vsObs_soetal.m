@@ -20,6 +20,7 @@
 % PJD 25 Mar 2021   - Updated to latest 210325 processed files (was 210324, which had rogue files)
 % PJD 27 Mar 2021   - Added conditional basin masking {'sos','tos'} only
 % PJD 27 Mar 2021   - Revise and augment badLists from complete 210325 data (mrro,sos,tas,tos)
+% PJD 27 Mar 2021   - Added badListFlag
 
 % Cleanup workspace and command window
 clear, clc, close all
@@ -29,7 +30,7 @@ outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
 dataDate = '210325';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
-badList = 1;
+badListFlag = 1;
 
 % Setup plotting scales
 mcont1 = 0:.25:10; % 0:1:30 map [min -6.5e-5, median 8.9e-7, max 7.3e-4]
@@ -66,7 +67,6 @@ if purge
     delete([outDir,dateFormat,'_WOA18*.png']);
     delete([outDir,dateFormat,'_cmip*.png']);
     delete([outDir,dateFormat,'_CMIP6*.mat']);
-    delete([outDir,'ncs/',dataDate,'/CMIP*/*/woaGrid/*/',dateFormat,'*.png']);
 end
 
 %% Print time to console, for logging
@@ -858,7 +858,7 @@ for exp = 1:length(exps)
         % mrro - test variable match
         if strcmp(vars(var).name,'mrro')
             disp(['mrro ',vars(var).name])
-            if badList
+            if badListFlag
                 badList = badListCM6Mrro;
             else
                 badList = {};
@@ -880,7 +880,7 @@ for exp = 1:length(exps)
         % sos - test variable match
         if strcmp(vars(var).name,'sos')
             disp(['sos ',vars(var).name])
-            if badList
+            if badListFlag
                 badList = badListCM6Sos;
             else
                 badList = {};
@@ -894,7 +894,7 @@ for exp = 1:length(exps)
         % tas - test variable match
         if strcmp(vars(var).name,'tas')
             disp(['tas ',vars(var).name])
-            if badList
+            if badListFlag
                 badList = badListCM6Tas;
             else
                 badList = {};
@@ -908,7 +908,7 @@ for exp = 1:length(exps)
         % tos - test variable match
         if strcmp(vars(var).name,'tos')
             disp(['tos ',vars(var).name])
-            if badList
+            if badListFlag
                 badList = badListCM6Tos;
             else
                 badList = {};
@@ -927,7 +927,11 @@ for exp = 1:length(exps)
         outData = fullfile(outDir,'ncs',dataDate,'CMIP6',exps(exp).name,vars(var).name,'woaGrid');
 
         % Deal with directory creation/cleanup
-        pngDir = fullfile(outData,[inVar,'_badList']);
+        if badListFlag
+            pngDir = fullfile(outData,[inVar,'_badList']);
+        else
+            pngDir = fullfile(outData,inVar);
+        end
         if exist(pngDir,'dir')
             rmdir(pngDir,'s');
         end
