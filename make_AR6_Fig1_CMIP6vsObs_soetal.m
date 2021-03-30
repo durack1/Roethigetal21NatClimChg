@@ -21,6 +21,7 @@
 % PJD 27 Mar 2021   - Added conditional basin masking {'sos','tos'} only
 % PJD 27 Mar 2021   - Revise and augment badLists from complete 210325 data (mrro,sos,tas,tos)
 % PJD 27 Mar 2021   - Added badListFlag
+%                   TO-DO: Infill mrro, landsea mask
 
 % Cleanup workspace and command window
 clear, clc, close all
