@@ -21,6 +21,7 @@
 % PJD 27 Mar 2021   - Added conditional basin masking {'sos','tos'} only
 % PJD 27 Mar 2021   - Revise and augment badLists from complete 210325 data (mrro,sos,tas,tos)
 % PJD 27 Mar 2021   - Added badListFlag
+% PJD 20 Apr 2021   - Generate draft Figure 1
 %                   TO-DO: Infill mrro, landsea mask - upstream
 
 % Cleanup workspace and command window
@@ -32,6 +33,7 @@ dataDate = '210325';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
 badListFlag = 1;
+addpath /work/durack1/csiro/toolbox-local/csirolib/ % Add coast
 
 % Setup plotting scales
 mcont1 = 0:.25:10; % 0:1:30 map [min -6.5e-5, median 8.9e-7, max 7.3e-4]
@@ -1207,9 +1209,98 @@ save(outFile, ...
 disp('** All data written to *.mat.. **')
 
 %% Or load WOA18 and CMIP5/6 ensemble matrices from saved file
-%load 210328T000410_210325_CMIP6.mat
+%load /work/durack1/Shared/210128_PaperPlots_Rothigetal/210328T000410_210325_CMIP6.mat
 
-%% Figure 1 - diff maps for sos
+%% Figure 1 - obs sos change, ssp585 sos and mrro changes
+close all,clc
+warning off export_fig:exportgraphics
+fonts = 8;
+dateFormat = datestr(now,'yymmdd');
+sscale = 1;
+mscale = 100; % In % change not needed
+
+% Get colormap
+clM = clmap(28);
+clS = clmap(27);
+
+% Load obs change
+obsFile = [homeDir,'200428_data_OceanObsAnalysis/DurackandWijffels_GlobalOceanChanges_19500101-20210106__210122-205144_beta.nc'];
+obsSChg = getnc(obsFile,'salinity_change',[-1 1 -1 -1],[-1 1 -1 -1]);
+obsLat = getnc(obsFile,'latitude');
+obsLon = getnc(obsFile,'longitude');
+
+% Generate 3 panel plot
+% Create canvas
+close all, handle = figure('units','centimeters','visible','on','color','w'); set(0,'CurrentFigure',handle); clmap(27)
+
+% Labels
+xLimLab = 110; yLimLab = 57; xLimLabInfo = 80; yLimLabInfo = 52;
+
+% Obs salinity
+ax1 = subplot(3,1,1);
+%colormap(ax1,clS) ; % Set palette - Blue -> Red
+pcolor(obsLon,obsLat,obsSChg); caxis([-1 1]*sscale); shading flat; continents
+ylab1 = ylabel('Latitude');
+cb1 = colorbarf_nw('vert',-1:0.0625:1,-1:.25:1);
+lab1 = text(xLimLab,yLimLab,'A');
+lab1Info = text(xLimLabInfo,yLimLabInfo,{'1950-2020';'Obs. Salinity'});
+
+% sos ssp585
+% Calculate diff
+s585SosDiff = sos_CMIP6_ssp585_2071_2101_mean-sos_CMIP6_historical_1985_2015_mean;
+ax2 = subplot(3,1,2);
+%colormap(ax2,clS) ; % Set palette - Blue -> Red
+pcolor(t_lon,t_lat,s585SosDiff); caxis([-1 1]*sscale); shading flat; continents
+ylab2 = ylabel('Latitude');
+lab2 = text(xLimLab,yLimLab,'B');
+lab2Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP585 Salinity'});
+
+% mrro ssp585
+% Calculate percent change
+s585MrroDiff = ((mrro_CMIP6_ssp585_2071_2101_mean./mrro_CMIP6_historical_1985_2015_mean)-1)*100; % kg m-2 s-1
+ax3 = subplot(3,1,3);
+pcM = pcolor(t_lon,t_lat,s585MrroDiff); caxis([-1 1]*mscale); shading flat;
+hold on; coast('k');
+colormap(ax3,clM) ; % Switch palette - Brown -> Green
+xlab3 = xlabel('Longitude');
+ylab3 = ylabel('Latitude');
+lab3 = text(xLimLab,yLimLab,'C');
+lab3Info = text(188,40,{'2071-2100';'CMIP6 SSP585 Runoff'});
+cb2 = colorbarf_nw('vert',[-1:.125:1]*mscale,[-1:.25:1]*mscale);
+
+% Deal with axes
+yticks = {'','75S','','55S','','35S','','15S','','','15N','','35N','','55N','','75N',''};
+xticks = {'0','60E','120E','180','120W','60W','0'};
+set(ax1,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',{''},'yminort','on', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',yticks,'xminort','on');
+set(ax2,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',{''},'yminort','on', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',yticks,'xminort','on');
+set(ax3,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',xticks,'yminort','on', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',yticks,'xminort','on');
+% Resize into canvas
+set(handle,'Position',[2 2 17 20]) % Full page width (175mm (17) width x 83mm (8) height)
+xlim = 0.07; xlimCb = 0.94; xlimWid = 0.015; wid = 0.85; hei = 0.3; labFont = 12; labInfoFont = 10;
+set(ax1,'Position',[xlim 0.69 wid hei]);
+set(lab1,'fontsize',labFont,'fontweight','bold')
+set(lab1Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(ax2,'Position',[xlim 0.37 wid hei]);
+set(lab2,'fontsize',labFont,'fontweight','bold')
+set(lab2Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(cb1,'Position',[xlimCb 0.37 xlimWid 0.62],'fontsize',fonts)
+set(ax3,'Position',[xlim 0.05 wid hei]);
+set(lab3,'fontsize',labFont,'fontweight','bold')
+set(lab3Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(cb2,'Position',[xlimCb 0.05 xlimWid 0.3],'fontsize',fonts,'Colormap',clM)
+
+% Print to file
+outName = [outDir,dateFormat,'_durack1_Rothigetal21NatCC_Figure1'];
+export_fig(outName,'-png')
+export_fig(outName,'-eps')
+
+%% Diff figures - diff maps for sos
 close all,clc
 warning off export_fig:exportgraphics
 fonts = 8;
