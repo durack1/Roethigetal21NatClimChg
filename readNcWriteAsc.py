@@ -9,6 +9,8 @@ PJD 26 May 2021     - Started
                     Notes: https://stackoverflow.com/questions/24876331/writing-an-ascii-file-from-a-2d-numpy-array
 PJD 28 May 2021     - Consider stringIO module
                     Notes: https://www.geeksforgeeks.org/stringio-module-in-python/
+                    https://stackoverflow.com/questions/24876331/writing-an-ascii-file-from-a-2d-numpy-array
+PJD 28 May 2021     - Updated to extract Palau data; Generated writeGridAscii function for generic outputs
                     TODO: pull out Palau data
 
 Target:
@@ -25,15 +27,51 @@ cellsize     1.000000000000
 # %% imports
 import argparse
 import cdms2 as cdm
-#import io
+import cdutil as cdu
 import numpy as np
 import pathlib
-import sys
-#import time
-#from io import StringIO
+
+# %% function def
+
+
+def writeGridAscii(matrix, outfile):
+    # get coords from matrix
+    lat = matrix.getLatitude()
+    lon = matrix.getLongitude()
+    # create format defaults
+    noData = -99999
+    strFormat = '{:6.3f}'
+    with open(outfile, 'w') as fO:
+        fO.write("ncols " + str(matrix.shape[1]) + "\n")
+        fO.write("nrows " + str(matrix.shape[0]) + "\n")
+        fO.write("xllcorner " + str(lon[0]) + "\n")
+        fO.write("yllcorner " + str(lat[0]) + "\n")
+        fO.write("cellsize " + str(lat[1]-lat[0]) + "\n")
+        fO.write("NODATA_value " + str(noData) + "\n")
+        # loop through lats
+        for count, lats in enumerate(lat):
+            print(count, lats)
+            # loop through lons, reset outstr
+            outStr = ''
+            for count2, latVal in enumerate(matrix[count, :]):
+                if np.isnan(latVal):
+                    outStr = outStr + ' ' + str(noData)
+                    #print('nan found')
+                elif latVal == 0.5:
+                    outStr = outStr + ' ' + str(noData)
+                    #print('0.5 found')
+                elif latVal == 1.0:
+                    outStr = outStr + ' ' + str(noData)
+                    #print('1.0 found')
+                else:
+                    outStr = outStr + ' ' +\
+                        str(strFormat.format(matrix[count, count2]))
+            fO.write(outStr + "\n")
+
 
 # %% get inputs
-parser = argparse.ArgumentParser(description='Convert a netcdf file to grid ascii')
+parser = argparse.ArgumentParser(
+    description='Convert a netcdf file to grid ascii')
 parser.add_argument('-i', '--infile', type=pathlib.Path,
                     help='a valid input netcdf file')
 parser.add_argument('-o', '--outfile', type=pathlib.Path,
@@ -45,7 +83,6 @@ infile = str(args.infile)
 print('infile:', infile)
 outfile = str(args.infile).replace('.nc', '.txt')
 print('outfile:', outfile)
-#sys.exit()
 
 # %% read data
 fH = cdm.open(infile)
@@ -59,57 +96,13 @@ print('cellsize:', lat[1]-lat[0])
 #print('sos[0,:]:', sos[0,:])
 fH.close()
 
-# %% write data
-noData = -99999
-strFormat = '{:6.3f}'
-with open(outfile, 'w') as fO:
-    fO.write("ncols " + str(sos.shape[1]) + "\n")
-    fO.write("nrows " + str(sos.shape[0]) + "\n")
-    fO.write("xllcorner " + str(lon[0]) + "\n")
-    fO.write("yllcorner " + str(lat[0]) + "\n")
-    fO.write("cellsize " + str(lat[1]-lat[0]) + "\n")
-    fO.write("NODATA_value " + str(noData) + "\n")
-    # loop through all lats
-    for count, lats in enumerate(lat):
-        print(count, lats)
-        # loop through all lons
-        outStr = ''
-        for count2, latVal in enumerate(sos[count,:]):
-            #print('latVal:', latVal,'D', 'type:', type(latVal))
-            if np.isnan(latVal):
-                outStr = outStr + ' ' + str(noData)
-                #print('nan found')
-            elif latVal == 0.5:
-                 outStr = outStr + ' ' + str(noData)
-                 #print('0.5 found')
-            elif latVal == 1.0:
-                 outStr = outStr + ' ' + str(noData)
-                 #print('1.0 found')
-            else:
-                #print('format:', str(strFormat.format(sos[count,count2])))
-                outStr = outStr + ' ' + str(strFormat.format(sos[count,count2]))
-        #print(count, count2, 'outStr:', outStr)
-        #print('-----')
-        #time.sleep(3)
-        fO.write(outStr + "\n")
+# %% write global data
+writeGridAscii(sos, outfile)
 
-
-# f = StringIO()
-# x = np.array(( -9999, 1.345, -9999, 3.21, 0.13, -9999), dtype=float)
-# np.savetxt(f, x, fmt='%.3f')
-# f.seek(0)
-# fs = f.read().replace('-9999.000', '-9999', -1)
-# f.close()
-# f = open('ASCIIout.asc', 'w')
-# f.write("ncols " + str(ncols) + "\n")
-# f.write("nrows " + str(nrows) + "\n")
-# f.write("xllcorner " + str(xllcorner) + "\n")
-# f.write("yllcorner " + str(yllcorner) + "\n")
-# f.write("cellsize " + str(cellsize) + "\n")
-# f.write("NODATA_value " + str(noDATA) + "\n")
-# f.write(fs)
-# f.close()
-
-# %% extract Palau info
-latBounds = [2, 9]
-lonBounds = [130, 135]
+# %% extract Palau data and write
+latBounds = [2, 10]
+lonBounds = [130, 136]
+palauDomain = cdu.region.domain(latitude=latBounds, longitude=lonBounds)
+sosPalau = palauDomain.select(sos)
+outfile = infile.replace('.nc', '_PalauDomain.txt')
+writeGridAscii(sosPalau, outfile)
