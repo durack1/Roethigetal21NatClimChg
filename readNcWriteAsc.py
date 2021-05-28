@@ -7,6 +7,9 @@ This file has been written to reformat netcdf matrices into grid ascii output
 
 PJD 26 May 2021     - Started
                     Notes: https://stackoverflow.com/questions/24876331/writing-an-ascii-file-from-a-2d-numpy-array
+PJD 28 May 2021     - Consider stringIO module
+                    Notes: https://www.geeksforgeeks.org/stringio-module-in-python/
+                    TODO: pull out Palau data
 
 Target:
 ncols        360
@@ -106,3 +109,7 @@ with open(outfile, 'w') as fO:
 # f.write("NODATA_value " + str(noDATA) + "\n")
 # f.write(fs)
 # f.close()
+
+# %% extract Palau info
+latBounds = [2, 9]
+lonBounds = [130, 135]
