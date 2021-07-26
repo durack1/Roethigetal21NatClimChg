@@ -18,6 +18,8 @@ PJD 27 Feb 2021     - Added temporal range check before var read with time bound
 PJD 24 Mar 2021     - Corrected issue with ssp534-over -> ssp534_over
 PJD 24 Mar 2021     - Fixed variable name from var*_CdmsRegrid -> var
 PJD 25 Mar 2021     - Redefine var before creating outfile names - test for variable stepping
+PJD 26 Jul 2021     - Update for new home path
+PJD 26 Jul 2021     - Appended additional historical tas to problem list CMIP6.CMIP.historical.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20210601.0000000.0.xml
                     - TO-DO: fix sos, tos rotated pole (FGOALS*, IPSL-CM6*INCA)
                     - TO-DO: fix mrro no ocean mask with sftof field (CanESM*, GISS*, E3SM*, NorESM2*, INMCM5*)
                     - TO-DO: Add badMods back in
@@ -34,9 +36,9 @@ import cdtime as cdt
 import cdutil as cdu
 #import MV2 as mv
 import numpy as np
-os.sys.path.insert(0,'/export/durack1/git/durolib/durolib')
+os.sys.path.insert(0,'/home/durack1/git/durolib/durolib')
 from durolib import fixVarUnits,globalAttWrite,writeToLog #,trimModelList
-os.sys.path.insert(0,'/export/durack1/git/climlib/climlib')
+os.sys.path.insert(0,'/home/durack1/git/climlib/climlib')
 from wrangle import trimModelList ; # climlib
 from socket import gethostname
 
@@ -96,11 +98,12 @@ for key in actExpPair.keys():
                     '/p/user_pub/xclim/CMIP6/CMIP/historical/atmos/mon/tas/CMIP6.CMIP.historical.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20191106.0000000.0.xml',
                     '/p/user_pub/xclim/CMIP6/ScenarioMIP/ssp126/atmos/mon/tas/CMIP6.ScenarioMIP.ssp126.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20191106.0000000.0.xml',
                     '/p/user_pub/xclim/CMIP6/ScenarioMIP/ssp245/atmos/mon/tas/CMIP6.ScenarioMIP.ssp245.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20191106.0000000.0.xml',
-                    '/p/user_pub/xclim/CMIP6/ScenarioMIP/ssp585/atmos/mon/tas/CMIP6.ScenarioMIP.ssp585.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20191106.0000000.0.xml']
+                    '/p/user_pub/xclim/CMIP6/ScenarioMIP/ssp585/atmos/mon/tas/CMIP6.ScenarioMIP.ssp585.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20191106.0000000.0.xml',
+                    '/p/user_pub/xclim/CMIP6/CMIP/historical/atmos/mon/tas/CMIP6.CMIP.historical.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20210601.0000000.0.xml']
                 for bad in badFiles:
                     #print(bad)
                     fileList = list(filter((bad).__ne__, fileList))
-                fileListTrim = trimModelList(fileList, criteria=['tpoints', 'cdate', 'ver']) #, verbose=True) ; #'publish',
+                fileListTrim = trimModelList(fileList, criteria=['tpoints', 'cdate', 'ver']) #, verbose=True); #, 'publish');
                 print(var,' len(fileListTrim): ',len(fileListTrim))
                 writeToLog(logFile,''.join([var,' len(fileListTrim): ',str(len(fileListTrim))]))
                 print('_'.join([mipEra,experimentId,var]))
