@@ -975,16 +975,16 @@ for exp = 1:length(exps)
             separators = strfind(mod,'.');
             %mod = mod(separators(3)+1:separators(11)-1);
             mod = mod(1:separators(11)-1);
-            disp(['mod:',mod])
+            disp(['mod: ',mod])
             %if contains(mod,'.IPSL-CM6A-LR.')
             %    keyboard
             %end
-            %match = strfind(badList,mod);
-            %match = strmatch(mod,badList,'exact');
-            %match = strncmp(mod,badList,length(mod));
-            %match = validatestring(mod,badList);
-            %match = find(~cellfun(@isempty,match), 1);
-            match = strcmp(mod,badList);
+            %match = strfind(badList,mod); % OLD
+            %match = strmatch(mod,badList,'exact'); % Test
+            %match = strncmp(mod,badList,length(mod)); % Test
+            %match = validatestring(mod,badList); % Test
+            match = cell(double(strcmp(mod,badList))');
+            match = find(~cellfun(@isempty,match), 1);
             if ~isempty(match)
                 ind(y) = x;
                 y = y + 1;
