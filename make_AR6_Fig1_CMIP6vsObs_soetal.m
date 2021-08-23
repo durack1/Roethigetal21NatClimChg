@@ -22,6 +22,9 @@
 % PJD 27 Mar 2021   - Revise and augment badLists from complete 210325 data (mrro,sos,tas,tos)
 % PJD 27 Mar 2021   - Added badListFlag
 % PJD 20 Apr 2021   - Generate draft Figure 1
+% PJD 17 Aug 2021   - Update dataDate to 210726
+% PJD 17 Aug 2021   - Update export -> home
+% PJD 23 Aug 2021   - Update logic, remove clc calls
 %                   TO-DO: Infill mrro, landsea mask - upstream
 
 % Cleanup workspace and command window
@@ -29,10 +32,10 @@ clear, clc, close all
 % Initialise environment variables
 [homeDir,~,dataDir,obsDir,~,aHostLongname] = myMatEnv(2);
 outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
-dataDate = '210325';
+dataDate = '210726';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
-badListFlag = 1;
+badListFlag = 1; % Test against badList before final run
 addpath /work/durack1/csiro/toolbox-local/csirolib/ % Add coast
 
 % Setup plotting scales
@@ -78,9 +81,9 @@ setenv('USERCREDENTIALS','Paul J. Durack; pauldurack@llnl.gov (durack1); +1 925 
 disp(['CONTACT: ',getenv('USERCREDENTIALS')])
 disp(['HOSTNAME: ',aHostLongname])
 disp(['SOURCE DATA: ',fullfile(outDir,'ncs',dataDate)])
-a = getGitInfo('/export/durack1/git/export_fig/') ;
+a = getGitInfo('/home/durack1/git/export_fig/') ;
 disp([upper('export_fig hash: '),a.hash])
-a = getGitInfo('/export/durack1/git/Roethigetal21NatClimChg/') ;
+a = getGitInfo('/home/durack1/git/Roethigetal21NatClimChg/') ;
 disp([upper('Roethigetal21NatClimChg hash: '),a.hash]); clear a
 
 %% Load WOA18 data
@@ -1212,7 +1215,7 @@ disp('** All data written to *.mat.. **')
 %load /work/durack1/Shared/210128_PaperPlots_Rothigetal/210328T000410_210325_CMIP6.mat
 
 %% Figure 1 - obs sos change, ssp585 sos and mrro changes
-close all,clc
+close all
 warning off export_fig:exportgraphics
 fonts = 8;
 dateFormat = datestr(now,'yymmdd');
@@ -1301,7 +1304,7 @@ export_fig(outName,'-png')
 export_fig(outName,'-eps')
 
 %% Diff figures - diff maps for sos
-close all,clc
+close all
 warning off export_fig:exportgraphics
 fonts = 8;
 dateFormat = datestr(now,'yymmdd');
