@@ -25,7 +25,10 @@
 % PJD 17 Aug 2021   - Update dataDate to 210726
 % PJD 17 Aug 2021   - Update export -> home
 % PJD 23 Aug 2021   - Update logic, remove clc calls
-%                   TO-DO: Infill mrro, landsea mask - upstream
+% PJD 23 Aug 2021   - Corrected sos, tos E3SM1-0, INM-CM4-8 .glb-l-gr. -> .glb-2d-gr.
+% PJD 23 Aug 2021   - Updated strcmp logic for badList matching
+%                   TO-DO:
+%                   Infill mrro, WOA025 landsea mask - upstream
 
 % Cleanup workspace and command window
 clear, clc, close all
@@ -186,6 +189,7 @@ disp('** WOA18 processing complete.. **')
 %% mrro
 badListCM6Mrro = {
     'CMIP6.CMIP.historical.AS-RCEC.TaiESM1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20200624' ; % no ocean masking
+    'CMIP6.CMIP.historical.AS-RCEC.TaiESM1.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20210416' ; % No ocean masking
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.CCCma.CanESM5.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
@@ -454,6 +458,7 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp126.NASA-GISS.GISS-E2-1-G.r4i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp126.NASA-GISS.GISS-E2-1-G.r5i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp126.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp126.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20210319' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp126.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp126.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp245.AS-RCEC.TaiESM1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20201124' ; % no ocean masking
@@ -535,8 +540,11 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r9i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r10i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20210319'
     'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-LM.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20191108'
+    'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-LM.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20210319'
     'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-LM.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20191108'
+    'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-LM.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20210319'
     'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108'
     'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-MM.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20200702'
     'CMIP6.ScenarioMIP.ssp245.NOAA-GFDL.GFDL-CM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
@@ -622,6 +630,7 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r9i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r10i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp370.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp370.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20210319'
     'CMIP6.ScenarioMIP.ssp370.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108'
     'CMIP6.ScenarioMIP.ssp370.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp434.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
@@ -728,6 +737,7 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp585.NASA-GISS.GISS-E2-1-G.r4i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp585.NASA-GISS.GISS-E2-1-G.r5i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp585.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp585.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20210319'
     'CMIP6.ScenarioMIP.ssp585.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp585.NOAA-GFDL.GFDL-CM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp585.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
@@ -742,12 +752,12 @@ badListCM6Sos = {
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191012'
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191012'
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r5i1p1f1.mon.sos.ocean.glb-2d-gn.v20191013'
-    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.sos.ocean.glb-l-gr.v20190826' ; % mask/missing_value? thetao too
-    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.sos.ocean.glb-l-gr.v20190830'
-    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r3i1p1f1.mon.sos.ocean.glb-l-gr.v20190827'
-    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r4i1p1f1.mon.sos.ocean.glb-l-gr.v20190909'
-    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r5i1p1f1.mon.sos.ocean.glb-l-gr.v20200429'
-    'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-l-gr1.v20190530-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.sos.ocean.glb-2d-gr.v20190826' ; % mask/missing_value? duped as glb-2d <- glb-l-gr; thetao too
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.sos.ocean.glb-2d-gr.v20190830'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r3i1p1f1.mon.sos.ocean.glb-2d-gr.v20190827'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r4i1p1f1.mon.sos.ocean.glb-2d-gr.v20190909'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r5i1p1f1.mon.sos.ocean.glb-2d-gr.v20200429'
+    'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190530-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao); .glb.l -> 2d
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191120' ; % Masking Atlantic/Southern O/Pac
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20200226'
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200226'
@@ -803,10 +813,10 @@ badListCM6Tos = {
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20200811'
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r5i1p1f1.mon.tos.ocean.glb-2d-gn.v20200811'
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r6i1p1f1.mon.tos.ocean.glb-2d-gn.v20200811'
-    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.sos.ocean.glb-l-gr.v20190826' ; % mask/missing_value? thetao too
-    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.sos.ocean.glb-l-gr.v20190830'
-    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r5i1p1f1.mon.sos.ocean.glb-l-gr.v20200429'
-    'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-l-gr1.v20190530-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.tos.ocean.glb-2d-gr.v20190826' ; % mask/missing_value? thetao too - .glb-l vs .glb-2d
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.tos.ocean.glb-2d-gr.v20190830'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r5i1p1f1.mon.tos.ocean.glb-2d-gr.v20200429'
+    'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190530-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191120' ; % Masking Atlantic/Southern O/Pac
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
@@ -963,10 +973,18 @@ for exp = 1:length(exps)
             splits = strfind(models{x},'/');
             mod = models{x}(splits(end)+1:end);
             separators = strfind(mod,'.');
-            mod = mod(separators(3)+1:separators(11)-1);
-            %disp(['mod:',mod])
-            match = strfind(badList,mod);
-            match = find(~cellfun(@isempty,match), 1);
+            %mod = mod(separators(3)+1:separators(11)-1);
+            mod = mod(1:separators(11)-1);
+            disp(['mod:',mod])
+            %if contains(mod,'.IPSL-CM6A-LR.')
+            %    keyboard
+            %end
+            %match = strfind(badList,mod);
+            %match = strmatch(mod,badList,'exact');
+            %match = strncmp(mod,badList,length(mod));
+            %match = validatestring(mod,badList);
+            %match = find(~cellfun(@isempty,match), 1);
+            match = strcmp(mod,badList);
             if ~isempty(match)
                 ind(y) = x;
                 y = y + 1;
