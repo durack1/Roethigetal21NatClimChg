@@ -995,7 +995,7 @@ for exp = 1:length(exps)
                 y = y + 1;
                 disp(['drop: ',mod])
             end
-            keyboard
+            %keyboard
         end
         % Truncate using ind list
         ind = ind(~isnan(ind));
