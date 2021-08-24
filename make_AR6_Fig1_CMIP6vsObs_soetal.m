@@ -27,6 +27,7 @@
 % PJD 23 Aug 2021   - Update logic, remove clc calls
 % PJD 23 Aug 2021   - Corrected sos, tos E3SM1-0, INM-CM4-8 .glb-l-gr. -> .glb-2d-gr.
 % PJD 23 Aug 2021   - Updated strcmp logic for badList matching
+% PJD 24 Aug 2021   - Toggle strcmp logic
 %                   TO-DO:
 %                   Infill mrro, WOA025 landsea mask - upstream
 
@@ -977,19 +978,24 @@ for exp = 1:length(exps)
             mod = mod(1:separators(11)-1);
             disp(['mod: ',mod])
             %if contains(mod,'.IPSL-CM6A-LR.')
-            %    keyboard
+            %if contains(mod,'.AS-RCEC.TaiESM1.')
+            %   keyboard
             %end
-            %match = strfind(badList,mod); % OLD
+            %match = strfind(badList,mod); % OLD, loose matching
             %match = strmatch(mod,badList,'exact'); % Test
             %match = strncmp(mod,badList,length(mod)); % Test
             %match = validatestring(mod,badList); % Test
-            match = cell(double(strcmp(mod,badList))');
-            match = find(~cellfun(@isempty,match), 1);
+            %match = num2cell(double(strcmp(mod,badList))); % Test
+            %match = num2cell(strcmp(mod,badList));
+            %match = find(~cellfun(@isempty,match), 1);
+            match = strcmp(mod,badList);
+            match = find(match, 1);
             if ~isempty(match)
                 ind(y) = x;
                 y = y + 1;
                 disp(['drop: ',mod])
             end
+            keyboard
         end
         % Truncate using ind list
         ind = ind(~isnan(ind));
@@ -1171,6 +1177,10 @@ for exp = 1:length(exps)
             for mod = 1:size(varTmp,1)
                 varTmp(mod,:,:) = squeeze(varTmp(mod,:,:)).*basins3_NaN_ones;
             end; clear mod
+        %elseif sum(strcmp(inVar,{'mrro'})) > 0
+        %    for mod = 1:size(varTmp,1)
+        %        varTmp(mod,:,:) = inpaint_nans(varTmp(mod,:,:)).*Inverse0p25DegreeMask;
+        %    end; clear mod
         end
 
         % Calculate ensemble mean
