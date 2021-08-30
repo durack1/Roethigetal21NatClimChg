@@ -9,6 +9,7 @@ PJD 29 Mar 2021     - Started
 PJD 29 Mar 2021     - First pass at data writing, minus metadata
 PJD 24 Aug 2021     - Update to latest data - need to update one last time
 PJD 24 Aug 2021     - Update home path
+PJD 30 Aug 2021     - Update input mat file 210824T132736_210726_CMIP6.mat -> 210824T225103_210726_CMIP6.mat
                     - TO-DO: Add attribution info to files; git hash etc
 
 @author: durack1
@@ -24,7 +25,7 @@ from durolib import globalAttWrite
 
 # %%
 targetDir = '/work/durack1/Shared/210128_PaperPlots_Rothigetal/'
-infile = os.path.join(targetDir, '210824T132736_210726_CMIP6.mat')
+infile = os.path.join(targetDir, '210824T225103_210726_CMIP6.mat')
 mat = sio.loadmat(infile)
 matKeys = mat.keys()
 lat = mat['t_lat']
