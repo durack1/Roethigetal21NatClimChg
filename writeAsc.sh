@@ -20,9 +20,8 @@ files=`ls "$srcPath"/*.nc`
 for file in $files; do
     echo "$file"
     echo "${file/nc/txt}"
+    # Call Python and write ascii
+    python readNcWriteAsc.py \
+    -i "$file" \
+    -o "${file/nc/txt}"
 done
-
-# Call Python and write ascii
-python readNcWriteAsc.py \
--i "$file" \
--o "${file/nc/txt}"
