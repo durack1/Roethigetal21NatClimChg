@@ -15,6 +15,8 @@ PJD 26 Jul 2021     - Update Palau spatial range 2 to 10, 130 to 136 -> -10 to 2
 PJD 26 Jul 2021     - flip upside down - https://github.com/durack1/Roethigetal21NatClimChg/issues/1
 PJD 24 Aug 2021     - Update bounds again 120 to 160E, 10S to 20N -> 120 to 145E, 8S to 19N
 PJD 24 Aug 2021     - Add 0p5 output grid
+PJD 30 Aug 2021     - Add sos flip
+PJD 30 Aug 2021     - Commented out 0p25 outputs
                     TODO: ?
 
 Target:
@@ -140,28 +142,30 @@ woaGrid0p5Uniform = cdm.grid.createUniformGrid(lat[0], 359, .5, lon[0], 719, .5,
 sos0p5Uniform = sos.regrid(woaGrid0p5Uniform,regridTool='ESMF',regridMethod='linear')
 
 # %% write global 1deg data
+# Flip upside down (N is on bottom, will be on top once flipped)
+sos = np.flip(sos, axis=0)
 writeGridAscii(sos, outfile)
 
 # %% extract Palau data and write
 latBounds = [-8.25, 19.25] ##[-8.5, 19.25] ##[-7.999, 19.001] ##[-8.001, 19.001] ##[-8, 19] ##[-10, 20] ##[2, 10]
 lonBounds = [119.75, 145.25] ##[120.001, 145.001] ##[120, 145] ##[120, 160] ##[130, 136]
 # 0p25
-palauDomain0p25 = cdu.region.domain(latitude=latBounds, longitude=lonBounds)
-sosPalau = palauDomain0p25.select(sos0p25)
-print('sosPalau0p25:\n', sosPalau)
-print('sosPalau.getLat.getData:', sosPalau.getLatitude().getData())
-print('sosPalau.getLat.getBnds:', sosPalau.getLatitude().getBounds())
-# And flip upside down (N is on bottom, will be on top once flipped)
-sosPalau = np.flip(sosPalau, axis=0)
-#print('sosPalau:\n', sosPalau)
-outfile = infile.replace('.nc', '_PalauDomain-0p25deg.txt')
-# Find filename (exclude path and append timeFormat)
-outFileName = outfile.split('/')[-1]
-outFileNameNew = '_'.join([timeFormat, outFileName])
-outfile = outfile.replace(outFileName, outFileNameNew)
-print('sos0p25 lat[1]-lat[0]:', sos0p25.getLatitude().getData()[1]-sos0p25.getLatitude().getData()[0])
-print('sosPalau0p25 lat[1]-lat[0]:', sosPalau.getLatitude().getData()[1]-sosPalau.getLatitude().getData()[0])
-writeGridAscii(sosPalau, outfile)
+# palauDomain0p25 = cdu.region.domain(latitude=latBounds, longitude=lonBounds)
+# sosPalau = palauDomain0p25.select(sos0p25)
+# print('sosPalau0p25:\n', sosPalau)
+# print('sosPalau.getLat.getData:', sosPalau.getLatitude().getData())
+# print('sosPalau.getLat.getBnds:', sosPalau.getLatitude().getBounds())
+# # And flip upside down (N is on bottom, will be on top once flipped)
+# sosPalau = np.flip(sosPalau, axis=0)
+# #print('sosPalau:\n', sosPalau)
+# outfile = infile.replace('.nc', '_PalauDomain-0p25deg.txt')
+# # Find filename (exclude path and append timeFormat)
+# outFileName = outfile.split('/')[-1]
+# outFileNameNew = '_'.join([timeFormat, outFileName])
+# outfile = outfile.replace(outFileName, outFileNameNew)
+# print('sos0p25 lat[1]-lat[0]:', sos0p25.getLatitude().getData()[1]-sos0p25.getLatitude().getData()[0])
+# print('sosPalau0p25 lat[1]-lat[0]:', sosPalau.getLatitude().getData()[1]-sosPalau.getLatitude().getData()[0])
+# writeGridAscii(sosPalau, outfile)
 # 0p5
 palauDomain0p5 = cdu.region.domain(latitude=latBounds, longitude=lonBounds)
 sosPalau = palauDomain0p5.select(sos0p5Uniform)
