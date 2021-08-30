@@ -38,7 +38,7 @@
 %                     ssp460 GISS-E2-1-G
 %                     ssp585 NorESM2-LM, GISS-E2-1-G
 %                   TO-DO:
-%                   Infill mrro, WOA025 landsea mask - upstream
+%                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
 % Cleanup workspace and command window
 clear, clc, close all
