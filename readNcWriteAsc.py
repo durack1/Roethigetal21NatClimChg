@@ -17,6 +17,7 @@ PJD 24 Aug 2021     - Update bounds again 120 to 160E, 10S to 20N -> 120 to 145E
 PJD 24 Aug 2021     - Add 0p5 output grid
 PJD 30 Aug 2021     - Add sos flip
 PJD 30 Aug 2021     - Commented out 0p25 outputs
+PJD 20 Sep 2021     - Updated to write out global 0p5deg data
                     TODO: ?
 
 Target:
@@ -141,10 +142,14 @@ woaGrid0p5Uniform = cdm.grid.createUniformGrid(lat[0], 359, .5, lon[0], 719, .5,
 # -89.5, -89. , -88.5, -88. , -87.5, -87. , -86.5, -86. , -85.5,
 sos0p5Uniform = sos.regrid(woaGrid0p5Uniform,regridTool='ESMF',regridMethod='linear')
 
-# %% write global 1deg data
+# %% write global data
+# 1deg data
 # Flip upside down (N is on bottom, will be on top once flipped)
 sos = np.flip(sos, axis=0)
-writeGridAscii(sos, outfile)
+writeGridAscii(sos, outfile.replace('.txt', '-1p0deg.txt'))
+# 0p5deg data
+sos = np.flip(sos0p5Uniform, axis=0)
+writeGridAscii(sos, outfile.replace('.txt', '-0p5deg.txt'))
 
 # %% extract Palau data and write
 latBounds = [-8.25, 19.25] ##[-8.5, 19.25] ##[-7.999, 19.001] ##[-8.001, 19.001] ##[-8, 19] ##[-10, 20] ##[2, 10]
@@ -183,4 +188,4 @@ outFileNameNew = '_'.join([timeFormat, outFileName])
 outfile = outfile.replace(outFileName, outFileNameNew)
 print('sos0p5Uniform lat[1]-lat[0]:', sos0p5Uniform.getLatitude().getData()[1]-sos0p5Uniform.getLatitude().getData()[0])
 print('sosPalau0p5 lat[1]-lat[0]:', sosPalau.getLatitude().getData()[1]-sosPalau.getLatitude().getData()[0])
-writeGridAscii(sosPalau, outfile)
+#writeGridAscii(sosPalau, outfile)
