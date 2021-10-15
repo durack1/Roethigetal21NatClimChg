@@ -18,6 +18,7 @@ PJD 24 Aug 2021     - Add 0p5 output grid
 PJD 30 Aug 2021     - Add sos flip
 PJD 30 Aug 2021     - Commented out 0p25 outputs
 PJD 20 Sep 2021     - Updated to write out global 0p5deg data
+PJD  7 Oct 2021     - Updated to compute diff
                     TODO: ?
 
 Target:
@@ -37,6 +38,7 @@ import cdms2 as cdm
 import cdutil as cdu
 import datetime
 import numpy as np
+import os
 import pathlib
 #import pdb
 import sys
@@ -90,13 +92,17 @@ parser.add_argument('-i', '--infile', type=pathlib.Path,
                     help='a valid input netcdf file')
 parser.add_argument('-o', '--outfile', type=pathlib.Path,
                     help='a valid output grid ascii file')
+parser.add_argument('-d', '--diff', type=str,
+                    help='generate a change field, rather than absolute')
 args = parser.parse_args()
 print(args)
 print('args.infile:', args.infile)
 infile = str(args.infile)
-print('infile:', infile)
+print('infile: ', infile)
 outfile = str(args.infile).replace('.nc', '.txt')
 print('outfile:', outfile)
+diff = str(args.diff)
+print('diff:   ', diff)
 # Append time to outfile, prevent overwrites
 timeNow = datetime.datetime.now();
 timeFormat = timeNow.strftime("%y%m%dT%H%M%S")
@@ -142,11 +148,23 @@ woaGrid0p5Uniform = cdm.grid.createUniformGrid(lat[0], 359, .5, lon[0], 719, .5,
 # -89.5, -89. , -88.5, -88. , -87.5, -87. , -86.5, -86. , -85.5,
 sos0p5Uniform = sos.regrid(woaGrid0p5Uniform,regridTool='ESMF',regridMethod='linear')
 
+#%% Check if diff
+if diff == 'diff':
+    inPath = '/work/durack1/Shared/210128_PaperPlots_Rothigetal/'
+    histFile = '210824T225103_210726_sos_CMIP6_historical_1985_2015_mean.nc'
+    fHist = cdm.open(os.path.join(inPath, histFile))
+    sosHist = fHist('sos')
+    sosHist0p5Uniform = sosHist.regrid(woaGrid0p5Uniform,regridTool='ESMF',regridMethod='linear')
+    sos0p5Uniform = sos0p5Uniform - sosHist0p5Uniform
+    outfile = outfile.replace('_mean.txt', '_diff.txt')
+    print('outfile:', outfile)
+    print('computing diff..')
+
 # %% write global data
 # 1deg data
 # Flip upside down (N is on bottom, will be on top once flipped)
 sos = np.flip(sos, axis=0)
-writeGridAscii(sos, outfile.replace('.txt', '-1p0deg.txt'))
+#writeGridAscii(sos, outfile.replace('.txt', '-1p0deg.txt'))
 # 0p5deg data
 sos = np.flip(sos0p5Uniform, axis=0)
 writeGridAscii(sos, outfile.replace('.txt', '-0p5deg.txt'))
