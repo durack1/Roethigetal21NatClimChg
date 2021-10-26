@@ -37,6 +37,7 @@
 %                     ssp434 GISS-E2-1-G
 %                     ssp460 GISS-E2-1-G
 %                     ssp585 NorESM2-LM, GISS-E2-1-G
+% PJD 26 Oct 2021   - Updated for ssp585 data reporting (now commented)
 %                   TO-DO:
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
@@ -911,11 +912,13 @@ exps(ismember( {exps.name}, {'.', '..'})) = [];
 expFlags = [exps.isdir];
 exps = exps(expFlags);
 for exp = 1:length(exps)
+%for exp = 9:length(exps) % For ssp585 data reporting
     vars = dir(fullfile(outDir,'ncs',dataDate,'CMIP6',exps(exp).name));
     vars(ismember( {vars.name}, {'.', '..'})) = [];
     varFlags = [vars.isdir];
     vars = vars(varFlags);
     for var = 1:length(vars) % Cycle through variables
+    %for var = 1:2 % For ssp585 data reporting
         fprintf('Sub folder #%0d = %s : %s\n', exp, exps(exp).name, vars(var).name);
         % mrro - test variable match
         if strcmp(vars(var).name,'mrro')
@@ -1047,6 +1050,14 @@ for exp = 1:length(exps)
         ind = ismember(1:length(models),ind); % Logic is create index of files in bad_list
         models(ind) = [];
         clear bad_list ind match splits x y
+
+        % Print models in ensemble to screen % For ssp585 data reporting
+        %for x = 1:length(models)
+        %    modStrTmp = strrep(models{x}, '/work/durack1/Shared/210128_PaperPlots_Rothigetal/ncs/210726/CMIP6/ssp585-2071-2101/', '');
+        %    disp([num2str(x,'%03d'), ' ', modStrTmp])
+        %end
+        %keyboard
+        %continue
 
         % Build matrix of model results
         varTmp = NaN(length(models),length(t_lat),length(t_lon));
