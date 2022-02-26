@@ -21,7 +21,8 @@ PJD 25 Mar 2021     - Redefine var before creating outfile names - test for vari
 PJD 26 Jul 2021     - Update for new home path
 PJD 26 Jul 2021     - Appended additional historical tas to problem list CMIP6.CMIP.historical.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20210601.0000000.0.xml
 PJD 18 Feb 2022     - Added .ICON-ESM-LR. to badMods list
-PJD 25 Feb 2022     - Added to badFiles list
+PJD 25 Feb 2022     - Added to badFiles list CMIP6.ScenarioMIP.ssp370.EC-Earth-Consortium.EC-Earth3.r3i1p1f1.mon.sos
+PJD 25 Feb 2022     - Added to badFiles list CMIP6.ScenarioMIP.ssp370.EC-Earth-Consortium.EC-Earth3.r3i1p1f1.mon.tos
                     - TO-DO: fix sos, tos rotated pole (FGOALS*, IPSL-CM6*INCA)
                     - TO-DO: fix mrro no ocean mask with sftof field (CanESM*, GISS*, E3SM*, NorESM2*, INMCM5*)
                     - TO-DO: Add badMods back in
@@ -145,6 +146,7 @@ for key in actExpPair.keys():
                     "/p/user_pub/xclim/CMIP6/ScenarioMIP/ssp585/atmos/mon/tas/CMIP6.ScenarioMIP.ssp585.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20191106.0000000.0.xml",
                     "/p/user_pub/xclim/CMIP6/CMIP/historical/atmos/mon/tas/CMIP6.CMIP.historical.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20210601.0000000.0.xml",
                     "/p/user_pub/xclim/CMIP6/ScenarioMIP/ssp370/ocean/mon/sos/CMIP6.ScenarioMIP.ssp370.EC-Earth-Consortium.EC-Earth3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20210517.0000000.0.xml",
+                    "/p/user_pub/xclim/CMIP6/ScenarioMIP/ssp370/ocean/mon/tos/CMIP6.ScenarioMIP.ssp370.EC-Earth-Consortium.EC-Earth3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20210517.0000000.0.xml",
                 ]
                 for bad in badFiles:
                     # print(bad)
