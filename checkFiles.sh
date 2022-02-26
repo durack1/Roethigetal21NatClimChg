@@ -14,6 +14,7 @@
 Help()
 {
    # Display Help
+   echo
    echo "Provide netcdf file path and variable name and test"
    echo "to read file header and variable"
    echo
