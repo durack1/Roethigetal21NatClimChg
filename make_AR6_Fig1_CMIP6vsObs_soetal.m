@@ -38,6 +38,7 @@
 %                     ssp460 GISS-E2-1-G
 %                     ssp585 NorESM2-LM, GISS-E2-1-G
 % PJD 26 Oct 2021   - Updated for ssp585 data reporting (now commented)
+% PJD  8 Mar 2022   - Updated for latest data
 %                   TO-DO:
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
@@ -46,7 +47,7 @@ clear, clc, close all
 % Initialise environment variables
 [homeDir,~,dataDir,obsDir,~,aHostLongname] = myMatEnv(2);
 outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
-dataDate = '210726';
+dataDate = '220228' ; %'210726';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
 badListFlag = 1; % Test against badList before final run
