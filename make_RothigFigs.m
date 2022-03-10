@@ -39,6 +39,7 @@
 %                     ssp585 NorESM2-LM, GISS-E2-1-G
 % PJD 26 Oct 2021   - Updated for ssp585 data reporting (now commented)
 % PJD  8 Mar 2022   - Updated for latest data
+% PJD 10 Mar 2022   - Renamed make_AR6_Fig1_CMIP6vsObs_soetal.m -> make_RothigFigs.m
 %                   TO-DO:
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
