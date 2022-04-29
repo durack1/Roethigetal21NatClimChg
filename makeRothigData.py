@@ -23,6 +23,7 @@ PJD 26 Jul 2021     - Appended additional historical tas to problem list CMIP6.C
 PJD 18 Feb 2022     - Added .ICON-ESM-LR. to badMods list
 PJD 25 Feb 2022     - Added to badFiles list CMIP6.ScenarioMIP.ssp370.EC-Earth-Consortium.EC-Earth3.r3i1p1f1.mon.sos
 PJD 25 Feb 2022     - Added to badFiles list CMIP6.ScenarioMIP.ssp370.EC-Earth-Consortium.EC-Earth3.r3i1p1f1.mon.tos
+PJD 27 Apr 2022     - Updated /work/durack1 to /p/user_pub/climate_work/durack1
                     - TO-DO: fix sos, tos rotated pole (FGOALS*, IPSL-CM6*INCA)
                     - TO-DO: fix mrro no ocean mask with sftof field (CanESM*, GISS*, E3SM*, NorESM2*, INMCM5*)
                     - TO-DO: Add badMods back in
@@ -32,9 +33,15 @@ PJD 25 Feb 2022     - Added to badFiles list CMIP6.ScenarioMIP.ssp370.EC-Earth-C
 @author: durack1
 """
 from __future__ import print_function
+from socket import gethostname
 
 # Make py2 backward compatible
-import datetime, gc, glob, os, sys, time  # ,pdb #,regrid2,
+import datetime
+import gc
+import glob
+import os
+import sys
+import time  # ,pdb #,regrid2,
 
 # import pdb,sys,warnings
 import cdms2 as cdm
@@ -44,21 +51,19 @@ import cdutil as cdu
 # import MV2 as mv
 import numpy as np
 
+# climlib
 os.sys.path.insert(0, "/home/durack1/git/durolib/durolib")
-from durolib import fixVarUnits, globalAttWrite, writeToLog  # ,trimModelList
-
 os.sys.path.insert(0, "/home/durack1/git/climlib/climlib")
 from wrangle import trimModelList
+from durolib import fixVarUnits, globalAttWrite, writeToLog  # ,trimModelList
 
-# climlib
-from socket import gethostname
-
-#%% Set current dirs
-workDir = "/work/durack1/Shared/210128_PaperPlots_Rothigetal/"
+# %% Set current dirs
+workDur = "/p/user_pub/climate_work/durack1"
+workDir = os.path.join(workDur, "Shared/210128_PaperPlots_Rothigetal/")
 xmlPath = "/p/user_pub/xclim/"
-#'/data_crunchy_oceanonly/crunchy_work/cmip-dyn'
+# '/data_crunchy_oceanonly/crunchy_work/cmip-dyn'
 
-#%% Generate log file
+# %% Generate log file
 timeNow = datetime.datetime.now()
 timeFormat = timeNow.strftime("%y%m%dT%H%M%S")
 dateNow = timeNow.strftime("%y%m%d")
@@ -76,7 +81,7 @@ writeToLog(logFile, " ".join(["HOSTNAME:", host_name]))
 print("----------")
 writeToLog(logFile, "----------")
 
-#%% Preallocate lists and fill
+# %% Preallocate lists and fill
 fileLists = []
 mipEra = "CMIP6"
 actExpPair = {}
@@ -137,7 +142,8 @@ for key in actExpPair.keys():
                 fileList.sort()
                 print(var, " len(fileList):     ", len(fileList))
                 writeToLog(
-                    logFile, "".join([var, " len(fileList):     ", str(len(fileList))])
+                    logFile, "".join(
+                        [var, " len(fileList):     ", str(len(fileList))])
                 )
                 badFiles = [
                     "/p/user_pub/xclim/CMIP6/CMIP/historical/atmos/mon/tas/CMIP6.CMIP.historical.KIOST.KIOST-ESM.r1i1p1f1.mon.tas.atmos.glb-z1-gr1.v20191106.0000000.0.xml",
@@ -157,7 +163,8 @@ for key in actExpPair.keys():
                 print(var, " len(fileListTrim): ", len(fileListTrim))
                 writeToLog(
                     logFile,
-                    "".join([var, " len(fileListTrim): ", str(len(fileListTrim))]),
+                    "".join([var, " len(fileListTrim): ",
+                            str(len(fileListTrim))]),
                 )
                 print("_".join([mipEra, experimentId, var]))
                 writeToLog(logFile, "_".join([mipEra, experimentId, var]))
@@ -177,14 +184,15 @@ for key in actExpPair.keys():
 # Sort fileLists
 fileLists.sort()
 
-#%% Now deal with lists - generate timeseries/trends
+# %% Now deal with lists - generate timeseries/trends
 print("Variables scanned")
 print("dir():", dir())
 # print('locals():',locals())
 
-#%% Preload WOA18 grids
+# %% Preload WOA18 grids
 # warnings.simplefilter('error')
-woa = cdm.open("/work/durack1/Shared/obs_data/WOD18/190312/woa18_decav_s00_01.nc")
+woa = cdm.open(os.path.join(
+    workDur, "Shared/obs_data/WOD18/190312/woa18_decav_s00_01.nc"))
 s = woa("s_oa")
 print("Start read wod18")
 print("type(s):", type(s))
@@ -197,7 +205,7 @@ woaLat = s.getLatitude()
 woaLon = s.getLongitude()
 woa.close()
 
-#%% Declare file lists of problem data or unuseable grids
+# %% Declare file lists of problem data or unuseable grids
 badMods = [
     ".AWI-CM-1-1-MR.",
     ".AWI-ESM-1-1-LR.",
@@ -221,7 +229,7 @@ bigMods = {
     ".CMCC.CMCC-CM2-HR4.": (1980, 50, 1051, 1442),
 }
 
-#%% Now generate climatologies
+# %% Now generate climatologies
 # First loop over lists
 for count1, listy in enumerate(fileLists):
     print(count1, listy)
@@ -245,7 +253,8 @@ for count1, listy in enumerate(fileLists):
         experimentId = "-".join(listy.split("_")[1:3])  # Deal with _ vs -
     else:
         experimentId = listy.split("_")[1]
-    experimentIdStartEndYrs = "-".join([experimentId, str(startYr), str(endYr)])
+    experimentIdStartEndYrs = "-".join([experimentId,
+                                       str(startYr), str(endYr)])
     print("experimentIdStartEndYrs:", experimentIdStartEndYrs)
     # continue
 
@@ -312,7 +321,8 @@ for count1, listy in enumerate(fileLists):
             endYr = endYrChk + 1  # Pad so last year is included fully
             print("piControl, startYr:", startYr, "endYr:", endYr)
 
-        print("startYr:", startYr, type(startYr), "endYr:  ", endYr, type(endYr))
+        print("startYr:", startYr, type(startYr),
+              "endYr:  ", endYr, type(endYr))
         # Generate climatological period (now provided as args)
         startYrCt = cdt.comptime(startYr)
         endYrCt = cdt.comptime(endYr)
@@ -381,7 +391,8 @@ for count1, listy in enumerate(fileLists):
         print("Time:", datetime.datetime.now().strftime("%H%M%S"), "cdu end")
         clim = climLvl
         # pdb.set_trace()
-        climInterp = climLvl.regrid(woaGrid, regridTool="ESMF", regridMethod="linear")
+        climInterp = climLvl.regrid(
+            woaGrid, regridTool="ESMF", regridMethod="linear")
         # climInterp = climLvl.regrid(woaGrid,regridTool='ESMF',regridMethod='conservative') ; # Chat to Pete 191127
         # print('climInterp created')
         precision = 8.3
@@ -501,10 +512,12 @@ for count1, listy in enumerate(fileLists):
         calStr = " ".join(
             [
                 "days since",
-                "-".join([str(startYrCtYear), str(startYrCtMonth), str(startYrCtDay)]),
+                "-".join([str(startYrCtYear),
+                         str(startYrCtMonth), str(startYrCtDay)]),
             ]
         )
-        timeMean = np.mean([startYrCt.torel(calStr).value, endYrCt.torel(calStr).value])
+        timeMean = np.mean([startYrCt.torel(calStr).value,
+                           endYrCt.torel(calStr).value])
         # timeMean = cdt.relativetime(timeMean,calStr)
         timeBounds = np.array(
             [startYrCt.torel(calStr).value, endYrCt.torel(calStr).value]
@@ -569,7 +582,8 @@ for count1, listy in enumerate(fileLists):
         print("Time taken (secs):", "{:.2f}".format(endTime - startTime))
         writeToLog(
             logFile,
-            " ".join(["Time taken (secs):", "{:.2f}".format(endTime - startTime)]),
+            " ".join(
+                ["Time taken (secs):", "{:.2f}".format(endTime - startTime)]),
         )
         print("----------")
         writeToLog(logFile, "----------")

@@ -40,6 +40,9 @@
 % PJD 26 Oct 2021   - Updated for ssp585 data reporting (now commented)
 % PJD  8 Mar 2022   - Updated for latest data
 % PJD 10 Mar 2022   - Renamed make_AR6_Fig1_CMIP6vsObs_soetal.m -> make_RothigFigs.m
+% PJD 19 Mar 2022   - Added to badLists:
+%                   'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r1-5i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
+% PJD 29 Apr 2022   - Updated myMatEnv work path; new data 220427
 %                   TO-DO:
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
@@ -48,7 +51,7 @@ clear, clc, close all
 % Initialise environment variables
 [homeDir,~,dataDir,obsDir,~,aHostLongname] = myMatEnv(2);
 outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
-dataDate = '220228' ; %'210726';
+dataDate = '220427' ; %'220228' ; %'210726';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
 badListFlag = 1; % Test against badList before final run
@@ -336,22 +339,27 @@ badListCM6Mrro = {
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-G.r102i1p1f1.mon.mrro.land.glb-2d-gn.v20190815'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-G-CC.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190815'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190403' ; % no ocean masking
+    'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20191003'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20191010'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r1i1p5f1.mon.mrro.land.glb-2d-gn.v20190905'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190403'
+    'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r2i1p1f2.mon.mrro.land.glb-2d-gn.v20191003'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r2i1p3f1.mon.mrro.land.glb-2d-gn.v20191010'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r2i1p5f1.mon.mrro.land.glb-2d-gn.v20190905'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20190403'
+    'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r3i1p1f2.mon.mrro.land.glb-2d-gn.v20191003'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r3i1p3f1.mon.mrro.land.glb-2d-gn.v20191010'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r3i1p5f1.mon.mrro.land.glb-2d-gn.v20190905'
+    'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20190403'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r4i1p1f2.mon.mrro.land.glb-2d-gn.v20191003'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r4i1p3f1.mon.mrro.land.glb-2d-gn.v20191010'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r4i1p5f1.mon.mrro.land.glb-2d-gn.v20190905'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20190403'
+    'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r5i1p1f2.mon.mrro.land.glb-2d-gn.v20191003'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r5i1p3f1.mon.mrro.land.glb-2d-gn.v20191010'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-H.r5i1p5f1.mon.mrro.land.glb-2d-gn.v20190905'
