@@ -42,7 +42,7 @@
 % PJD 10 Mar 2022   - Renamed make_AR6_Fig1_CMIP6vsObs_soetal.m -> make_RothigFigs.m
 % PJD 19 Mar 2022   - Added to badLists:
 %                   'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r1-5i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
-% PJD 29 Apr 2022   - Updated myMatEnv work path; new data 220427
+% PJD 29 Apr 2022   - Updated myMatEnv work path; new data 220427 (was 220228)
 %                   TO-DO:
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
