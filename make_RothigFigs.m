@@ -43,6 +43,7 @@
 % PJD 19 Mar 2022   - Added to badLists:
 %                   'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r1-5i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
 % PJD 29 Apr 2022   - Updated myMatEnv work path; new data 220427 (was 220228)
+% PJD 30 Apr 2022   - Updated csirolib path
 %                   TO-DO:
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
@@ -55,7 +56,7 @@ dataDate = '220427' ; %'220228' ; %'210726';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
 badListFlag = 1; % Test against badList before final run
-addpath /work/durack1/csiro/toolbox-local/csirolib/ % Add coast
+addpath [dataDir,'toolbox-local/csirolib/'] % Add coast
 
 % Setup plotting scales
 mcont1 = 0:.25:10; % 0:1:30 map [min -6.5e-5, median 8.9e-7, max 7.3e-4]
