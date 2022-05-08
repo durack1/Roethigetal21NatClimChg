@@ -8,6 +8,7 @@
 # Requires cdms in execution env
 
 # PJD 20 Sep 2021   - Update with args to regenerate netcdf e.g. "nc", or select scenarios e.g. "historical"
+# PJD  6 May 2022   - Added workDir
 
 # @author: durack1
 
@@ -20,7 +21,8 @@ else
 fi
 
 # Get list of output netcdf files
-srcPath=/work/durack1/Shared/210128_PaperPlots_Rothigetal
+workDir=/p/user_pub/climate_work/durack1/Shared/
+srcPath=${workDir}210128_PaperPlots_Rothigetal
 echo "Searching for files matching \"$2\""
 files=`ls "$srcPath"/*$2*.nc`
 

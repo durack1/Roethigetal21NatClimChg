@@ -19,6 +19,7 @@ PJD 30 Aug 2021     - Add sos flip
 PJD 30 Aug 2021     - Commented out 0p25 outputs
 PJD 20 Sep 2021     - Updated to write out global 0p5deg data
 PJD  7 Oct 2021     - Updated to compute diff
+PJD  6 May 2022     - Added workDir, inFile and histFile entries
                     TODO: ?
 
 Target:
@@ -40,8 +41,12 @@ import datetime
 import numpy as np
 import os
 import pathlib
-#import pdb
 import sys
+
+# %% file and path def
+workDir = '/p/user_pub/climate_work/durack1/Shared/'
+inFile = '220429T143503_220427_CMIP6.mat'
+histFile = '220429T143503_220427_sos_CMIP6_historical_1985_2015_mean.nc'
 
 # %% function def
 
@@ -104,7 +109,7 @@ print('outfile:', outfile)
 diff = str(args.diff)
 print('diff:   ', diff)
 # Append time to outfile, prevent overwrites
-timeNow = datetime.datetime.now();
+timeNow = datetime.datetime.now()
 timeFormat = timeNow.strftime("%y%m%dT%H%M%S")
 # Find filename (exclude path and append timeFormat)
 outFileName = outfile.split('/')[-1]
@@ -126,35 +131,40 @@ fH.close()
 
 # %% regrid data
 # Preload WOA18 0p25 grid
-#warnings.simplefilter('error')
-woa         = cdm.open('/work/durack1/Shared/obs_data/WOD18/190501_1210_WOD18_masks_0p25deg.nc')
-s           = woa('basinmask')
-woaGrid     = s.getGrid() ; # Get WOA target grid
-woaLat      = s.getLatitude()
-woaLon      = s.getLongitude()
+# warnings.simplefilter('error')
+woa = cdm.open(os.path.join(
+    workDir, 'obs_data/WOD18/190501_1210_WOD18_masks_0p25deg.nc'))
+s = woa('basinmask')
+woaGrid = s.getGrid()  # Get WOA target grid
+woaLat = s.getLatitude()
+woaLon = s.getLongitude()
 woa.close()
-sos0p25 = sos.regrid(woaGrid,regridTool='ESMF',regridMethod='linear')
+sos0p25 = sos.regrid(woaGrid, regridTool='ESMF', regridMethod='linear')
 print('s:\n', sos.shape)
 print('s025:\n', sos0p25.shape)
 
 # Create 0p5 grid
-woaLat0p5 = woaLat.getData()[0::2] ## Extract every second lon
+woaLat0p5 = woaLat.getData()[0::2]  # Extract every second lon
 woaLon0p5 = woaLon.getData()[0::2]
-#woaGrid0p5 = cdm.grid.createGenericGrid(woaLat0p5, woaLon0p5, latBounds=None, lonBounds=None, order='yx', mask=None) ## Returns a 0.5 but off set grid
+# woaGrid0p5 = cdm.grid.createGenericGrid(woaLat0p5, woaLon0p5, latBounds=None, lonBounds=None, order='yx', mask=None) ## Returns a 0.5 but off set grid
 # -89.875, -89.375, -88.875, -88.375, -87.875, -87.375, -86.875,
 #sos05 = sos.regrid(woaGrid0p5,regridTool='ESMF',regridMethod='linear')
 #createUniformGrid(startLat, nlat, deltaLat, startLon, nlon, deltaLon, order='yx', mask=None)
-woaGrid0p5Uniform = cdm.grid.createUniformGrid(lat[0], 359, .5, lon[0], 719, .5, order='yx', mask=None) ## Returns a 0.5 grid
+woaGrid0p5Uniform = cdm.grid.createUniformGrid(
+    lat[0], 359, .5, lon[0], 719, .5, order='yx', mask=None)  # Returns a 0.5 grid
 # -89.5, -89. , -88.5, -88. , -87.5, -87. , -86.5, -86. , -85.5,
-sos0p5Uniform = sos.regrid(woaGrid0p5Uniform,regridTool='ESMF',regridMethod='linear')
+sos0p5Uniform = sos.regrid(
+    woaGrid0p5Uniform, regridTool='ESMF', regridMethod='linear')
 
-#%% Check if diff
+# %% Check if diff
 if diff == 'diff':
-    inPath = '/work/durack1/Shared/210128_PaperPlots_Rothigetal/'
-    histFile = '210824T225103_210726_sos_CMIP6_historical_1985_2015_mean.nc'
+    inPath = os.path.join(workDir, '210128_PaperPlots_Rothigetal/')
+    histFile = histFile
+    varName = histFile.split('_')[2]
     fHist = cdm.open(os.path.join(inPath, histFile))
-    sosHist = fHist('sos')
-    sosHist0p5Uniform = sosHist.regrid(woaGrid0p5Uniform,regridTool='ESMF',regridMethod='linear')
+    sosHist = fHist(varName)
+    sosHist0p5Uniform = sosHist.regrid(
+        woaGrid0p5Uniform, regridTool='ESMF', regridMethod='linear')
     sos0p5Uniform = sos0p5Uniform - sosHist0p5Uniform
     outfile = outfile.replace('_mean.txt', '_diff.txt')
     print('outfile:', outfile)
@@ -170,8 +180,10 @@ sos = np.flip(sos0p5Uniform, axis=0)
 writeGridAscii(sos, outfile.replace('.txt', '-0p5deg.txt'))
 
 # %% extract Palau data and write
-latBounds = [-8.25, 19.25] ##[-8.5, 19.25] ##[-7.999, 19.001] ##[-8.001, 19.001] ##[-8, 19] ##[-10, 20] ##[2, 10]
-lonBounds = [119.75, 145.25] ##[120.001, 145.001] ##[120, 145] ##[120, 160] ##[130, 136]
+# [-8.5, 19.25] ##[-7.999, 19.001] ##[-8.001, 19.001] ##[-8, 19] ##[-10, 20] ##[2, 10]
+latBounds = [-8.25, 19.25]
+# [120.001, 145.001] ##[120, 145] ##[120, 160] ##[130, 136]
+lonBounds = [119.75, 145.25]
 # 0p25
 # palauDomain0p25 = cdu.region.domain(latitude=latBounds, longitude=lonBounds)
 # sosPalau = palauDomain0p25.select(sos0p25)
@@ -192,7 +204,7 @@ lonBounds = [119.75, 145.25] ##[120.001, 145.001] ##[120, 145] ##[120, 160] ##[1
 # 0p5
 palauDomain0p5 = cdu.region.domain(latitude=latBounds, longitude=lonBounds)
 sosPalau = palauDomain0p5.select(sos0p5Uniform)
-#pdb.set_trace()
+# pdb.set_trace()
 print('sosPalau0p5:\n', sosPalau)
 print('sosPalau.getLat.getData:', sosPalau.getLatitude().getData())
 print('sosPalau.getLat.getBnds:', sosPalau.getLatitude().getBounds())
@@ -204,6 +216,8 @@ outfile = infile.replace('.nc', '_PalauDomain-0p5deg.txt')
 outFileName = outfile.split('/')[-1]
 outFileNameNew = '_'.join([timeFormat, outFileName])
 outfile = outfile.replace(outFileName, outFileNameNew)
-print('sos0p5Uniform lat[1]-lat[0]:', sos0p5Uniform.getLatitude().getData()[1]-sos0p5Uniform.getLatitude().getData()[0])
-print('sosPalau0p5 lat[1]-lat[0]:', sosPalau.getLatitude().getData()[1]-sosPalau.getLatitude().getData()[0])
+print('sos0p5Uniform lat[1]-lat[0]:', sos0p5Uniform.getLatitude().getData()
+      [1]-sos0p5Uniform.getLatitude().getData()[0])
+print('sosPalau0p5 lat[1]-lat[0]:', sosPalau.getLatitude().getData()
+      [1]-sosPalau.getLatitude().getData()[0])
 #writeGridAscii(sosPalau, outfile)

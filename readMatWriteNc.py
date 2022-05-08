@@ -10,22 +10,25 @@ PJD 29 Mar 2021     - First pass at data writing, minus metadata
 PJD 24 Aug 2021     - Update to latest data - need to update one last time
 PJD 24 Aug 2021     - Update home path
 PJD 30 Aug 2021     - Update input mat file 210824T132736_210726_CMIP6.mat -> 210824T225103_210726_CMIP6.mat
+PJD  6 May 2022     - Added workDir, matFile
+PJD  6 May 2022     - Added multi-var [sos, tos]
                     - TO-DO: Add attribution info to files; git hash etc
 
 @author: durack1
 """
 
-import os  # , pdb
+import os
 import cdms2 as cdm
 import numpy as np
-#import pdb
 import scipy.io as sio
 os.sys.path.insert(0, '/home/durack1/git/durolib/durolib')
 from durolib import globalAttWrite
 
 # %%
-targetDir = '/work/durack1/Shared/210128_PaperPlots_Rothigetal/'
-infile = os.path.join(targetDir, '210824T225103_210726_CMIP6.mat')
+workDir = '/p/user_pub/climate_work/durack1/Shared/'
+targetDir = os.path.join(workDir, '210128_PaperPlots_Rothigetal/')
+matFile = '220429T143503_220427_CMIP6.mat'
+infile = os.path.join(targetDir, matFile)
 mat = sio.loadmat(infile)
 matKeys = mat.keys()
 lat = mat['t_lat']
@@ -34,7 +37,7 @@ lat = cdm.createAxis(np.float32(lat), id='latitude')
 lon = mat['t_lon']
 lon = lon[:, 0]
 lon = cdm.createAxis(np.float32(lon), id='longitude')
-#pdb.set_trace()
+# pdb.set_trace()
 
 # %% Create target variable list
 actExpPair = {}
@@ -51,27 +54,29 @@ activityId = ['CMIP', 'ScenarioMIP']
 for count1, actId in enumerate(activityId):
     exps = actExpPair[actId]['exps']
     time = actExpPair[actId]['time'][0]
+    varList = ['sos', 'tos']
     for count2, exp in enumerate(exps):
-        fileName = '_'.join(['sos', 'CMIP6', exp, time, 'mean'])
-        outFile = '_'.join([infile.split(
-            '/')[-1].split('.')[0].replace('_CMIP6', ''), fileName])
-        print('fileName:', fileName)
-        vars()[exp] = mat[fileName]
-        # Create output file and write
-        outFile = '.'.join([os.path.join(targetDir, outFile), 'nc'])
-        print('outFile:', outFile)
-        cdVar = cdm.createVariable(eval(exp), id='sos')
-        cdVar.setAxis(0, lat)
-        cdVar.setAxis(1, lon)
-        # Write variables to file
-        if os.path.isfile(outFile):
-            os.remove(outFile)
-        fH = cdm.open(outFile, 'w')
-        # Global attributes
-        # Use function to write standard global atts
-        globalAttWrite(fH, options=None)
-        # Master variables
-        fH.write(cdVar.astype('float32'))
-        fH.close()
+        for count3, var in enumerate(varList):
+            fileName = '_'.join([var, 'CMIP6', exp, time, 'mean'])
+            outFile = '_'.join([infile.split(
+                '/')[-1].split('.')[0].replace('_CMIP6', ''), fileName])
+            print('fileName:', fileName)
+            vars()[exp] = mat[fileName]
+            # Create output file and write
+            outFile = '.'.join([os.path.join(targetDir, outFile), 'nc'])
+            print('outFile:', outFile)
+            cdVar = cdm.createVariable(eval(exp), id='sos')
+            cdVar.setAxis(0, lat)
+            cdVar.setAxis(1, lon)
+            # Write variables to file
+            if os.path.isfile(outFile):
+                os.remove(outFile)
+            fH = cdm.open(outFile, 'w')
+            # Global attributes
+            # Use function to write standard global atts
+            globalAttWrite(fH, options=None)
+            # Master variables
+            fH.write(cdVar.astype('float32'))
+            fH.close()
 
 del(count1, actId, exps, time, count2, exp)
