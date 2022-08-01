@@ -46,7 +46,7 @@
 %                   'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r1-5i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
 % PJD 29 Apr 2022   - Updated myMatEnv work path; new data 220427 (was 220228)
 % PJD 30 Apr 2022   - Updated csirolib path
-% PJD  1 Aug 2022   - Latest data update 220729
+% PJD  1 Aug 2022   - Latest data update 220729; Added new functional addpath
 %                   TO-DO:
 %                   Check:
 %                   ssp119 mrro,
@@ -68,7 +68,7 @@ dataDate = '220729' ; %'220427' ; %'220228' ; %'210726';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
 badListFlag = 0; % 1 = Test against badList before final run
-addpath [dataDir,'toolbox-local/csirolib/'] % Add coast
+addpath([dataDir,'toolbox-local/csirolib/'], '-BEGIN') % Add clmap, coast
 
 % Setup plotting scales
 mcont1 = 0:.25:10; % 0:1:30 map [min -6.5e-5, median 8.9e-7, max 7.3e-4]
