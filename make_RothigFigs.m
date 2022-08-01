@@ -84,7 +84,7 @@ scont2 = 30:0.5:40;
 scont3 = 30:0.25:40;
 sscaler = 1;
 %sscale = [1 1]; gscale = [0.3 0.5]; ptscale = [3 3];
-%fonts = 7; fonts_c = 6; fonts_ax = 6; fonts_lab = 10;
+fonts_c = 6; fonts_ax = 6; fonts_lab = 10; fonts = 7;
 
 %% If running through entire script cleanup old figure files
 [command] = matlab_mode;
