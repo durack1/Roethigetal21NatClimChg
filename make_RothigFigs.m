@@ -5,6 +5,7 @@
 %
 % make_AR6_Fig1_CMIP6vsObs_soetal.m
 
+%{
 % PJD  1 Mar 2021   - Copied from /export/durack1/git/Roethigetal21NatClimChg/make_AR6_Fig3p23_CMIP6minusWOA18_thetaoAndso.m
 %                     and updated contents
 % PJD 20 Mar 2021   - Updated K test from >250 to >200 (205K recorded CanESM5, 209K GISS-E2-1-G)
@@ -38,13 +39,24 @@
 %                     ssp460 GISS-E2-1-G
 %                     ssp585 NorESM2-LM, GISS-E2-1-G
 % PJD 26 Oct 2021   - Updated for ssp585 data reporting (now commented)
+%}
 % PJD  8 Mar 2022   - Updated for latest data
 % PJD 10 Mar 2022   - Renamed make_AR6_Fig1_CMIP6vsObs_soetal.m -> make_RothigFigs.m
 % PJD 19 Mar 2022   - Added to badLists:
 %                   'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-2-H.r1-5i1p1f1.mon.mrro.land.glb-2d-gn.v20191120'
 % PJD 29 Apr 2022   - Updated myMatEnv work path; new data 220427 (was 220228)
 % PJD 30 Apr 2022   - Updated csirolib path
+% PJD  1 Aug 2022   - Latest data update 220729
 %                   TO-DO:
+%                   Check:
+%                   ssp119 mrro,
+%                   ssp126 mrro
+%                   ssp245 mrro
+%                   ssp370 mrro
+%                   ssp434 mrro
+%                   ssp460 mrro
+%                   ssp534-over mrro
+%                   ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
 % Cleanup workspace and command window
@@ -52,10 +64,10 @@ clear, clc, close all
 % Initialise environment variables
 [homeDir,~,dataDir,obsDir,~,aHostLongname] = myMatEnv(2);
 outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
-dataDate = '220427' ; %'220228' ; %'210726';
+dataDate = '220729' ; %'220427' ; %'220228' ; %'210726';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
-badListFlag = 1; % Test against badList before final run
+badListFlag = 0; % 1 = Test against badList before final run
 addpath [dataDir,'toolbox-local/csirolib/'] % Add coast
 
 % Setup plotting scales
@@ -71,8 +83,8 @@ scont1 = 30.25:0.5:39.75;
 scont2 = 30:0.5:40;
 scont3 = 30:0.25:40;
 sscaler = 1;
-sscale = [1 1]; gscale = [0.3 0.5]; ptscale = [3 3];
-fonts = 7; fonts_c = 6; fonts_ax = 6; fonts_lab = 10;
+%sscale = [1 1]; gscale = [0.3 0.5]; ptscale = [3 3];
+%fonts = 7; fonts_c = 6; fonts_ax = 6; fonts_lab = 10;
 
 %% If running through entire script cleanup old figure files
 [command] = matlab_mode;

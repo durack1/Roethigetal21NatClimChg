@@ -20,6 +20,7 @@ PJD 30 Aug 2021     - Commented out 0p25 outputs
 PJD 20 Sep 2021     - Updated to write out global 0p5deg data
 PJD  7 Oct 2021     - Updated to compute diff
 PJD  6 May 2022     - Added workDir, inFile and histFile entries
+PJD 10 May 2022     - Updated hardcoded sos var to variable argument
                     TODO: ?
 
 Target:
@@ -29,6 +30,21 @@ xllcorner    -0.500000000000
 yllcorner    -90.000000000000
 cellsize     1.000000000000
  30.681314468383789062
+
+
+Updated region for Marshall Islands
+See email 9th March and Supplementary Text (coordinates: 139° E, 192° E, 16° S, 37° N)
+latBounds = [16, 37]
+lonBounds = [139, 192]
+
+
+Plankton - North Atlantic
+latBounds = [0.00033, 79.2233]
+lonBounds = [-80, -7]
+Plankton - South Atlantic
+latBounds = [-62.2231, -1.9002]
+lonBounds = [-50, 11]
+
 
 @author: durack1
 """
@@ -41,6 +57,7 @@ import datetime
 import numpy as np
 import os
 import pathlib
+import pdb
 import sys
 
 # %% file and path def
@@ -58,6 +75,7 @@ def writeGridAscii(matrix, outfile):
     # Check for edge effects
     if (lat[1]-lat[0]) != (lat[2]-lat[1]):
         print('writeGridAscii: lat step inconsistency, check inputs..')
+        pdb.set_trace()
         sys.exit()
     # create format defaults
     noData = -99999
@@ -95,15 +113,20 @@ parser = argparse.ArgumentParser(
     description='Convert a netcdf file to grid ascii')
 parser.add_argument('-i', '--infile', type=pathlib.Path,
                     help='a valid input netcdf file')
+parser.add_argument('-v', '--variable', type=str,
+                    help='a valid file variable')
 parser.add_argument('-o', '--outfile', type=pathlib.Path,
                     help='a valid output grid ascii file')
 parser.add_argument('-d', '--diff', type=str,
                     help='generate a change field, rather than absolute')
 args = parser.parse_args()
 print(args)
-print('args.infile:', args.infile)
+#print('args.infile:', args.infile)
 infile = str(args.infile)
 print('infile: ', infile)
+#print('args.variable:', args.variable)
+varName = str(args.variable)
+print('varName: ', varName)
 outfile = str(args.infile).replace('.nc', '.txt')
 print('outfile:', outfile)
 diff = str(args.diff)
@@ -119,10 +142,10 @@ print('outfile:', outfile)
 
 # %% read data
 fH = cdm.open(infile)
-sos = fH('sos')
-lat = sos.getLatitude()
-lon = sos.getLongitude()
-print('sos.shape:', sos.shape)
+var = fH(varName)
+lat = var.getLatitude()
+lon = var.getLongitude()
+print('var.shape:', var.shape)
 print('lat[0]:', lat[0])
 print('lon[0]:', lon[0])
 print('cellsize:', lat[1]-lat[0])
@@ -139,9 +162,9 @@ woaGrid = s.getGrid()  # Get WOA target grid
 woaLat = s.getLatitude()
 woaLon = s.getLongitude()
 woa.close()
-sos0p25 = sos.regrid(woaGrid, regridTool='ESMF', regridMethod='linear')
-print('s:\n', sos.shape)
-print('s025:\n', sos0p25.shape)
+#var0p25 = var.regrid(woaGrid, regridTool='ESMF', regridMethod='linear')
+#print('s:\n', var.shape)
+#print('s025:\n', var0p25.shape)
 
 # Create 0p5 grid
 woaLat0p5 = woaLat.getData()[0::2]  # Extract every second lon
@@ -153,7 +176,7 @@ woaLon0p5 = woaLon.getData()[0::2]
 woaGrid0p5Uniform = cdm.grid.createUniformGrid(
     lat[0], 359, .5, lon[0], 719, .5, order='yx', mask=None)  # Returns a 0.5 grid
 # -89.5, -89. , -88.5, -88. , -87.5, -87. , -86.5, -86. , -85.5,
-sos0p5Uniform = sos.regrid(
+var0p5Uniform = var.regrid(
     woaGrid0p5Uniform, regridTool='ESMF', regridMethod='linear')
 
 # %% Check if diff
@@ -165,7 +188,7 @@ if diff == 'diff':
     sosHist = fHist(varName)
     sosHist0p5Uniform = sosHist.regrid(
         woaGrid0p5Uniform, regridTool='ESMF', regridMethod='linear')
-    sos0p5Uniform = sos0p5Uniform - sosHist0p5Uniform
+    var0p5Uniform = var0p5Uniform - sosHist0p5Uniform
     outfile = outfile.replace('_mean.txt', '_diff.txt')
     print('outfile:', outfile)
     print('computing diff..')
@@ -173,12 +196,62 @@ if diff == 'diff':
 # %% write global data
 # 1deg data
 # Flip upside down (N is on bottom, will be on top once flipped)
-sos = np.flip(sos, axis=0)
+var = np.flip(var, axis=0)
 #writeGridAscii(sos, outfile.replace('.txt', '-1p0deg.txt'))
 # 0p5deg data
-sos = np.flip(sos0p5Uniform, axis=0)
-writeGridAscii(sos, outfile.replace('.txt', '-0p5deg.txt'))
+var0p5 = np.flip(var0p5Uniform, axis=0)
+writeGridAscii(var0p5, outfile.replace('.txt', '-0p5deg.txt'))
 
+# %% Create dictionary for regions
+regions = {}
+regions['Palau'] = {}
+regions['Palau']['latBounds'] = [-8.25, 19.25]
+regions['Palau']['lonBounds'] = [119.75, 145.25]
+regions['MarshallIslands'] = {}
+regions['MarshallIslands']['latBounds'] = [-16.25, 37.25]  # [16, 37]
+regions['MarshallIslands']['lonBounds'] = [138.75, 192.25]  # [139, 192]
+regions['Plankton-NAtl'] = {}
+regions['Plankton-NAtl']['latBounds'] = [-0.25, 79.75]  # [0.00033, 79.2233]
+regions['Plankton-NAtl']['lonBounds'] = [278.25, 352.75]  # [-80, -7]
+regions['Plankton-SAtl'] = {}
+regions['Plankton-SAtl']['latBounds'] = [-62.25, -2.75]  # [-62.2231, -1.9002]
+regions['Plankton-SAtl']['lonBounds'] = [308.25, 348.75]  # [-50, 11]
+
+for count, regionId in enumerate(regions.keys()):
+    print('----------')
+    print(count, regionId)
+    print('----------')
+    # get info from dictionary
+    latBounds = regions[regionId]['latBounds']
+    lonBounds = regions[regionId]['lonBounds']
+    # regrid to 0p5 degree
+    tmpDomain0p5 = cdu.region.domain(latitude=latBounds, longitude=lonBounds)
+    print('lat:', var0p5Uniform.getLatitude()[
+          0], var0p5Uniform.getLatitude()[-1])
+    print('lon:', var0p5Uniform.getLongitude()[
+          0], var0p5Uniform.getLongitude()[-1])
+    pdb.set_trace()
+    tmpVar = tmpDomain0p5.select(var0p5Uniform)
+    # checkout values
+    print('tmpVar0p5:\n', tmpVar)
+    print('tmpVar.getLat.getData:', tmpVar.getLatitude().getData())
+    print('tmpVar.getLat.getBnds:', tmpVar.getLatitude().getBounds())
+    # flip upside down (N is on bottom, will be on top once flipped)
+    tmpVar = np.flip(tmpVar, axis=0)
+    # create outfile name, write
+    print('tmpSos:\n', tmpVar)
+    outfile = infile.replace('.nc', '-'.join([regionId, '0p5deg.txt']))
+    # Find filename (exclude path and append timeFormat)
+    outFileName = outfile.split('/')[-1]
+    outFileNameNew = '_'.join([timeFormat, outFileName])
+    outfile = outfile.replace(outFileName, outFileNameNew)
+    print('var0p5Uniform lat[1]-lat[0]:', var0p5Uniform.getLatitude().getData()
+          [1]-var0p5Uniform.getLatitude().getData()[0])
+    print('tmpSos0p5 lat[1]-lat[0]:', tmpVar.getLatitude().getData()
+          [1]-tmpVar.getLatitude().getData()[0])
+    writeGridAscii(tmpVar, outfile)
+
+'''
 # %% extract Palau data and write
 # [-8.5, 19.25] ##[-7.999, 19.001] ##[-8.001, 19.001] ##[-8, 19] ##[-10, 20] ##[2, 10]
 latBounds = [-8.25, 19.25]
@@ -221,3 +294,4 @@ print('sos0p5Uniform lat[1]-lat[0]:', sos0p5Uniform.getLatitude().getData()
 print('sosPalau0p5 lat[1]-lat[0]:', sosPalau.getLatitude().getData()
       [1]-sosPalau.getLatitude().getData()[0])
 #writeGridAscii(sosPalau, outfile)
+'''

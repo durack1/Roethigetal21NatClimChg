@@ -9,11 +9,12 @@
 
 # PJD 20 Sep 2021   - Update with args to regenerate netcdf e.g. "nc", or select scenarios e.g. "historical"
 # PJD  6 May 2022   - Added workDir
+# PJD 10 May 2022   - Added -v as argument
 
 # @author: durack1
 
 # Generate fresh netcdf files from mat input
-if [ $1 = "nc" ]; then
+if [ "$1" == "nc" ]; then
     echo "Recreating nc files"
     python readMatWriteNc.py
 else
@@ -33,5 +34,6 @@ for file in $files; do
     # Call Python and write ascii
     python readNcWriteAsc.py \
     -i "$file" \
+    -v "$2" \
     -o "${file/nc/txt}"
 done

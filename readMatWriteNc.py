@@ -12,17 +12,18 @@ PJD 24 Aug 2021     - Update home path
 PJD 30 Aug 2021     - Update input mat file 210824T132736_210726_CMIP6.mat -> 210824T225103_210726_CMIP6.mat
 PJD  6 May 2022     - Added workDir, matFile
 PJD  6 May 2022     - Added multi-var [sos, tos]
+PJD 10 May 2022     - Corrected output varName to var (not sos hard-coded)
                     - TO-DO: Add attribution info to files; git hash etc
 
 @author: durack1
 """
 
+from durolib import globalAttWrite
 import os
 import cdms2 as cdm
 import numpy as np
 import scipy.io as sio
 os.sys.path.insert(0, '/home/durack1/git/durolib/durolib')
-from durolib import globalAttWrite
 
 # %%
 workDir = '/p/user_pub/climate_work/durack1/Shared/'
@@ -65,7 +66,7 @@ for count1, actId in enumerate(activityId):
             # Create output file and write
             outFile = '.'.join([os.path.join(targetDir, outFile), 'nc'])
             print('outFile:', outFile)
-            cdVar = cdm.createVariable(eval(exp), id='sos')
+            cdVar = cdm.createVariable(eval(exp), id=var)
             cdVar.setAxis(0, lat)
             cdVar.setAxis(1, lon)
             # Write variables to file
