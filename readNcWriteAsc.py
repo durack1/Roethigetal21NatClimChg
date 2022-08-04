@@ -21,6 +21,7 @@ PJD 20 Sep 2021     - Updated to write out global 0p5deg data
 PJD  7 Oct 2021     - Updated to compute diff
 PJD  6 May 2022     - Added workDir, inFile and histFile entries
 PJD 10 May 2022     - Updated hardcoded sos var to variable argument
+PJD  4 Aug 2022     - Updated for latest data 220729/220803mat
                     TODO: ?
 
 Target:
@@ -31,20 +32,12 @@ yllcorner    -90.000000000000
 cellsize     1.000000000000
  30.681314468383789062
 
-
 Updated region for Marshall Islands
 See email 9th March and Supplementary Text (coordinates: 139° E, 192° E, 16° S, 37° N)
 latBounds = [16, 37]
 lonBounds = [139, 192]
 
-
-Plankton - North Atlantic
-latBounds = [0.00033, 79.2233]
-lonBounds = [-80, -7]
-Plankton - South Atlantic
-latBounds = [-62.2231, -1.9002]
-lonBounds = [-50, 11]
-
+See https://docs.google.com/document/d/1sbGRVjFTLLIXCDPyEbxe7SU7QAyC4yofDtXaNflmlZU/edit
 
 @author: durack1
 """
@@ -61,9 +54,9 @@ import pdb
 import sys
 
 # %% file and path def
-workDir = '/p/user_pub/climate_work/durack1/Shared/'
-inFile = '220429T143503_220427_CMIP6.mat'
-histFile = '220429T143503_220427_sos_CMIP6_historical_1985_2015_mean.nc'
+workDir = "/p/user_pub/climate_work/durack1/Shared/"
+# inFile = "220803T175312_220729_CMIP6.mat"  # "220429T143503_220427_CMIP6.mat"
+histFile = "220429T143503_220427_sos_CMIP6_historical_1985_2015_mean.nc"
 
 # %% function def
 
@@ -230,7 +223,7 @@ for count, regionId in enumerate(regions.keys()):
           0], var0p5Uniform.getLatitude()[-1])
     print('lon:', var0p5Uniform.getLongitude()[
           0], var0p5Uniform.getLongitude()[-1])
-    pdb.set_trace()
+    # pdb.set_trace()
     tmpVar = tmpDomain0p5.select(var0p5Uniform)
     # checkout values
     print('tmpVar0p5:\n', tmpVar)

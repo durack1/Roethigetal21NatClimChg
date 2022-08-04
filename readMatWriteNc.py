@@ -13,6 +13,7 @@ PJD 30 Aug 2021     - Update input mat file 210824T132736_210726_CMIP6.mat -> 21
 PJD  6 May 2022     - Added workDir, matFile
 PJD  6 May 2022     - Added multi-var [sos, tos]
 PJD 10 May 2022     - Corrected output varName to var (not sos hard-coded)
+PJD  4 Aug 2022     - Updated for latest data 220729/220803mat
                     - TO-DO: Add attribution info to files; git hash etc
 
 @author: durack1
@@ -28,7 +29,7 @@ os.sys.path.insert(0, '/home/durack1/git/durolib/durolib')
 # %%
 workDir = '/p/user_pub/climate_work/durack1/Shared/'
 targetDir = os.path.join(workDir, '210128_PaperPlots_Rothigetal/')
-matFile = '220429T143503_220427_CMIP6.mat'
+matFile = "220803T175312_220729_CMIP6.mat"  # "220429T143503_220427_CMIP6.mat"
 infile = os.path.join(targetDir, matFile)
 mat = sio.loadmat(infile)
 matKeys = mat.keys()
@@ -46,8 +47,8 @@ actExpPair['CMIP'] = {}
 actExpPair['CMIP']['exps'] = ['historical']
 actExpPair['CMIP']['time'] = ['1985_2015']
 actExpPair['ScenarioMIP'] = {}
-actExpPair['ScenarioMIP']['exps'] = ['ssp119', 'ssp126', 'ssp245',
-                                     'ssp370', 'ssp434', 'ssp460', 'ssp585']  # ,'ssp534-over'
+actExpPair['ScenarioMIP']['exps'] = ['ssp126',  # 'ssp119', 'ssp245',
+                                     'ssp434', 'ssp585']  # 'ssp370', 'ssp460', 'ssp534-over'
 actExpPair['ScenarioMIP']['time'] = ['2071_2101']
 activityId = ['CMIP', 'ScenarioMIP']
 #vars = ['mean','modelNames']

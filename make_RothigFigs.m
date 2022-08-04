@@ -50,8 +50,8 @@
 % PJD  1 Aug 2022   - Update export_fig 3.15 -> 3.27
 % PJD  2 Aug 2022   - Update exclusion lists
 % PJD  3 Aug 2022   - Updated mrro, sos, tas (hist, ssp119 only), tos exclusion lists
+% PJD  4 Aug 2022   - Updated to remove CMCC-CM2-SR5 data; badListFlag = 1 (was 0)
 %                   TO-DO:
-%                   Remove: CMCC-CM2-SR5 data
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
@@ -63,7 +63,7 @@ outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
 dataDate = '220729' ; %'220427' ; %'220228' ; %'210726';
 dateFormat = datestr(now,'yymmdd');
 dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
-badListFlag = 0; % 1 = Test against badList before final run
+badListFlag = 1; % 1 = Test against badList before final run
 addpath([dataDir,'toolbox-local/csirolib/'], '-BEGIN') % Add clmap, coast
 
 % Setup plotting scales
@@ -80,7 +80,7 @@ scont2 = 30:0.5:40;
 scont3 = 30:0.25:40;
 sscaler = 1;
 %sscale = [1 1]; gscale = [0.3 0.5]; ptscale = [3 3];
-fonts_c = 6; fonts_ax = 6; fonts_lab = 10; fonts = 7;
+fonts_c = 6; fonts_ax = 6; fonts_lab = 10; % fonts = 7;
 
 %% If running through entire script cleanup old figure files
 [command] = matlab_mode;
@@ -943,6 +943,17 @@ badListCM6Sos = {
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191012'
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191012'
     'CMIP6.CMIP.historical.CAS.FGOALS-g3.r5i1p1f1.mon.sos.ocean.glb-2d-gn.v20191013'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r10i1p2f1.mon.sos.ocean.glb-2d-gn.v20220401' ; % Invalid/deprecated data
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r11i1p2f1.mon.sos.ocean.glb-2d-gn.v20220401'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200616'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r2i1p2f1.mon.sos.ocean.glb-2d-gn.v20211109'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r3i1p2f1.mon.sos.ocean.glb-2d-gn.v20211108'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r4i1p2f1.mon.sos.ocean.glb-2d-gn.v20220112'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r5i1p2f1.mon.sos.ocean.glb-2d-gn.v20220112'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r6i1p2f1.mon.sos.ocean.glb-2d-gn.v20220112'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r7i1p2f1.mon.sos.ocean.glb-2d-gn.v20220112'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r8i1p2f1.mon.sos.ocean.glb-2d-gn.v20220316'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r9i1p2f1.mon.sos.ocean.glb-2d-gn.v20220316'
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.sos.ocean.glb-2d-gr.v20190826' ; % mask/missing_value? duped as glb-2d <- glb-l-gr; thetao too
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.sos.ocean.glb-2d-gr.v20190830'
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r3i1p1f1.mon.sos.ocean.glb-2d-gr.v20190827'
@@ -961,6 +972,7 @@ badListCM6Sos = {
     'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229' ; % rotated pole, thetao too
     'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229'
     'CMIP6.ScenarioMIP.ssp126.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200101'
+    'CMIP6.ScenarioMIP.ssp126.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200717' ; % Invalid/deprecated data
     'CMIP6.ScenarioMIP.ssp126.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     '' ; % split
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
@@ -970,6 +982,7 @@ badListCM6Sos = {
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191229'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20200101'
+    'CMIP6.ScenarioMIP.ssp245.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200617' ; % Invalid/deprecated data
     'CMIP6.ScenarioMIP.ssp245.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     '' ; % split
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
@@ -980,6 +993,7 @@ badListCM6Sos = {
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r5i1p1f1.mon.sos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200622' ; % Invalid/deprecated data
     'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     '' ; % split
     'CMIP6.ScenarioMIP.ssp434.CAS.FGOALS-g3.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
@@ -995,11 +1009,30 @@ badListCM6Sos = {
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191230'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20200102'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r4i1p1f1.mon.sos.ocean.glb-2d-gn.v20191230'
+    'CMIP6.ScenarioMIP.ssp585.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20200622' ; % Invalid/deprecated data
     'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 %% tas
 badListCM6Tas = {
-    '' ; % Bad files retracted
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r10i1p2f1.mon.tas.atmos.glb-z1-gn.v20220401' ; % Invalid/deprecated data
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r11i1p2f1.mon.tas.atmos.glb-z1-gn.v20220401'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200616'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r2i1p2f1.mon.tas.atmos.glb-z1-gn.v20211109'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r3i1p2f1.mon.tas.atmos.glb-z1-gn.v20211108'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r4i1p2f1.mon.tas.atmos.glb-z1-gn.v20220112'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r5i1p2f1.mon.tas.atmos.glb-z1-gn.v20220112'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r6i1p2f1.mon.tas.atmos.glb-z1-gn.v20220112'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r7i1p2f1.mon.tas.atmos.glb-z1-gn.v20220112'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r8i1p2f1.mon.tas.atmos.glb-z1-gn.v20220316'
+    'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r9i1p2f1.mon.tas.atmos.glb-z1-gn.v20220316'
+    '' ; % split
+    'CMIP6.ScenarioMIP.ssp126.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200717' ; % Invalid/deprecated data
+    '' ; % split
+    'CMIP6.ScenarioMIP.ssp245.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200617' ; % Invalid/deprecated data
+    '' ; % split
+    'CMIP6.ScenarioMIP.ssp370.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200622' ; % Invalid/deprecated data
+    '' ; % split
+    'CMIP6.ScenarioMIP.ssp585.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200622' ; % Invalid/deprecated data
     };
 %% tos
 badListCM6Tos = {
@@ -1050,6 +1083,7 @@ badListCM6Tos = {
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191229'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp245.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20200101'
+    'CMIP6.ScenarioMIP.ssp245.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200617' ; % Invalid/deprecated data
     'CMIP6.ScenarioMIP.ssp245.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     '' ; % split
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008' ; % rotated pole, thetao too
@@ -1060,6 +1094,7 @@ badListCM6Tos = {
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
     'CMIP6.ScenarioMIP.ssp370.CAS.FGOALS-g3.r5i1p1f1.mon.tos.ocean.glb-2d-gn.v20191231'
+    'CMIP6.ScenarioMIP.ssp370.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200622' ; % Invalid/deprecated data
     'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     '' ; % split
     'CMIP6.ScenarioMIP.ssp434.CAS.FGOALS-g3.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200526' ; % rotated pole, thetao too
@@ -1075,6 +1110,7 @@ badListCM6Tos = {
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191230'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200102'
     'CMIP6.ScenarioMIP.ssp585.CAS.FGOALS-g3.r4i1p1f1.mon.tos.ocean.glb-2d-gn.v20191230'
+    'CMIP6.ScenarioMIP.ssp585.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20200622' ; % Invalid/deprecated data
     'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 
