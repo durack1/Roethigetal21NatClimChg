@@ -51,6 +51,7 @@
 % PJD  2 Aug 2022   - Update exclusion lists
 % PJD  3 Aug 2022   - Updated mrro, sos, tas (hist, ssp119 only), tos exclusion lists
 % PJD  4 Aug 2022   - Updated to remove CMCC-CM2-SR5 data; badListFlag = 1 (was 0)
+% PJD  4 Aug 2022   - Added IPSL-CM5A2-INCA ssp126 mrro, GISS-E2-1-G ssp245 mrro to badList
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
@@ -533,6 +534,7 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp126.INM.INM-CM4-8.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190603' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp126.INM.INM-CM5-0.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190619' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp126.IPSL.IPSL-CM5A2-INCA.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20201218' ; % lats bound to 90
+    'CMIP6.ScenarioMIP.ssp126.IPSL.IPSL-CM5A2-INCA.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20220105'
     'CMIP6.ScenarioMIP.ssp126.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190903-blah' ; % no Antarctica
     'CMIP6.ScenarioMIP.ssp126.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp126.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
@@ -643,10 +645,15 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r5i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r5i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r6i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r6i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r7i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r7i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r8i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r8i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r9i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r9i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r10i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
+    'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r10i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-H.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-H.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20201215'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-H.r2i1p1f2.mon.mrro.land.glb-2d-gn.v20200115'
