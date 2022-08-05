@@ -1,9 +1,9 @@
-% This file generates two-panel figures displaying density changes for
-% global basins as sourced from DW10
+% This file generates a series of models fields and compares these
+% to observed change estimates from DW10 updated
 %
-% Paul J. Durack 7th January 2011
+% Paul J. Durack 1st March 2021
 %
-% make_AR6_Fig1_CMIP6vsObs_soetal.m
+% make_RothigFigs.m
 
 %{
 % PJD  1 Mar 2021   - Copied from /export/durack1/git/Roethigetal21NatClimChg/make_AR6_Fig3p23_CMIP6minusWOA18_thetaoAndso.m
