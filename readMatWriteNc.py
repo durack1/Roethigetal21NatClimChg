@@ -14,6 +14,7 @@ PJD  6 May 2022     - Added workDir, matFile
 PJD  6 May 2022     - Added multi-var [sos, tos]
 PJD 10 May 2022     - Corrected output varName to var (not sos hard-coded)
 PJD  4 Aug 2022     - Updated for latest data 220729/220803mat
+PJD  5 Aug 2022     - Updated for corrected latest data 220804
                     - TO-DO: Add attribution info to files; git hash etc
 
 @author: durack1
@@ -29,7 +30,8 @@ os.sys.path.insert(0, '/home/durack1/git/durolib/durolib')
 # %%
 workDir = '/p/user_pub/climate_work/durack1/Shared/'
 targetDir = os.path.join(workDir, '210128_PaperPlots_Rothigetal/')
-matFile = "220803T175312_220729_CMIP6.mat"  # "220429T143503_220427_CMIP6.mat"
+# "220803T175312_220729_CMIP6.mat"  # "220429T143503_220427_CMIP6.mat"
+matFile = "220804T215723_220729_CMIP6.mat"
 infile = os.path.join(targetDir, matFile)
 mat = sio.loadmat(infile)
 matKeys = mat.keys()

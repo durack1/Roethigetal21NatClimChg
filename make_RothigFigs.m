@@ -50,7 +50,8 @@
 % PJD  1 Aug 2022   - Update export_fig 3.15 -> 3.27
 % PJD  2 Aug 2022   - Update exclusion lists
 % PJD  3 Aug 2022   - Updated mrro, sos, tas (hist, ssp119 only), tos exclusion lists
-% PJD  4 Aug 2022   - Updated to remove CMCC-CM2-SR5 data; badListFlag = 1 (was 0)
+% PJD  4 Aug 2022   - Updated to remove CMCC-CM2-SR5 data; badListFlag = 1
+% (was 0)exit
 % PJD  4 Aug 2022   - Added IPSL-CM5A2-INCA ssp126 mrro, GISS-E2-1-G ssp245 mrro to badList
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
