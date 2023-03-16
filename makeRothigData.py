@@ -33,6 +33,8 @@ PJD 27 Apr 2022     - Updated /work/durack1 to /p/user_pub/climate_work/durack1
 @author: durack1
 """
 from __future__ import print_function
+from durolib import fixVarUnits, globalAttWrite, writeToLog  # ,trimModelList
+from wrangle import trimModelList
 from socket import gethostname
 
 # Make py2 backward compatible
@@ -54,8 +56,6 @@ import numpy as np
 # climlib
 os.sys.path.insert(0, "/home/durack1/git/durolib/durolib")
 os.sys.path.insert(0, "/home/durack1/git/climlib/climlib")
-from wrangle import trimModelList
-from durolib import fixVarUnits, globalAttWrite, writeToLog  # ,trimModelList
 
 # %% Set current dirs
 workDur = "/p/user_pub/climate_work/durack1"
