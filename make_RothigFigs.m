@@ -1504,7 +1504,7 @@ disp('** Model processing complete.. **')
 % Rename obs
 so_woa18_mean = s_mean; clear s_mean
 thetao_woa18_mean = pt_mean; clear pt_mean
-outFile = [outDir,dateFormatLong,'_',dataDate,'_CMIP6.mat'];
+outFile = strcat(outDir,dateFormatLong,'_',dataDate,'_CMIP6.mat');
 delete(outFile)
 save(outFile, ...
     'so_woa18_mean','thetao_woa18_mean', ...
