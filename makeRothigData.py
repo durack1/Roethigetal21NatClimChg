@@ -24,6 +24,7 @@ PJD 18 Feb 2022     - Added .ICON-ESM-LR. to badMods list
 PJD 25 Feb 2022     - Added to badFiles list CMIP6.ScenarioMIP.ssp370.EC-Earth-Consortium.EC-Earth3.r3i1p1f1.mon.sos
 PJD 25 Feb 2022     - Added to badFiles list CMIP6.ScenarioMIP.ssp370.EC-Earth-Consortium.EC-Earth3.r3i1p1f1.mon.tos
 PJD 27 Apr 2022     - Updated /work/durack1 to /p/user_pub/climate_work/durack1
+PJD 15 Mar 2023     - Update to correct durolib/wrangle imports (requires os.sys.path.insert)
                     - TO-DO: fix sos, tos rotated pole (FGOALS*, IPSL-CM6*INCA)
                     - TO-DO: fix mrro no ocean mask with sftof field (CanESM*, GISS*, E3SM*, NorESM2*, INMCM5*)
                     - TO-DO: Add badMods back in
@@ -33,8 +34,6 @@ PJD 27 Apr 2022     - Updated /work/durack1 to /p/user_pub/climate_work/durack1
 @author: durack1
 """
 from __future__ import print_function
-from durolib import fixVarUnits, globalAttWrite, writeToLog  # ,trimModelList
-from wrangle import trimModelList
 from socket import gethostname
 
 # Make py2 backward compatible
@@ -56,6 +55,8 @@ import numpy as np
 # climlib
 os.sys.path.insert(0, "/home/durack1/git/durolib/durolib")
 os.sys.path.insert(0, "/home/durack1/git/climlib/climlib")
+from durolib import fixVarUnits, globalAttWrite, writeToLog  # ,trimModelList
+from wrangle import trimModelList
 
 # %% Set current dirs
 workDur = "/p/user_pub/climate_work/durack1"

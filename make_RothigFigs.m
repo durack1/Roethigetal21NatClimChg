@@ -50,9 +50,11 @@
 % PJD  1 Aug 2022   - Update export_fig 3.15 -> 3.27
 % PJD  2 Aug 2022   - Update exclusion lists
 % PJD  3 Aug 2022   - Updated mrro, sos, tas (hist, ssp119 only), tos exclusion lists
-% PJD  4 Aug 2022   - Updated to remove CMCC-CM2-SR5 data; badListFlag = 1
-% (was 0)exit
+% PJD  4 Aug 2022   - Updated to remove CMCC-CM2-SR5 data; badListFlag = 1 (was 0)exit
 % PJD  4 Aug 2022   - Added IPSL-CM5A2-INCA ssp126 mrro, GISS-E2-1-G ssp245 mrro to badList
+% PJD 23 Mar 2023   - Updated Matlab R2022a -> R2023a
+% PJD 23 Mar 2023   - Updated for latest data grab 230321 (was 220729)
+% PJD 23 Mar 2023   - Updated export_fig v3.27 -> v3.33
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
@@ -62,9 +64,9 @@ clear, clc, close all
 % Initialise environment variables
 [homeDir,~,dataDir,obsDir,~,aHostLongname] = myMatEnv(2);
 outDir = os_path([homeDir,'210128_PaperPlots_Rothigetal/']);
-dataDate = '220729' ; %'220427' ; %'220228' ; %'210726';
-dateFormat = datestr(now,'yymmdd');
-dateFormatLong = [datestr(now,'yymmdd'),'T',datestr(now,'HHMMSS')];
+dataDate = '230321'; %'220729' ; %'220427' ; %'220228' ; %'210726';
+dateFormat = string(datetime('now', 'Format', 'yyMMdd'));
+dateFormatLong = strcat(dateFormat, 'T', string(datetime('now', 'Format', 'HHmmSS')));
 badListFlag = 1; % 1 = Test against badList before final run
 addpath([dataDir,'toolbox-local/csirolib/'], '-BEGIN') % Add clmap, coast
 
@@ -98,11 +100,11 @@ else % If batch job purge files
     purge = 1;
 end
 if purge
-    delete([outDir,dateFormat,'*_cmip*.eps']);
-    delete([outDir,dateFormat,'*_cmip*.png']);
-    delete([outDir,dateFormat,'_WOA18*.png']);
-    delete([outDir,dateFormat,'_cmip*.png']);
-    delete([outDir,dateFormat,'_CMIP6*.mat']);
+    delete(strcat(outDir,dateFormat,'*_cmip*.eps'));
+    delete(strcat(outDir,dateFormat,'*_cmip*.png'));
+    delete(strcat(outDir,dateFormat,'_WOA18*.png'));
+    delete(strcat(outDir,dateFormat,'_cmip*.png'));
+    delete(strcat(outDir,dateFormat,'_CMIP6*.mat'));
 end
 
 %% Print time to console, for logging
@@ -214,7 +216,8 @@ disp('** WOA18 processing complete.. **')
 
 %% Declare bad lists
 %% mrro
-badListCM6Mrro = {
+badListCM6Mrro = { }
+{
     'CMIP6.CMIP.historical.AS-RCEC.TaiESM1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20200624' ; % no ocean masking
     'CMIP6.CMIP.historical.AS-RCEC.TaiESM1.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20210416' ; % No ocean masking
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
@@ -942,7 +945,8 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp585.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     };
 %% sos
-badListCM6Sos = {
+badListCM6Sos = { }
+{
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007'
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008'
@@ -1021,7 +1025,8 @@ badListCM6Sos = {
     'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 %% tas
-badListCM6Tas = {
+badListCM6Tas = { }
+{
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r10i1p2f1.mon.tas.atmos.glb-z1-gn.v20220401' ; % Invalid/deprecated data
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r11i1p2f1.mon.tas.atmos.glb-z1-gn.v20220401'
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200616'
@@ -1043,7 +1048,8 @@ badListCM6Tas = {
     'CMIP6.ScenarioMIP.ssp585.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200622' ; % Invalid/deprecated data
     };
 %% tos
-badListCM6Tos = {
+badListCM6Tos = { }
+{
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007'
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008'
@@ -1343,7 +1349,7 @@ for exp = 1:length(exps)
                 set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
                     'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
                     'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-                export_fig([pngDir,'/',dateFormat,'_',modName],'-png')
+                export_fig(strcat(pngDir,'/',dateFormat,'_',modName),'-png')
                 close all
                 clear handle ax1 ax2 hh1 mod ind modName
             end
