@@ -55,6 +55,7 @@
 % PJD 23 Mar 2023   - Updated Matlab R2022a -> R2023a
 % PJD 23 Mar 2023   - Updated for latest data grab 230321 (was 220729)
 % PJD 23 Mar 2023   - Updated export_fig v3.27 -> v3.33
+% PJD 23 Mar 2023   - updated caxis -> clim
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
@@ -108,7 +109,7 @@ if purge
 end
 
 %% Print time to console, for logging
-disp(['TIME: ',datestr(now)])
+disp(['TIME: ',string(datetime('now', 'Format', 'yyMMdd'))])
 setenv('USERCREDENTIALS','Paul J. Durack; pauldurack@llnl.gov (durack1); +1 925 422 5208')
 disp(['CONTACT: ',getenv('USERCREDENTIALS')])
 disp(['HOSTNAME: ',aHostLongname])
@@ -166,9 +167,9 @@ end
 clear t_mean pres pres_mat x
 
 % Generate zonal means
-pt_mean_zonal = nanmean(pt_mean,3);
-pt_mean_zonal2 = mean(pt_mean,3,'omitnan');
-s_mean_zonal = mean(s_mean,3,'omitnan');
+% pt_mean_zonal = nanmean(pt_mean,3);
+% pt_mean_zonal2 = mean(pt_mean,3,'omitnan');
+% s_mean_zonal = mean(s_mean,3,'omitnan');
 
 % Plot 1 thetao and 2 so
 for flip = 1:2
@@ -192,10 +193,10 @@ for flip = 1:2
     % WOA18
     close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
     ax1 = subplot(1,2,1);
-    pcolor(t_lon,t_lat,wmean); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); hold all
+    pcolor(t_lon,t_lat,wmean); shading flat; clim([cont1(1) cont1(end)]); clmap(27); hold all
     contour(t_lon,t_lat,wmean,cont1,'color','k');
     ax2 = subplot(1,2,2);
-    pcolor(t_lat,t_depth,wzmean); shading flat; caxis([cont1(1) cont1(end)]); clmap(27); axis ij; hold all
+    pcolor(t_lat,t_depth,wzmean); shading flat; clim([cont1(1) cont1(end)]); clmap(27); axis ij; hold all
     contour(t_lat,t_depth,wzmean,cont1,'color','k');
     hh1 = colorbarf_nw('horiz',cont3,cont2);
     set(handle,'Position',[3 3 16 7]) % Full page width (175mm (17) width x 83mm (8) height) - Back to 16.5 x 6 for proportion
@@ -216,7 +217,7 @@ disp('** WOA18 processing complete.. **')
 
 %% Declare bad lists
 %% mrro
-badListCM6Mrro = { }
+badListCM6Mrro = { };
 {
     'CMIP6.CMIP.historical.AS-RCEC.TaiESM1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20200624' ; % no ocean masking
     'CMIP6.CMIP.historical.AS-RCEC.TaiESM1.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20210416' ; % No ocean masking
@@ -945,7 +946,7 @@ badListCM6Mrro = { }
     'CMIP6.ScenarioMIP.ssp585.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     };
 %% sos
-badListCM6Sos = { }
+badListCM6Sos = { };
 {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007'
@@ -1025,7 +1026,7 @@ badListCM6Sos = { }
     'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 %% tas
-badListCM6Tas = { }
+badListCM6Tas = { };
 {
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r10i1p2f1.mon.tas.atmos.glb-z1-gn.v20220401' ; % Invalid/deprecated data
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r11i1p2f1.mon.tas.atmos.glb-z1-gn.v20220401'
@@ -1048,7 +1049,7 @@ badListCM6Tas = { }
     'CMIP6.ScenarioMIP.ssp585.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200622' ; % Invalid/deprecated data
     };
 %% tos
-badListCM6Tos = { }
+badListCM6Tos = { };
 {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007'
@@ -1337,9 +1338,9 @@ for exp = 1:length(exps)
                 close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
                 ax1 = subplot(1,1,1);
                 if strcmp(vars(var).name,'mrro')
-                    pcolor(t_lon,t_lat,squeeze(mod)); shading flat; caxis([0 log10(cMax)]); clmap(clMap); hold all
+                    pcolor(t_lon,t_lat,squeeze(mod)); shading flat; clim([0 log10(cMax)]); clmap(clMap); hold all
                 else
-                    pcolor(t_lon,t_lat,squeeze(mod)); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
+                    pcolor(t_lon,t_lat,squeeze(mod)); shading flat; clim([cont1(1) cont1(end)]); clmap(clMap); hold all
                     contour(t_lon,t_lat,squeeze(mod),cont1,'color','k'); % don't contour log scale
                 end
                 hh1 = colorbarf_nw('horiz',cont3,cont2);
@@ -1471,9 +1472,9 @@ for exp = 1:length(exps)
         close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle)
         ax1 = subplot(1,1,1);
         if strcmp(vars(var).name,'mrro')
-            pcolor(t_lon,t_lat,varTmp_mean*scale); shading flat; caxis([0 log10(cMax)]); clmap(clMap); hold all
+            pcolor(t_lon,t_lat,varTmp_mean*scale); shading flat; clim([0 log10(cMax)]); clmap(clMap); hold all
         else
-            pcolor(t_lon,t_lat,varTmp_mean*scale); shading flat; caxis([cont1(1) cont1(end)]); clmap(clMap); hold all
+            pcolor(t_lon,t_lat,varTmp_mean*scale); shading flat; clim([cont1(1) cont1(end)]); clmap(clMap); hold all
             contour(t_lon,t_lat,varTmp_mean*scale,cont1,'color','k'); % don't contour log scale
         end
         hh1 = colorbarf_nw('horiz',cont3,cont2);
@@ -1483,7 +1484,7 @@ for exp = 1:length(exps)
         set(ax1,'Tickdir','out','fontsize',fonts_ax,'layer','top','box','on', ...
             'xlim',[0 360],'xtick',0:30:360,'xticklabel',{'0','30','60','90','120','150','180','210','240','270','300','330','360'},'xminort','on', ...
             'ylim',[-90 90],'ytick',-90:20:90,'yticklabel',{'-90','-70','-50','-30','-10','10','30','50','70','90'},'yminort','on');
-        export_fig([outDir,dateFormat,'_',dataDate,'_',mipEra,'_',exps(exp).name,'_',inVar,'_mean'],'-png')
+        export_fig(strcat(outDir,dateFormat,'_',dataDate,'_',mipEra,'_',exps(exp).name,'_',inVar,'_mean'),'-png')
         clear handle ax1 ax2 hh1 cont1 cont2 cont3 ncVar badList
         % Calculate zonal means
         varName = [inVar,'_',mipEra,'_',strrep(exps(exp).name,'-','_')];
@@ -1524,7 +1525,7 @@ disp('** All data written to *.mat.. **')
 close all
 warning off export_fig:exportgraphics
 fonts = 8;
-dateFormat = datestr(now,'yymmdd');
+dateFormat = string(datetime('now', 'Format', 'yyMMdd'));
 sscale = 1;
 mscale = 100; % In % change not needed
 
@@ -1548,7 +1549,7 @@ xLimLab = 110; yLimLab = 57; xLimLabInfo = 80; yLimLabInfo = 52;
 % Obs salinity
 ax1 = subplot(3,1,1);
 %colormap(ax1,clS) ; % Set palette - Blue -> Red
-pcolor(obsLon,obsLat,obsSChg); caxis([-1 1]*sscale); shading flat; continents
+pcolor(obsLon,obsLat,obsSChg); clim([-1 1]*sscale); shading flat; continents
 ylab1 = ylabel('Latitude');
 cb1 = colorbarf_nw('vert',-1:0.0625:1,-1:.25:1);
 lab1 = text(xLimLab,yLimLab,'A');
@@ -1559,7 +1560,7 @@ lab1Info = text(xLimLabInfo,yLimLabInfo,{'1950-2020';'Obs. Salinity'});
 s585SosDiff = sos_CMIP6_ssp585_2071_2101_mean-sos_CMIP6_historical_1985_2015_mean;
 ax2 = subplot(3,1,2);
 %colormap(ax2,clS) ; % Set palette - Blue -> Red
-pcolor(t_lon,t_lat,s585SosDiff); caxis([-1 1]*sscale); shading flat; continents
+pcolor(t_lon,t_lat,s585SosDiff); clim([-1 1]*sscale); shading flat; continents
 ylab2 = ylabel('Latitude');
 lab2 = text(xLimLab,yLimLab,'B');
 lab2Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP585 Salinity'});
@@ -1568,14 +1569,14 @@ lab2Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP585 Salinity'});
 % Calculate percent change
 s585MrroDiff = ((mrro_CMIP6_ssp585_2071_2101_mean./mrro_CMIP6_historical_1985_2015_mean)-1)*100; % kg m-2 s-1
 ax3 = subplot(3,1,3);
-pcM = pcolor(t_lon,t_lat,s585MrroDiff); caxis([-1 1]*mscale); shading flat;
+pcM = pcolor(t_lon,t_lat,s585MrroDiff); clim([-1 1]*mscale); shading flat;
 hold on; coast('k');
 colormap(ax3,clM) ; % Switch palette - Brown -> Green
 xlab3 = xlabel('Longitude');
 ylab3 = ylabel('Latitude');
 lab3 = text(xLimLab,yLimLab,'C');
 lab3Info = text(188,40,{'2071-2100';'CMIP6 SSP585 Runoff'});
-cb2 = colorbarf_nw('vert',[-1:.125:1]*mscale,[-1:.25:1]*mscale);
+cb2 = colorbarf_nw('vert',(-1:.125:1)*mscale,(-1:.25:1)*mscale);
 
 % Deal with axes
 yticks = {'','75S','','55S','','35S','','15S','','','15N','','35N','','55N','','75N',''};
@@ -1613,7 +1614,7 @@ export_fig(outName,'-eps')
 close all
 warning off export_fig:exportgraphics
 fonts = 8;
-dateFormat = datestr(now,'yymmdd');
+dateFormat = string(datetime('now', 'Format', 'yyMMdd'));
 
 % Loop through scenarios
 scens = whos('sos*mean');
@@ -1629,13 +1630,13 @@ for scen = 2:length(scens)
     % Create canvas
     close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle); clmap(27)
     ax1 = subplot(1,2,1);
-    pcolor(t_lon,t_lat,tmp); caxis([30,40]); shading flat; continents;
+    pcolor(t_lon,t_lat,tmp); clim([30,40]); shading flat; continents;
     hh1 = colorbarf_nw('horiz',30:0.25:40,30:1:40);
     xlab1 = xlabel('Longitude');
     ylab1 = ylabel('Latitude');
     titleAx1 = title([scenId,'2071-2101']);
     ax2 = subplot(1,2,2);
-    pcolor(t_lon,t_lat,tmp2); caxis([-2 2]); shading flat; continents
+    pcolor(t_lon,t_lat,tmp2); clim([-2 2]); shading flat; continents
     hh2 = colorbarf_nw('horiz',-2:0.25:2,-2:.5:2);
     set(hh2,'XTickLabelRotation',0)
     xlab2 = xlabel('Longitude');
