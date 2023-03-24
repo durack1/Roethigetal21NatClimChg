@@ -56,6 +56,7 @@
 % PJD 23 Mar 2023   - Updated for latest data grab 230321 (was 220729)
 % PJD 23 Mar 2023   - Updated export_fig v3.27 -> v3.33
 % PJD 23 Mar 2023   - updated caxis -> clim
+% PJD 24 Mar 2023   - Updated more strcat calls
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
@@ -1606,7 +1607,7 @@ set(lab3Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment',
 set(cb2,'Position',[xlimCb 0.05 xlimWid 0.3],'fontsize',fonts,'Colormap',clM)
 
 % Print to file
-outName = [outDir,dateFormat,'_durack1_Rothigetal21NatCC_Figure1'];
+outName = strcat(outDir,dateFormat,'_durack1_Rothigetal21NatCC_Figure1');
 export_fig(outName,'-png')
 export_fig(outName,'-eps')
 
