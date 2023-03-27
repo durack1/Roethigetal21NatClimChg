@@ -57,6 +57,7 @@
 % PJD 23 Mar 2023   - Updated export_fig v3.27 -> v3.33
 % PJD 23 Mar 2023   - updated caxis -> clim
 % PJD 24 Mar 2023   - Updated more strcat calls
+% PJD 27 Mar 2023   - More strcat calls
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
@@ -1657,7 +1658,7 @@ for scen = 2:length(scens)
     set(hh2,'Position',[0.545 0.05 0.4 0.02],'fontsize',fonts)
 
     % Print to file
-    outName = [outDir,dateFormat,'_durack1_CMIP6_sos_',strtrim(scenId),'minusHistorical1985-2015'];
+    outName = strcat(outDir,dateFormat,'_durack1_CMIP6_sos_',strtrim(scenId),'minusHistorical1985-2015');
     export_fig(outName,'-png')
     export_fig(outName,'-eps')
 
