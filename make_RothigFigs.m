@@ -58,6 +58,7 @@
 % PJD 23 Mar 2023   - updated caxis -> clim
 % PJD 24 Mar 2023   - Updated more strcat calls
 % PJD 27 Mar 2023   - More strcat calls
+% PJD  3 Apr 2023   - Validated 230321 mrro and sos variable bad lists
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
@@ -219,8 +220,7 @@ disp('** WOA18 processing complete.. **')
 
 %% Declare bad lists
 %% mrro
-badListCM6Mrro = { };
-{
+badListCM6Mrro = {
     'CMIP6.CMIP.historical.AS-RCEC.TaiESM1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20200624' ; % no ocean masking
     'CMIP6.CMIP.historical.AS-RCEC.TaiESM1.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20210416' ; % No ocean masking
     'CMIP6.CMIP.historical.CCCma.CanESM5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
@@ -289,6 +289,77 @@ badListCM6Mrro = { };
     'CMIP6.CMIP.historical.CCCma.CanESM5.r38i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.CCCma.CanESM5.r39i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.CCCma.CanESM5.r40i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r10i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r10i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r11i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r11i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r12i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r12i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r13i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r13i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r14i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r14i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r15i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r15i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r16i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r16i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r17i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r17i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r18i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r18i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r19i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r19i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r20i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r20i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r21i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r22i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r22i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r23i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r24i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r24i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r25i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r25i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r26i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r27i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r28i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r30i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r31i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r32i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r33i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r34i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r35i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r36i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r37i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r38i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r39i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r41i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r42i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r43i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r44i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r45i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r46i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r47i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r48i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r49i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r4i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r50i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r5i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r6i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r6i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r7i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r7i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r8i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r8i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r9i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.CMIP.historical.CCCma.CanESM5-1.r9i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.CCCma.CanESM5-CanOE.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
     'CMIP6.CMIP.historical.CCCma.CanESM5-CanOE.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.CMIP.historical.CCCma.CanESM5-CanOE.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
@@ -303,8 +374,11 @@ badListCM6Mrro = { };
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r7i1p2f1.mon.mrro.land.glb-2d-gn.v20220112'
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r8i1p2f1.mon.mrro.land.glb-2d-gn.v20220316'
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r9i1p2f1.mon.mrro.land.glb-2d-gn.v20220316'
+    'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r1i1p1f1.mon.mrro.land.glb-2d-gr, E3SM-1-1 + ECA, E3SM-2-0' ; % Weird Indo archipelago masking
+    'CMIP6.CMIP.historical.EC-Earth-Consortium.EC-Earth3-AerChem.r3i1p1f1.mon.mrro.land.glb-2d-gr.v20200824' ; % no ocean masking
     'CMIP6.CMIP.historical.EC-Earth-Consortium.EC-Earth3-AerChem.r4i1p1f1.mon.mrro.land.glb-2d-gr.v20201214' ; % no ocean masking
     'CMIP6.CMIP.historical.EC-Earth-Consortium.EC-Earth3-CC.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20210113' ; % no ocean masking
+    'CMIP6.CMIP.historical.HAMMOZ-Consortium.MPI-ESM-1-2-HAM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190627-blah' ; % weird Indo archipelago masking
     'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190530' ; % no ocean masking
     'CMIP6.CMIP.historical.INM.INM-CM5-0.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190610' ; % no ocean masking
     'CMIP6.CMIP.historical.INM.INM-CM5-0.r2i1p1f1.mon.mrro.land.glb-2d-gr1.v20190704'
@@ -318,6 +392,10 @@ badListCM6Mrro = { };
     'CMIP6.CMIP.historical.INM.INM-CM5-0.r10i1p1f1.mon.mrro.land.glb-2d-gr1.v20190712'
     'CMIP6.CMIP.historical.IPSL.IPSL-CM5A2-INCA.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20200729' ; % lats bound to 90
     'CMIP6.CMIP.historical.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20180803-blah' ; % no Antarctica
+    'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-G.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20181015' ; % no ocean masking
+    'CMIP6.CMIP.historical.KIOST.KIOST-ESM.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20210601-blah' ; % weird Indo archipelago masking
+    'CMIP6.CMIP.historical.MPI-M.MPI-ESM1-2-HR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' ; % weird Indo archipelago masking
+    'CMIP6.CMIP.historical.MPI-M.MPI-ESM1-2-LR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' ; % weird Indo archipelago masking
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-G.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20181015' ; % no ocean masking
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20190903'
     'CMIP6.CMIP.historical.NASA-GISS.GISS-E2-1-G.r1i1p1f3.mon.mrro.land.glb-2d-gn.v20190903'
@@ -418,6 +496,7 @@ badListCM6Mrro = { };
     'CMIP6.CMIP.historical.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
     'CMIP6.CMIP.historical.NCC.NorESM2-MM.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20200218'
     'CMIP6.CMIP.historical.NCC.NorESM2-MM.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20200702'
+    'CMIP6.CMIP.historical.NIMS-KMA.KACE-1-0-G.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190911-blah' % weird Indo archipelago masking
     'CMIP6.CMIP.historical.NOAA-GFDL.GFDL-CM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     'CMIP6.CMIP.historical.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190726' ; % no ocean masking
     '' ; % split
@@ -471,6 +550,10 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp119.CCCma.CanESM5.r24i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp119.CCCma.CanESM5.r25i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp119.CCCma.CanESM5.r25i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp119.DKRZ.MPI-ESM1-2-LR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20210901-blah' ; % weird Indo archipelago masking
+    'CMIP6.ScenarioMIP.ssp119.EC-Earth-Consortium.EC-Earth3.r4i1p1f1.mon.mrro.land.glb-2d-gr.v20200425-blah' ; % weird Indo archipelago masking
+    'CMIP6.ScenarioMIP.ssp119.EC-Earth-Consortium.EC-Earth3-Veg.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20200226-blah' ; % weird Indo archipelago masking
+    'CMIP6.ScenarioMIP.ssp119.EC-Earth-Consortium.EC-Earth3-Veg-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20201201-blah' ; % weird Indo archipelago masking
     'CMIP6.ScenarioMIP.ssp119.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190410-blah' ; % no Antarctica
     'CMIP6.ScenarioMIP.ssp119.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp119.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
@@ -538,11 +621,19 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp126.CCCma.CanESM5-CanOE.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp126.CCCma.CanESM5-CanOE.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp126.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20200717' ; % Invalid/deprecated data
+    'CMIP6.ScenarioMIP.ssp126.DKRZ.MPI-ESM1-2-HR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo archipelago masking
+    'CMIP6.ScenarioMIP.ssp126.DWD.MPI-ESM1-2-HR.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo archipelago masking
+    'CMIP6.ScenarioMIP.ssp126.EC-Earth-Consortium.EC-Earth3.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20210324-blah' % weird Indo archipelago masking
+    'CMIP6.ScenarioMIP.ssp126.EC-Earth-Consortium.EC-Earth3-Veg.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20200225-blah' % weird Indo archipelago masking
+    'CMIP6.ScenarioMIP.ssp126.EC-Earth-Consortium.EC-Earth3-Veg-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20201201-blah' % weird Indo archipelago masking
     'CMIP6.ScenarioMIP.ssp126.INM.INM-CM4-8.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190603' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp126.INM.INM-CM5-0.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190619' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp126.IPSL.IPSL-CM5A2-INCA.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20201218' ; % lats bound to 90
     'CMIP6.ScenarioMIP.ssp126.IPSL.IPSL-CM5A2-INCA.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20220105'
     'CMIP6.ScenarioMIP.ssp126.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190903-blah' ; % no Antarctica
+    'CMIP6.ScenarioMIP.ssp126.KIOST.KIOST-ESM.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20210601-blah' % weird Indo archipelago masking
+    'CMIP6.ScenarioMIP.ssp126.MIROC.MIROC-ES2L.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20220314-blah' % weird Indo archipelago masking
+    'CMIP6.ScenarioMIP.ssp126.MPI-M.MPI-ESM1-2-LR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo archipelago masking
     'CMIP6.ScenarioMIP.ssp126.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp126.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp126.NASA-GISS.GISS-E2-1-G.r1i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
@@ -575,6 +666,7 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp126.NASA-GISS.GISS-E2-2-G.r5i1p3f1.mon.mrro.land.glb-2d-gn.v20211015'
     'CMIP6.ScenarioMIP.ssp126.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20210319' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp126.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp126.NIMS-KMA.KACE-1-0-G.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20191011-blah' % incomplete Antarctica
     'CMIP6.ScenarioMIP.ssp126.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     '' ; % split
     'CMIP6.ScenarioMIP.ssp245.AS-RCEC.TaiESM1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20201124' ; % no ocean masking
@@ -632,10 +724,14 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp245.CCCma.CanESM5-CanOE.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp245.CCCma.CanESM5-CanOE.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp245.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20200617' ; % Invalid/deprecated data
+    'CMIP6.ScenarioMIP.ssp245.DKRZ.MPI-ESM1-2-HR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo Archipelago mask
+    'CMIP6.ScenarioMIP.ssp245.EC-Earth-Consortium.EC-Earth3.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20210324-blah' % weird Indo Archipelago mask
     'CMIP6.ScenarioMIP.ssp245.EC-Earth-Consortium.EC-Earth3-CC.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20210113' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp245.INM.INM-CM4-8.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190603' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp245.INM.INM-CM5-0.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190619' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp245.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190119-blah' ; % no Antarctica
+    'CMIP6.ScenarioMIP.ssp245.KIOST.KIOST-ESM.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20210601-blah' % weird Indo Archipelago mask
+    'CMIP6.ScenarioMIP.ssp245.MPI-M.MPI-ESM1-2-LR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo Archipelago mask
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp245.NASA-GISS.GISS-E2-1-G.r1i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
@@ -681,6 +777,7 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-LM.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20210319'
     'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108'
     'CMIP6.ScenarioMIP.ssp245.NCC.NorESM2-MM.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20200702'
+    'CMIP6.ScenarioMIP.ssp245.NIMS-KMA.KACE-1-0-G.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20191125-blah' % weird Antarctica mask
     'CMIP6.ScenarioMIP.ssp245.NOAA-GFDL.GFDL-CM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp245.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     '' ; % split
@@ -739,6 +836,8 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5-CanOE.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp370.CCCma.CanESM5-CanOE.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp370.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20200622' ; % Invalid/deprecated data
+    'CMIP6.ScenarioMIP.ssp370.DKRZ.MPI-ESM1-2-HR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo Archipelago masking
+    'CMIP6.ScenarioMIP.ssp370.EC-Earth-Consortium.EC-Earth3.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20210324-blah + AerChem + Veg' % weird Indo Archipelago masking
     'CMIP6.ScenarioMIP.ssp370.INM.INM-CM4-8.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190603' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp370.INM.INM-CM5-0.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190618' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp370.INM.INM-CM5-0.r2i1p1f1.mon.mrro.land.glb-2d-gr1.v20190712'
@@ -747,6 +846,8 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp370.INM.INM-CM5-0.r5i1p1f1.mon.mrro.land.glb-2d-gr1.v20190722'
     'CMIP6.ScenarioMIP.ssp370.IPSL.IPSL-CM5A2-INCA.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20201218' ; % lats bound to 90
     'CMIP6.ScenarioMIP.ssp370.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190119-blah' ; % no Antarctica
+    'CMIP6.ScenarioMIP.ssp370.MIROC.MIROC-ES2L.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20190823-blah' % weird Indo Archipelago masking
+    'CMIP6.ScenarioMIP.ssp370.MPI-M.MPI-ESM1-2-LR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo Archipelago masking
     'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp370.NASA-GISS.GISS-E2-1-G.r1i1p3f2.mon.mrro.land.glb-2d-gn.v20200115'
@@ -794,6 +895,7 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp434.CCCma.CanESM5.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp434.CCCma.CanESM5.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp434.CCCma.CanESM5.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp434.EC-Earth-Consortium.EC-Earth3.r101i1p1f1.mon.mrro.land.glb-2d-gr.v20200412-blah' % weird Indo Archipelago masking
     'CMIP6.ScenarioMIP.ssp434.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190506-blah' ; % no Antarctica
     'CMIP6.ScenarioMIP.ssp434.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp434.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
@@ -810,6 +912,7 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp460.CCCma.CanESM5.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp460.CCCma.CanESM5.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp460.CCCma.CanESM5.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp460.EC-Earth-Consortium.EC-Earth3.r101i1p1f1.mon.mrro.land.glb-2d-gr.v20210901-blah' % weird Indo Archipelago masking
     'CMIP6.ScenarioMIP.ssp460.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190506-blah' ; % no Antarctica
     'CMIP6.ScenarioMIP.ssp460.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp460.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
@@ -826,6 +929,7 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp534-over.CCCma.CanESM5.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp534-over.CCCma.CanESM5.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp534-over.CCCma.CanESM5.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp534-over.EC-Earth-Consortium.EC-Earth3.r101i1p1f1.mon.mrro.land.glb-2d-gr.v20200412-blah' % weird Indo Archipelago masking
     'CMIP6.ScenarioMIP.ssp534-over.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190909-blah' ; % no Antarctica
     'CMIP6.ScenarioMIP.ssp534-over.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp534-over.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
@@ -902,16 +1006,38 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5.r24i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5.r25i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5.r25i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r10i1p1f1.mon.mrro.land.glb-2d-gn.v20190429' % no ocean masking
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r10i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r3i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r4i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r4i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r5i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r6i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r7i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r7i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r8i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r8i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r9i1p1f1.mon.mrro.land.glb-2d-gn.v20190429'
+    'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-1.r9i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-CanOE.r1i1p2f1.mon.mrro.land.glb-2d-gn.v20190429' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-CanOE.r2i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp585.CCCma.CanESM5-CanOE.r3i1p2f1.mon.mrro.land.glb-2d-gn.v20190429'
     'CMIP6.ScenarioMIP.ssp585.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20200622' ; % Invalid/deprecated data
+    'CMIP6.ScenarioMIP.ssp585.DKRZ.MPI-ESM1-2-HR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo Archipelago masking
+    'CMIP6.ScenarioMIP.ssp585.DWD.MPI-ESM1-2-HR.r2i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo Archipelago masking
     'CMIP6.ScenarioMIP.ssp585.E3SM-Project.E3SM-1-1.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20201117' ; % Problems with Indonesian archipelago
     'CMIP6.ScenarioMIP.ssp585.E3SM-Project.E3SM-1-1-ECA.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20220325' ; % Problems with Indonesian archipelago
+    'CMIP6.ScenarioMIP.ssp585.EC-Earth-Consortium.EC-Earth3.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20210324-blah + Veg + Veg-LR' % weird Indo Archipelago masking
     'CMIP6.ScenarioMIP.ssp585.EC-Earth-Consortium.EC-Earth3-CC.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20210113' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190603' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp585.INM.INM-CM5-0.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20190724' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp585.IPSL.IPSL-CM6A-LR.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20190903-blah' ; % no Antarctica
+    'CMIP6.ScenarioMIP.ssp585.MPI-M.MPI-ESM1-2-LR.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20190710-blah' % weird Indo Archipelago masking
     'CMIP6.ScenarioMIP.ssp585.NASA-GISS.GISS-E2-1-G.r1i1p1f2.mon.mrro.land.glb-2d-gn.v20200115' ; % no ocean masking / f2 deprecated
     'CMIP6.ScenarioMIP.ssp585.NASA-GISS.GISS-E2-1-G.r1i1p3f1.mon.mrro.land.glb-2d-gn.v20200115'
     'CMIP6.ScenarioMIP.ssp585.NASA-GISS.GISS-E2-1-G.r1i1p5f1.mon.mrro.land.glb-2d-gn.v20200115'
@@ -944,6 +1070,7 @@ badListCM6Mrro = { };
     'CMIP6.ScenarioMIP.ssp585.NASA-GISS.GISS-E2-2-G.r5i1p3f1.mon.mrro.land.glb-2d-gn.v20211015'
     'CMIP6.ScenarioMIP.ssp585.NCC.NorESM2-LM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20210319' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp585.NCC.NorESM2-MM.r1i1p1f1.mon.mrro.land.glb-2d-gn.v20191108' ; % no ocean masking
+    'CMIP6.ScenarioMIP.ssp585.NIMS-KMA.KACE-1-0-G.r1i1p1f1.mon.mrro.land.glb-2d-gr.v20191002-blah' % weird Antarctica masking - missing
     'CMIP6.ScenarioMIP.ssp585.NOAA-GFDL.GFDL-CM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     'CMIP6.ScenarioMIP.ssp585.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     };
