@@ -59,6 +59,8 @@
 % PJD 24 Mar 2023   - Updated more strcat calls
 % PJD 27 Mar 2023   - More strcat calls
 % PJD  3 Apr 2023   - Validated 230321 mrro and sos variable bad lists
+% PJD 11 Apr 2023   - Validated 230321 tos variable bad list
+% PJD 12 Apr 2023   - Updated to include sos, tas and tos bad lists
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
@@ -1075,8 +1077,7 @@ badListCM6Mrro = {
     'CMIP6.ScenarioMIP.ssp585.NOAA-GFDL.GFDL-ESM4.r1i1p1f1.mon.mrro.land.glb-2d-gr1.v20180701' ; % no ocean masking
     };
 %% sos
-badListCM6Sos = { };
-{
+badListCM6Sos = {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.sos.ocean.glb-2d-gn.v20191007'
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.sos.ocean.glb-2d-gn.v20191008'
@@ -1155,8 +1156,7 @@ badListCM6Sos = { };
     'CMIP6.ScenarioMIP.ssp585.INM.INM-CM4-8.r1i1p1f1.mon.sos.ocean.glb-2d-gr1.v20190603-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
     };
 %% tas
-badListCM6Tas = { };
-{
+badListCM6Tas = {
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r10i1p2f1.mon.tas.atmos.glb-z1-gn.v20220401' ; % Invalid/deprecated data
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r11i1p2f1.mon.tas.atmos.glb-z1-gn.v20220401'
     'CMIP6.CMIP.historical.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200616'
@@ -1178,8 +1178,7 @@ badListCM6Tas = { };
     'CMIP6.ScenarioMIP.ssp585.CMCC.CMCC-CM2-SR5.r1i1p1f1.mon.tas.atmos.glb-z1-gn.v20200622' ; % Invalid/deprecated data
     };
 %% tos
-badListCM6Tos = { };
-{
+badListCM6Tos = {
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007' ; % rotated pole, thetao too
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20191007'
     'CMIP6.CMIP.historical.CAS.FGOALS-f3-L.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20191008'
@@ -1204,6 +1203,7 @@ badListCM6Tos = { };
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r2i1p1f1.mon.tos.ocean.glb-2d-gr.v20190830'
     'CMIP6.CMIP.historical.E3SM-Project.E3SM-1-0.r5i1p1f1.mon.tos.ocean.glb-2d-gr.v20200429'
     'CMIP6.CMIP.historical.INM.INM-CM4-8.r1i1p1f1.mon.tos.ocean.glb-2d-gr1.v20190530-blah' ; % Values over Russia and Antarctica/grid (same for so/thetao)
+    'CMIP6.CMIP.historical.MRI.MRI-ESM2-0.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20190904-blah' ; % weird changing Indo Archipelago grid across realizations r1i2p1f1
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r1i1p1f1.mon.tos.ocean.glb-2d-gn.v20191120' ; % Masking Atlantic/Southern O/Pac
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r2i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
     'CMIP6.CMIP.historical.NCAR.CESM2-FV2.r3i1p1f1.mon.tos.ocean.glb-2d-gn.v20200226'
