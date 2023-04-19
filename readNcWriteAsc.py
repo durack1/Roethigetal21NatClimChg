@@ -226,8 +226,8 @@ regions['Plankton-SAtl'] = {}
 regions['Plankton-SAtl']['latBounds'] = [-62.25, -2.75]  # [-62.2231, -1.9002]
 regions['Plankton-SAtl']['lonBounds'] = [308.25, 348.75]  # [-50, 11]
 regions['Seagrass-Aust'] = {}
-regions['Seagrass-Aust']['latBounds'] = [-48.25, -7.25]
-regions['Seagrass-Aust']['lonBounds'] = [111.25, 162.25]
+regions['Seagrass-Aust']['latBounds'] = [-48.25, -6.75]
+regions['Seagrass-Aust']['lonBounds'] = [110.75, 162.25]
 
 for count, regionId in enumerate(regions.keys()):
     print('----------')
