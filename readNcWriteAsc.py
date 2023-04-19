@@ -22,6 +22,8 @@ PJD  7 Oct 2021     - Updated to compute diff
 PJD  6 May 2022     - Added workDir, inFile and histFile entries
 PJD 10 May 2022     - Updated hardcoded sos var to variable argument
 PJD  4 Aug 2022     - Updated for latest data 220729/220803mat
+PJD 19 Apr 2023     - Updated for seagrass-Aust region
+PJD 19 Apr 2023     - Added fillHoles function
                     TODO: ?
 
 Target:
@@ -36,6 +38,13 @@ Updated region for Marshall Islands
 See email 9th March and Supplementary Text (coordinates: 139° E, 192° E, 16° S, 37° N)
 latBounds = [16, 37]
 lonBounds = [139, 192]
+
+Added region seagrass-Aust
+https://github.com/durack1/Roethigetal21NatClimChg/issues/3#issuecomment-1499318175
+@durack1 The maximum extent limits for the seagrass groups are (format: max lat, max lon, min lat, min lon):
+-9, 160, -46, 113
+We could just add a boundary around that to add a few degrees either side as previously I think?
+Let me know of any questions and thanks! Laura
 
 See https://docs.google.com/document/d/1sbGRVjFTLLIXCDPyEbxe7SU7QAyC4yofDtXaNflmlZU/edit
 
@@ -57,7 +66,8 @@ import sys
 workDir = "/p/user_pub/climate_work/durack1/Shared/"
 # inFile = "220803T175312_220729_CMIP6.mat"  # "220429T143503_220427_CMIP6.mat"
 # if diff is being used
-# histFile = "220429T143503_220427_sos_CMIP6_historical_1985_2015_mean.nc"
+# "220429T143503_220427_sos_CMIP6_historical_1985_2015_mean.nc"
+histFile = "220804T215723_220729_sos_CMIP6_historical_1985_2015_mean.nc"
 
 # %% function def
 
@@ -100,6 +110,11 @@ def writeGridAscii(matrix, outfile):
                     outStr = outStr + ' ' +\
                         str(strFormat.format(matrix[count, count2]))
             fO.write(outStr + "\n")
+
+
+def fillHoles(matrix):
+    # iteratively fill missing data with nearest neighbour averages
+    pass
 
 
 # %% get inputs
@@ -210,6 +225,9 @@ regions['Plankton-NAtl']['lonBounds'] = [278.25, 352.75]  # [-80, -7]
 regions['Plankton-SAtl'] = {}
 regions['Plankton-SAtl']['latBounds'] = [-62.25, -2.75]  # [-62.2231, -1.9002]
 regions['Plankton-SAtl']['lonBounds'] = [308.25, 348.75]  # [-50, 11]
+regions['Seagrass-Aust'] = {}
+regions['Seagrass-Aust']['latBounds'] = [-48.25, -7.25]
+regions['Seagrass-Aust']['lonBounds'] = [111.25, 162.25]
 
 for count, regionId in enumerate(regions.keys()):
     print('----------')
