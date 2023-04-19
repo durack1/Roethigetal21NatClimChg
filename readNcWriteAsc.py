@@ -64,7 +64,7 @@ import sys
 
 # %% file and path def
 workDir = "/p/user_pub/climate_work/durack1/Shared/"
-# inFile = "220803T175312_220729_CMIP6.mat"  # "220429T143503_220427_CMIP6.mat"
+# inFile = "230412T104649_230321_CMIP6.mat" # "220803T175312_220729_CMIP6.mat"  # "220429T143503_220427_CMIP6.mat"
 # if diff is being used
 # "220429T143503_220427_sos_CMIP6_historical_1985_2015_mean.nc"
 histFile = "220804T215723_220729_sos_CMIP6_historical_1985_2015_mean.nc"
