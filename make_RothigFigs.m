@@ -61,6 +61,7 @@
 % PJD  3 Apr 2023   - Validated 230321 mrro and sos variable bad lists
 % PJD 11 Apr 2023   - Validated 230321 tos variable bad list
 % PJD 12 Apr 2023   - Updated to include sos, tas and tos bad lists
+% PJD 26 May 2023   - Updated to generate a 3x3 panel plot - scenario uncertainty
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
@@ -1648,12 +1649,12 @@ save(outFile, ...
 disp('** All data written to *.mat.. **')
 
 %% Or load WOA18 and CMIP5/6 ensemble matrices from saved file
-%load /work/durack1/Shared/210128_PaperPlots_Rothigetal/210328T000410_210325_CMIP6.mat
+%load /p/user_pub/climate_work/durack1/Shared/210128_PaperPlots_Rothigetal/230412T104649_230321_CMIP6.mat
 
 %% Figure 1 - obs sos change, ssp585 sos and mrro changes
 close all
 warning off export_fig:exportgraphics
-fonts = 8;
+fonts = 4;
 dateFormat = string(datetime('now', 'Format', 'yyMMdd'));
 sscale = 1;
 mscale = 100; % In % change not needed
@@ -1668,71 +1669,141 @@ obsSChg = getnc(obsFile,'salinity_change',[-1 1 -1 -1],[-1 1 -1 -1]);
 obsLat = getnc(obsFile,'latitude');
 obsLon = getnc(obsFile,'longitude');
 
-% Generate 3 panel plot
+% Generate 3x3 panel plot
 % Create canvas
 close all, handle = figure('units','centimeters','visible','on','color','w'); set(0,'CurrentFigure',handle); clmap(27)
 
 % Labels
-xLimLab = 110; yLimLab = 57; xLimLabInfo = 80; yLimLabInfo = 52;
+xLimLab = 20; yLimLab = 0; xLimLabInfo = 80; yLimLabInfo = 52;
 
 % Obs salinity
-ax1 = subplot(3,1,1);
+ax2 = subplot(3,3,2);
 %colormap(ax1,clS) ; % Set palette - Blue -> Red
 pcolor(obsLon,obsLat,obsSChg); clim([-1 1]*sscale); shading flat; continents
-ylab1 = ylabel('Latitude');
-cb1 = colorbarf_nw('vert',-1:0.0625:1,-1:.25:1);
-lab1 = text(xLimLab,yLimLab,'A');
-lab1Info = text(xLimLabInfo,yLimLabInfo,{'1950-2020';'Obs. Salinity'});
+ylab2 = ylabel('Latitude');
+lab2 = text(xLimLab,yLimLab,'A');
+lab2Info = text(xLimLabInfo,yLimLabInfo,{'1950-2020';'Obs. Salinity'});
+%cb2 = colorbarf_nw('vert',-1:0.0625:1,-1:.25:1);
+cb2 = colorbar('SouthOutside');
+
+% sos ssp126
+s126SosDiff = sos_CMIP6_ssp126_2071_2101_mean-sos_CMIP6_historical_1985_2015_mean;
+ax4 = subplot(3,3,4);
+%colormap(ax2,clS) ; % Set palette - Blue -> Red
+pcolor(t_lon,t_lat,s126SosDiff); clim([-1 1]*sscale); shading flat; continents
+ylab4 = ylabel('Latitude');
+lab4 = text(xLimLab,yLimLab,'B');
+lab4Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP126 Salinity'});
+
+% sos ssp370
+s370SosDiff = sos_CMIP6_ssp370_2071_2101_mean-sos_CMIP6_historical_1985_2015_mean;
+ax5 = subplot(3,3,5);
+%colormap(ax2,clS) ; % Set palette - Blue -> Red
+pcolor(t_lon,t_lat,s370SosDiff); clim([-1 1]*sscale); shading flat; continents
+lab5 = text(xLimLab,yLimLab,'C');
+lab5Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP370 Salinity'});
 
 % sos ssp585
 % Calculate diff
 s585SosDiff = sos_CMIP6_ssp585_2071_2101_mean-sos_CMIP6_historical_1985_2015_mean;
-ax2 = subplot(3,1,2);
+ax6 = subplot(3,3,6);
 %colormap(ax2,clS) ; % Set palette - Blue -> Red
 pcolor(t_lon,t_lat,s585SosDiff); clim([-1 1]*sscale); shading flat; continents
-ylab2 = ylabel('Latitude');
-lab2 = text(xLimLab,yLimLab,'B');
-lab2Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP585 Salinity'});
+lab6 = text(xLimLab,yLimLab,'D');
+lab6Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP585 Salinity'});
+
+% mrro ssp126
+% Calculate percent change
+s126MrroDiff = ((mrro_CMIP6_ssp126_2071_2101_mean./mrro_CMIP6_historical_1985_2015_mean)-1)*100; % kg m-2 s-1
+ax7 = subplot(3,3,7);
+pcM = pcolor(t_lon,t_lat,s126MrroDiff); clim([-1 1]*mscale); shading flat;
+hold on; coast('k');
+colormap(ax7,clM) ; % Switch palette - Brown -> Green
+xlab7 = xlabel('Longitude');
+ylab7 = ylabel('Latitude');
+lab7 = text(xLimLab,yLimLab,'E');
+lab7Info = text(188,20,{'2071-2100';'CMIP6 SSP126 Runoff'});
+
+% mrro ssp370
+% Calculate percent change
+s370MrroDiff = ((mrro_CMIP6_ssp370_2071_2101_mean./mrro_CMIP6_historical_1985_2015_mean)-1)*100; % kg m-2 s-1
+ax8 = subplot(3,3,8);
+pcM = pcolor(t_lon,t_lat,s370MrroDiff); clim([-1 1]*mscale); shading flat;
+hold on; coast('k');
+colormap(ax8,clM) ; % Switch palette - Brown -> Green
+xlab8 = xlabel('Longitude');
+lab8 = text(xLimLab,yLimLab,'F');
+lab8Info = text(188,20,{'2071-2100';'CMIP6 SSP370 Runoff'});
 
 % mrro ssp585
 % Calculate percent change
 s585MrroDiff = ((mrro_CMIP6_ssp585_2071_2101_mean./mrro_CMIP6_historical_1985_2015_mean)-1)*100; % kg m-2 s-1
-ax3 = subplot(3,1,3);
+ax9 = subplot(3,3,9);
 pcM = pcolor(t_lon,t_lat,s585MrroDiff); clim([-1 1]*mscale); shading flat;
 hold on; coast('k');
-colormap(ax3,clM) ; % Switch palette - Brown -> Green
-xlab3 = xlabel('Longitude');
-ylab3 = ylabel('Latitude');
-lab3 = text(xLimLab,yLimLab,'C');
-lab3Info = text(188,40,{'2071-2100';'CMIP6 SSP585 Runoff'});
-cb2 = colorbarf_nw('vert',(-1:.125:1)*mscale,(-1:.25:1)*mscale);
+colormap(ax9,clM) ; % Switch palette - Brown -> Green
+xlab9 = xlabel('Longitude');
+lab9 = text(xLimLab,yLimLab,'G');
+lab9Info = text(188,20,{'2071-2100';'CMIP6 SSP585 Runoff'});
+%cb9 = colorbarf_nw('vert',(-1:.125:1)*mscale,(-1:.25:1)*mscale);
+cb9 = colorbar('SouthOutside');
 
 % Deal with axes
 yticks = {'','75S','','55S','','35S','','15S','','','15N','','35N','','55N','','75N',''};
 xticks = {'0','60E','120E','180','120W','60W','0'};
-set(ax1,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
-    'xlim',[0 360],'xtick',0:60:360,'xticklabel',{''},'yminort','on', ...
-    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',yticks,'xminort','on');
 set(ax2,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
-    'xlim',[0 360],'xtick',0:60:360,'xticklabel',{''},'yminort','on', ...
-    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',yticks,'xminort','on');
-set(ax3,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
-    'xlim',[0 360],'xtick',0:60:360,'xticklabel',xticks,'yminort','on', ...
-    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',yticks,'xminort','on');
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',{''},'yminort','off', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',yticks,'xminort','off');
+set(ax4,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',{''},'yminort','off', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',yticks,'xminort','off');
+set(ax5,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',{''},'yminort','off', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',{''},'xminort','off');
+set(ax6,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',{''},'yminort','off', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',{''},'xminort','off');
+set(ax7,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',xticks,'yminort','off', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',yticks,'xminort','off');
+set(ax8,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',xticks,'yminort','off', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',{''},'xminort','off');
+set(ax9,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
+    'xlim',[0 360],'xtick',0:60:360,'xticklabel',xticks,'yminort','off', ...
+    'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',{''},'xminort','off');
 % Resize into canvas
-set(handle,'Position',[2 2 17 20]) % Full page width (175mm (17) width x 83mm (8) height)
-xlim = 0.07; xlimCb = 0.94; xlimWid = 0.015; wid = 0.85; hei = 0.3; labFont = 12; labInfoFont = 10;
-set(ax1,'Position',[xlim 0.69 wid hei]);
-set(lab1,'fontsize',labFont,'fontweight','bold')
-set(lab1Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
-set(ax2,'Position',[xlim 0.37 wid hei]);
+set(handle,'Position',[2 2 17 10]) % Full page width (175mm (17) width x 83mm (8) height)
+xlim1 = 0.06; xlim2 = 0.375; xlim3 = .69; xlimCb = 0.94;
+ylim1 = 0.14; ylim2 = 0.42; ylim3 = 0.75;
+wid = 0.3; hei = 0.25;
+climWid = 0.9; climHei = 0.02;
+labFont = 7; labInfoFont = 4;
+set(ax2,'Position',[xlim2 ylim3 wid hei]);
 set(lab2,'fontsize',labFont,'fontweight','bold')
 set(lab2Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
-set(cb1,'Position',[xlimCb 0.37 xlimWid 0.62],'fontsize',fonts)
-set(ax3,'Position',[xlim 0.05 wid hei]);
-set(lab3,'fontsize',labFont,'fontweight','bold')
-set(lab3Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
-set(cb2,'Position',[xlimCb 0.05 xlimWid 0.3],'fontsize',fonts,'Colormap',clM)
+set(ax4,'Position',[xlim1 ylim2 wid hei]);
+set(ax5,'Position',[xlim2 ylim2 wid hei]);
+set(ax6,'Position',[xlim3 ylim2 wid hei]);
+set(ax7,'Position',[xlim1 ylim1 wid hei]);
+set(ax8,'Position',[xlim2 ylim1 wid hei]);
+set(ax9,'Position',[xlim3 ylim1 wid hei]);
+set(lab2,'fontsize',labFont,'fontweight','bold')
+set(lab2Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(cb2,'Position',[xlim1 .72 .93 climHei],'fontsize',6)
+set(lab4,'fontsize',labFont,'fontweight','bold')
+set(lab4Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(lab5,'fontsize',labFont,'fontweight','bold')
+set(lab5Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(lab6,'fontsize',labFont,'fontweight','bold')
+set(lab6Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(lab7,'fontsize',labFont,'fontweight','bold')
+set(lab7Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(lab8,'fontsize',labFont,'fontweight','bold')
+set(lab8Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(lab9,'fontsize',labFont,'fontweight','bold')
+set(lab9Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
+set(cb9,'Position',[xlim1 .05 .93 climHei],'fontsize',6,'Colormap',clM)
 
 % Print to file
 outName = strcat(outDir,dateFormat,'_durack1_Rothigetal21NatCC_Figure1');
