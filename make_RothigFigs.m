@@ -62,6 +62,7 @@
 % PJD 11 Apr 2023   - Validated 230321 tos variable bad list
 % PJD 12 Apr 2023   - Updated to include sos, tas and tos bad lists
 % PJD 26 May 2023   - Updated to generate a 3x3 panel plot - scenario uncertainty
+% PJD 30 May 2023   - Updating figure 1 labels (upper -> lower case)
 %                   TO-DO:
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
@@ -1681,7 +1682,7 @@ ax2 = subplot(3,3,2);
 %colormap(ax1,clS) ; % Set palette - Blue -> Red
 pcolor(obsLon,obsLat,obsSChg); clim([-1 1]*sscale); shading flat; continents
 ylab2 = ylabel('Latitude');
-lab2 = text(xLimLab,yLimLab,'A');
+lab2 = text(xLimLab,yLimLab,'a');
 lab2Info = text(xLimLabInfo,yLimLabInfo,{'1950-2020';'Obs. Salinity'});
 %cb2 = colorbarf_nw('vert',-1:0.0625:1,-1:.25:1);
 cb2 = colorbar('SouthOutside');
@@ -1692,7 +1693,7 @@ ax4 = subplot(3,3,4);
 %colormap(ax2,clS) ; % Set palette - Blue -> Red
 pcolor(t_lon,t_lat,s126SosDiff); clim([-1 1]*sscale); shading flat; continents
 ylab4 = ylabel('Latitude');
-lab4 = text(xLimLab,yLimLab,'B');
+lab4 = text(xLimLab,yLimLab,'b');
 lab4Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP126 Salinity'});
 
 % sos ssp370
@@ -1700,7 +1701,7 @@ s370SosDiff = sos_CMIP6_ssp370_2071_2101_mean-sos_CMIP6_historical_1985_2015_mea
 ax5 = subplot(3,3,5);
 %colormap(ax2,clS) ; % Set palette - Blue -> Red
 pcolor(t_lon,t_lat,s370SosDiff); clim([-1 1]*sscale); shading flat; continents
-lab5 = text(xLimLab,yLimLab,'C');
+lab5 = text(xLimLab,yLimLab,'c');
 lab5Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP370 Salinity'});
 
 % sos ssp585
@@ -1709,7 +1710,7 @@ s585SosDiff = sos_CMIP6_ssp585_2071_2101_mean-sos_CMIP6_historical_1985_2015_mea
 ax6 = subplot(3,3,6);
 %colormap(ax2,clS) ; % Set palette - Blue -> Red
 pcolor(t_lon,t_lat,s585SosDiff); clim([-1 1]*sscale); shading flat; continents
-lab6 = text(xLimLab,yLimLab,'D');
+lab6 = text(xLimLab,yLimLab,'d');
 lab6Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP585 Salinity'});
 
 % mrro ssp126
@@ -1721,7 +1722,7 @@ hold on; coast('k');
 colormap(ax7,clM) ; % Switch palette - Brown -> Green
 xlab7 = xlabel('Longitude');
 ylab7 = ylabel('Latitude');
-lab7 = text(xLimLab,yLimLab,'E');
+lab7 = text(xLimLab,yLimLab,'e');
 lab7Info = text(188,20,{'2071-2100';'CMIP6 SSP126 Runoff'});
 
 % mrro ssp370
@@ -1732,7 +1733,7 @@ pcM = pcolor(t_lon,t_lat,s370MrroDiff); clim([-1 1]*mscale); shading flat;
 hold on; coast('k');
 colormap(ax8,clM) ; % Switch palette - Brown -> Green
 xlab8 = xlabel('Longitude');
-lab8 = text(xLimLab,yLimLab,'F');
+lab8 = text(xLimLab,yLimLab,'f');
 lab8Info = text(188,20,{'2071-2100';'CMIP6 SSP370 Runoff'});
 
 % mrro ssp585
@@ -1743,7 +1744,7 @@ pcM = pcolor(t_lon,t_lat,s585MrroDiff); clim([-1 1]*mscale); shading flat;
 hold on; coast('k');
 colormap(ax9,clM) ; % Switch palette - Brown -> Green
 xlab9 = xlabel('Longitude');
-lab9 = text(xLimLab,yLimLab,'G');
+lab9 = text(xLimLab,yLimLab,'g');
 lab9Info = text(188,20,{'2071-2100';'CMIP6 SSP585 Runoff'});
 %cb9 = colorbarf_nw('vert',(-1:.125:1)*mscale,(-1:.25:1)*mscale);
 cb9 = colorbar('SouthOutside');
@@ -1809,6 +1810,7 @@ set(cb9,'Position',[xlim1 .05 .93 climHei],'fontsize',6,'Colormap',clM)
 outName = strcat(outDir,dateFormat,'_durack1_Rothigetal21NatCC_Figure1');
 export_fig(outName,'-png')
 export_fig(outName,'-eps')
+close all
 
 %% Diff figures - diff maps for sos
 close all
