@@ -63,7 +63,12 @@
 % PJD 12 Apr 2023   - Updated to include sos, tas and tos bad lists
 % PJD 26 May 2023   - Updated to generate a 3x3 panel plot - scenario uncertainty
 % PJD 30 May 2023   - Updating figure 1 labels (upper -> lower case)
+% PJD 30 May 2023   - Updated label positioning
+% PJD 31 May 2023   - Updated indexing for new variable varTmp_model_names_all_sims
 %                   TO-DO:
+%                   Update: create _modelNamesAllSims var to catch all
+%                   entries, _modelNames list only model not realization
+%                   though doesn't truncate to length
 %                   Check: ssp119, ssp126, ssp245, ssp370, ssp434, ssp460, ssp534-over, ssp585 mrro
 %                   Infill mrro - plot 2 maps, WOA025 landsea mask - upstream
 
@@ -1416,16 +1421,33 @@ for exp = 1:length(exps)
         % Build matrix of model results
         varTmp = NaN(length(models),length(t_lat),length(t_lon));
         varTmp_model_names = cell(length(models),1);
+        varTmp_model_names_all_sims = cell(length(models),1);
         count = 1; ens_count = 1;
         ensemble = NaN(50,length(t_lat),length(t_lon));
         catchArray = NaN(3,length(models)); % 'blah blah' test below
         for x = 1:(length(models)-1)
+            %keyboard
             % Test for multiple realisations and generate ensemble mean
             model_ind = strfind(models{x},'.'); temp = models{x};
             %model1 = temp((model_ind(1)+1):(model_ind(2)-1)); clear temp
             model1 = temp((model_ind(4)+1):(model_ind(5)-1)); clear temp
             model_ind = strfind(models{x+1},'.'); temp = models{x+1};
             model2 = temp((model_ind(4)+1):(model_ind(5)-1)); clear temp
+            %keyboard
+
+            % Get model full names
+            tmp = split(models{x}, "/");
+            tmp = tmp{length(tmp)};
+            tmp = split(tmp, ".");
+            tmp(10) = [] ; % Lose grid label
+            tmp(11:12) = [] ; % Lose woaClim and extension
+            model1Long = strjoin(tmp,".");
+            tmp = split(models{x+1}, "/");
+            tmp = tmp{length(tmp)};
+            tmp = split(tmp, ".");
+            tmp(10) = [] ; % Lose grid label
+            tmp(11:12) = [] ; % Lose woaClim and extension
+            model2Long = strjoin(tmp,".");
 
             % Plot model fields for bug-tracking - 2D
             tmp1 = getnc(models{x},inVar); temp = models{x};
@@ -1494,6 +1516,7 @@ for exp = 1:length(exps)
                 if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                 varTmp(count,:,:) = unit_test;
                 varTmp_model_names{count} = model1;
+                varTmp_model_names_all_sims{x} = model1Long;
                 count = count + 1;
                 infile = models{x+1};
                 unit_test = getnc(infile,inVar);
@@ -1501,6 +1524,7 @@ for exp = 1:length(exps)
                 if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                 varTmp(count,:,:) = unit_test;
                 varTmp_model_names{count} = model2;
+                varTmp_model_names_all_sims{x} = model2Long;
             elseif x == (length(models)-1) && strcmp(model1,model2)
                 % Process final fields - if same
                 infile = models{x};
@@ -1517,12 +1541,14 @@ for exp = 1:length(exps)
                 % Write to matrix
                 varTmp(count,:,:) = squeeze(mean(ensemble,'omitnan'));
                 varTmp_model_names{count} = model1;
+                varTmp_model_names_all_sims{x} = model1Long;
             elseif ~strcmp(model1,model2)
                 disp([num2str(x,'%03d'),' ',inVar,' different count: ',num2str(count),' ',model1,' ',model2])
                 % If models are different
                 if ens_count > 1
                     varTmp(count,:,:) = squeeze(mean(ensemble,'omitnan'));
                     varTmp_model_names{count} = model1;
+                    varTmp_model_names_all_sims{x} = model1Long;
                     count = count + 1;
                     % Reset ensemble stuff
                     ens_count = 1;
@@ -1534,6 +1560,7 @@ for exp = 1:length(exps)
                     if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                     varTmp(count,:,:) = unit_test;
                     varTmp_model_names{count} = model1;
+                    varTmp_model_names_all_sims{x} = model1Long;
                     count = count + 1;
                 end
             else
@@ -1622,7 +1649,8 @@ for exp = 1:length(exps)
         eval([varName,' = varTmp;']);
         eval([varName,'_mean = varTmp_mean;']);
         eval([varName,'_modelNames = varTmp_model_names;']); % Generate model name lookup
-        clear varTmp varTmp_mean varTmp_model_names
+        eval([varName,'_modelNamesAllSims = varTmp_model_names_all_sims;']); % Generate model all sim name lookup
+        clear varTmp varTmp_mean varTmp_model_names varTmp_model_names_all_sims
         disp([inVar,' ',mipEra,' ',exps(exp).name,' done..'])
         clear mipEra mipVar inVar
     end
@@ -1650,7 +1678,7 @@ save(outFile, ...
 disp('** All data written to *.mat.. **')
 
 %% Or load WOA18 and CMIP5/6 ensemble matrices from saved file
-%load /p/user_pub/climate_work/durack1/Shared/210128_PaperPlots_Rothigetal/230412T104649_230321_CMIP6.mat
+%load /p/user_pub/climate_work/durack1/Shared/210128_PaperPlots_Rothigetal/230530T151389_230321_CMIP6.mat
 
 %% Figure 1 - obs sos change, ssp585 sos and mrro changes
 close all
@@ -1672,18 +1700,19 @@ obsLon = getnc(obsFile,'longitude');
 
 % Generate 3x3 panel plot
 % Create canvas
-close all, handle = figure('units','centimeters','visible','on','color','w'); set(0,'CurrentFigure',handle); clmap(27)
+close all, handle = figure('units','centimeters','visible','off','color','w'); set(0,'CurrentFigure',handle); clmap(27)
 
 % Labels
-xLimLab = 20; yLimLab = 0; xLimLabInfo = 80; yLimLabInfo = 52;
+xLimLab1 = 20; yLimLab1 = 0; xLimLabInfo1 = 75; yLimLabInfo1 = 54;
+xLimLab2 = 20; yLimLab2 = -50; xLimLabInfo2 = 188; yLimLabInfo2 = 20;
 
 % Obs salinity
 ax2 = subplot(3,3,2);
 %colormap(ax1,clS) ; % Set palette - Blue -> Red
 pcolor(obsLon,obsLat,obsSChg); clim([-1 1]*sscale); shading flat; continents
 ylab2 = ylabel('Latitude');
-lab2 = text(xLimLab,yLimLab,'a');
-lab2Info = text(xLimLabInfo,yLimLabInfo,{'1950-2020';'Obs. Salinity'});
+lab2 = text(xLimLab1,yLimLab1,'a');
+lab2Info = text(xLimLabInfo1,yLimLabInfo1,{'1950-2020';'Obs. Salinity'});
 %cb2 = colorbarf_nw('vert',-1:0.0625:1,-1:.25:1);
 cb2 = colorbar('SouthOutside');
 
@@ -1693,16 +1722,16 @@ ax4 = subplot(3,3,4);
 %colormap(ax2,clS) ; % Set palette - Blue -> Red
 pcolor(t_lon,t_lat,s126SosDiff); clim([-1 1]*sscale); shading flat; continents
 ylab4 = ylabel('Latitude');
-lab4 = text(xLimLab,yLimLab,'b');
-lab4Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP126 Salinity'});
+lab4 = text(xLimLab1,yLimLab1,'b');
+lab4Info = text(xLimLabInfo1,yLimLabInfo1,{'2071-2100';'CMIP6 SSP126 Salinity'});
 
 % sos ssp370
 s370SosDiff = sos_CMIP6_ssp370_2071_2101_mean-sos_CMIP6_historical_1985_2015_mean;
 ax5 = subplot(3,3,5);
 %colormap(ax2,clS) ; % Set palette - Blue -> Red
 pcolor(t_lon,t_lat,s370SosDiff); clim([-1 1]*sscale); shading flat; continents
-lab5 = text(xLimLab,yLimLab,'c');
-lab5Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP370 Salinity'});
+lab5 = text(xLimLab1,yLimLab1,'c');
+lab5Info = text(xLimLabInfo1,yLimLabInfo1,{'2071-2100';'CMIP6 SSP370 Salinity'});
 
 % sos ssp585
 % Calculate diff
@@ -1710,8 +1739,8 @@ s585SosDiff = sos_CMIP6_ssp585_2071_2101_mean-sos_CMIP6_historical_1985_2015_mea
 ax6 = subplot(3,3,6);
 %colormap(ax2,clS) ; % Set palette - Blue -> Red
 pcolor(t_lon,t_lat,s585SosDiff); clim([-1 1]*sscale); shading flat; continents
-lab6 = text(xLimLab,yLimLab,'d');
-lab6Info = text(xLimLabInfo,yLimLabInfo,{'2071-2100';'CMIP6 SSP585 Salinity'});
+lab6 = text(xLimLab1,yLimLab1,'d');
+lab6Info = text(xLimLabInfo1,yLimLabInfo1,{'2071-2100';'CMIP6 SSP585 Salinity'});
 
 % mrro ssp126
 % Calculate percent change
@@ -1722,8 +1751,8 @@ hold on; coast('k');
 colormap(ax7,clM) ; % Switch palette - Brown -> Green
 xlab7 = xlabel('Longitude');
 ylab7 = ylabel('Latitude');
-lab7 = text(xLimLab,yLimLab,'e');
-lab7Info = text(188,20,{'2071-2100';'CMIP6 SSP126 Runoff'});
+lab7 = text(xLimLab2,yLimLab2,'e');
+lab7Info = text(xLimLabInfo2,yLimLabInfo2,{'2071-2100';'CMIP6 SSP126 Runoff'});
 
 % mrro ssp370
 % Calculate percent change
@@ -1733,8 +1762,8 @@ pcM = pcolor(t_lon,t_lat,s370MrroDiff); clim([-1 1]*mscale); shading flat;
 hold on; coast('k');
 colormap(ax8,clM) ; % Switch palette - Brown -> Green
 xlab8 = xlabel('Longitude');
-lab8 = text(xLimLab,yLimLab,'f');
-lab8Info = text(188,20,{'2071-2100';'CMIP6 SSP370 Runoff'});
+lab8 = text(xLimLab2,yLimLab2,'f');
+lab8Info = text(xLimLabInfo2,yLimLabInfo2,{'2071-2100';'CMIP6 SSP370 Runoff'});
 
 % mrro ssp585
 % Calculate percent change
@@ -1744,8 +1773,8 @@ pcM = pcolor(t_lon,t_lat,s585MrroDiff); clim([-1 1]*mscale); shading flat;
 hold on; coast('k');
 colormap(ax9,clM) ; % Switch palette - Brown -> Green
 xlab9 = xlabel('Longitude');
-lab9 = text(xLimLab,yLimLab,'g');
-lab9Info = text(188,20,{'2071-2100';'CMIP6 SSP585 Runoff'});
+lab9 = text(xLimLab2,yLimLab2,'g');
+lab9Info = text(xLimLabInfo2,yLimLabInfo2,{'2071-2100';'CMIP6 SSP585 Runoff'});
 %cb9 = colorbarf_nw('vert',(-1:.125:1)*mscale,(-1:.25:1)*mscale);
 cb9 = colorbar('SouthOutside');
 
