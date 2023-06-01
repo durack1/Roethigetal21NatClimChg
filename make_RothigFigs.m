@@ -65,6 +65,7 @@
 % PJD 30 May 2023   - Updating figure 1 labels (upper -> lower case)
 % PJD 30 May 2023   - Updated label positioning
 % PJD 31 May 2023   - Updated indexing for new variable varTmp_model_names_all_sims
+% PJD  1 Jun 2023   - Further uUpdate to indexing for new variable varTmp_model_names_all_sims
 %                   TO-DO:
 %                   Update: create _modelNamesAllSims var to catch all
 %                   entries, _modelNames list only model not realization
@@ -1441,13 +1442,13 @@ for exp = 1:length(exps)
             tmp = split(tmp, ".");
             tmp(10) = [] ; % Lose grid label
             tmp(11:12) = [] ; % Lose woaClim and extension
-            model1Long = strjoin(tmp,".");
+            varTmp_model_names_all_sims{x} = strjoin(tmp,".");
             tmp = split(models{x+1}, "/");
             tmp = tmp{length(tmp)};
             tmp = split(tmp, ".");
             tmp(10) = [] ; % Lose grid label
             tmp(11:12) = [] ; % Lose woaClim and extension
-            model2Long = strjoin(tmp,".");
+            varTmp_model_names_all_sims{x+1} = strjoin(tmp,".");
 
             % Plot model fields for bug-tracking - 2D
             tmp1 = getnc(models{x},inVar); temp = models{x};
@@ -1516,7 +1517,7 @@ for exp = 1:length(exps)
                 if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                 varTmp(count,:,:) = unit_test;
                 varTmp_model_names{count} = model1;
-                varTmp_model_names_all_sims{x} = model1Long;
+                %varTmp_model_names_all_sims{x} = model1Long;
                 count = count + 1;
                 infile = models{x+1};
                 unit_test = getnc(infile,inVar);
@@ -1524,7 +1525,7 @@ for exp = 1:length(exps)
                 if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                 varTmp(count,:,:) = unit_test;
                 varTmp_model_names{count} = model2;
-                varTmp_model_names_all_sims{x} = model2Long;
+                %varTmp_model_names_all_sims{x} = model2Long;
             elseif x == (length(models)-1) && strcmp(model1,model2)
                 % Process final fields - if same
                 infile = models{x};
@@ -1541,14 +1542,14 @@ for exp = 1:length(exps)
                 % Write to matrix
                 varTmp(count,:,:) = squeeze(mean(ensemble,'omitnan'));
                 varTmp_model_names{count} = model1;
-                varTmp_model_names_all_sims{x} = model1Long;
+                %varTmp_model_names_all_sims{x} = model1Long;
             elseif ~strcmp(model1,model2)
                 disp([num2str(x,'%03d'),' ',inVar,' different count: ',num2str(count),' ',model1,' ',model2])
                 % If models are different
                 if ens_count > 1
                     varTmp(count,:,:) = squeeze(mean(ensemble,'omitnan'));
                     varTmp_model_names{count} = model1;
-                    varTmp_model_names_all_sims{x} = model1Long;
+                    %varTmp_model_names_all_sims{x} = model1Long;
                     count = count + 1;
                     % Reset ensemble stuff
                     ens_count = 1;
@@ -1560,7 +1561,7 @@ for exp = 1:length(exps)
                     if min(min(unit_test(1,:,:))) > 200; unit_test = unit_test-273.15; end
                     varTmp(count,:,:) = unit_test;
                     varTmp_model_names{count} = model1;
-                    varTmp_model_names_all_sims{x} = model1Long;
+                    %varTmp_model_names_all_sims{x} = model1Long;
                     count = count + 1;
                 end
             else
@@ -1576,7 +1577,7 @@ for exp = 1:length(exps)
         end
         % Trim excess values
         varTmp((count+1):end,:,:,:) = [];
-        %varTmp_model_names((count+1):end) = [];
+        varTmp_model_names((count+1):end) = [];
         clear count ens_count ensemble in_path infile model* unit_test x
 
         % Cludgey fix for bad data
@@ -1678,7 +1679,7 @@ save(outFile, ...
 disp('** All data written to *.mat.. **')
 
 %% Or load WOA18 and CMIP5/6 ensemble matrices from saved file
-%load /p/user_pub/climate_work/durack1/Shared/210128_PaperPlots_Rothigetal/230530T151389_230321_CMIP6.mat
+%load /p/user_pub/climate_work/durack1/Shared/210128_PaperPlots_Rothigetal/230531T215961_230321_CMIP6.mat
 
 %% Figure 1 - obs sos change, ssp585 sos and mrro changes
 close all
