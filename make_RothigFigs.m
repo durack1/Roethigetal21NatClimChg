@@ -1805,9 +1805,9 @@ set(ax9,'Tickdir','out','fontsize',fonts,'layer','top','box','on', ...
     'ylim',[-85 85],'ytick',-85:10:85,'yticklabel',{''},'xminort','off');
 % Resize into canvas
 set(handle,'Position',[2 2 17 10]) % Full page width (175mm (17) width x 83mm (8) height)
-xlim1 = 0.06; xlim2 = 0.375; xlim3 = .69; xlimCb = 0.94;
+xlim1 = 0.06; xlim2 = 0.37; xlim3 = .68; xlimCb = 0.94;
 ylim1 = 0.14; ylim2 = 0.42; ylim3 = 0.75;
-wid = 0.3; hei = 0.25;
+wid = 0.295; hei = 0.25;
 climWid = 0.9; climHei = 0.02;
 labFont = 7; labInfoFont = 4;
 set(ax2,'Position',[xlim2 ylim3 wid hei]);
@@ -1821,7 +1821,7 @@ set(ax8,'Position',[xlim2 ylim1 wid hei]);
 set(ax9,'Position',[xlim3 ylim1 wid hei]);
 set(lab2,'fontsize',labFont,'fontweight','bold')
 set(lab2Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
-set(cb2,'Position',[xlim1 .72 .93 climHei],'fontsize',6)
+set(cb2,'Position',[xlim1 .72 .915 climHei],'fontsize',6)
 set(lab4,'fontsize',labFont,'fontweight','bold')
 set(lab4Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
 set(lab5,'fontsize',labFont,'fontweight','bold')
@@ -1834,7 +1834,7 @@ set(lab8,'fontsize',labFont,'fontweight','bold')
 set(lab8Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
 set(lab9,'fontsize',labFont,'fontweight','bold')
 set(lab9Info,'fontsize',labInfoFont,'fontweight','normal','HorizontalAlignment','center')
-set(cb9,'Position',[xlim1 .05 .93 climHei],'fontsize',6,'Colormap',clM)
+set(cb9,'Position',[xlim1 .05 .915 climHei],'fontsize',6,'Colormap',clM)
 
 % Print to file
 outName = strcat(outDir,dateFormat,'_durack1_Rothigetal21NatCC_Figure1');
