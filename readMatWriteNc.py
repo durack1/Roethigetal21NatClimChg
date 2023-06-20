@@ -18,6 +18,8 @@ PJD  5 Aug 2022     - Updated for corrected latest data 220804
 PJD 20 Jun 2023     - Updated for latest data 230321
 PJD 20 Jun 2023     - Updated ssp434 -> ssp370
 PJD 20 Jun 2023     - Added mambaEnv and gitInfo as global attributes to output files
+PJD 20 Jun 2023     - Updated fH.write(cdVar), np.float() ; float32 -> float; numpy 1.20.0 deprecation
+PJD 20 Jun 2023     - Library amipbcs230516 (py3.10.11, numpy1.23.5) required for readMatWriteNc.py as scipy.loadmat required
                     - TO-DO: Add attribution info to files; git hash etc
 
 @author: durack1
@@ -88,6 +90,7 @@ for count1, actId in enumerate(activityId):
             gitInfo = getGitInfo("./readMatWriteNc.py")
             fH.gitInfo = "; ".join(gitInfo)
             # Master variables
+            # sensitive to numpy version 1.20.0 warning
             fH.write(cdVar.astype('float32'))
             fH.close()
 

@@ -26,7 +26,8 @@ PJD 19 Apr 2023     - Updated for seagrass-Aust region
 PJD 19 Apr 2023     - Added fillHoles function
 PJD 20 Jun 2023     - Library cd315cdugencdtspy532mat352 required, as latter envs loose ESMF integration
                       bash-4.2$ ./writeAsc.sh sos
-                    - Library cd315cdu821spy543mat371car0211 required for readMatWriteNc.py as scipy.loadmat required
+                    - Library amipbcs230516 (py3.10.11, numpy1.23.5) required for readMatWriteNc.py
+                      scipy.loadmat required; numpy quirk with cdms2.float32 works here, but not with earlier envs
                       bash-4.2$ python readMatWriteNc.py
 PJD 20 Jun 2023     - Updated histFile 220729 -> 230321
 
