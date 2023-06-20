@@ -15,23 +15,28 @@ PJD  6 May 2022     - Added multi-var [sos, tos]
 PJD 10 May 2022     - Corrected output varName to var (not sos hard-coded)
 PJD  4 Aug 2022     - Updated for latest data 220729/220803mat
 PJD  5 Aug 2022     - Updated for corrected latest data 220804
+PJD 20 Jun 2023     - Updated for latest data 230321
+PJD 20 Jun 2023     - Updated ssp434 -> ssp370
+PJD 20 Jun 2023     - Added mambaEnv and gitInfo as global attributes to output files
                     - TO-DO: Add attribution info to files; git hash etc
 
 @author: durack1
 """
 
-from durolib import globalAttWrite
 import os
 import cdms2 as cdm
 import numpy as np
+# import pdb
 import scipy.io as sio
+import sys
 os.sys.path.insert(0, '/home/durack1/git/durolib/durolib')
+from durolib import globalAttWrite, getGitInfo
 
 # %%
 workDir = '/p/user_pub/climate_work/durack1/Shared/'
 targetDir = os.path.join(workDir, '210128_PaperPlots_Rothigetal/')
 # "220803T175312_220729_CMIP6.mat"  # "220429T143503_220427_CMIP6.mat"
-matFile = "220804T215723_220729_CMIP6.mat"
+matFile = "230601T165519_230321_CMIP6.mat"  # "220804T215723_220729_CMIP6.mat"
 infile = os.path.join(targetDir, matFile)
 mat = sio.loadmat(infile)
 matKeys = mat.keys()
@@ -50,10 +55,10 @@ actExpPair['CMIP']['exps'] = ['historical']
 actExpPair['CMIP']['time'] = ['1985_2015']
 actExpPair['ScenarioMIP'] = {}
 actExpPair['ScenarioMIP']['exps'] = ['ssp126',  # 'ssp119', 'ssp245',
-                                     'ssp434', 'ssp585']  # 'ssp370', 'ssp460', 'ssp534-over'
+                                     'ssp370', 'ssp585']  # 'ssp434', 'ssp460', 'ssp534-over'
 actExpPair['ScenarioMIP']['time'] = ['2071_2101']
 activityId = ['CMIP', 'ScenarioMIP']
-#vars = ['mean','modelNames']
+# vars = ['mean','modelNames']
 
 for count1, actId in enumerate(activityId):
     exps = actExpPair[actId]['exps']
@@ -79,8 +84,11 @@ for count1, actId in enumerate(activityId):
             # Global attributes
             # Use function to write standard global atts
             globalAttWrite(fH, options=None)
+            fH.mambaEnv = sys.prefix
+            gitInfo = getGitInfo("./readMatWriteNc.py")
+            fH.gitInfo = "; ".join(gitInfo)
             # Master variables
             fH.write(cdVar.astype('float32'))
             fH.close()
 
-del(count1, actId, exps, time, count2, exp)
+del (count1, actId, exps, time, count2, exp)

@@ -24,6 +24,12 @@ PJD 10 May 2022     - Updated hardcoded sos var to variable argument
 PJD  4 Aug 2022     - Updated for latest data 220729/220803mat
 PJD 19 Apr 2023     - Updated for seagrass-Aust region
 PJD 19 Apr 2023     - Added fillHoles function
+PJD 20 Jun 2023     - Library cd315cdugencdtspy532mat352 required, as latter envs loose ESMF integration
+                      bash-4.2$ ./writeAsc.sh sos
+                    - Library cd315cdu821spy543mat371car0211 required for readMatWriteNc.py as scipy.loadmat required
+                      bash-4.2$ python readMatWriteNc.py
+PJD 20 Jun 2023     - Updated histFile 220729 -> 230321
+
                     TODO: ?
 
 Target:
@@ -53,6 +59,7 @@ See https://docs.google.com/document/d/1sbGRVjFTLLIXCDPyEbxe7SU7QAyC4yofDtXaNflm
 
 # %% imports
 import argparse
+# cd315cdugencdtspy532mat352 required, as latter envs loose ESMF integration
 import cdms2 as cdm
 import cdutil as cdu
 import datetime
@@ -67,7 +74,8 @@ workDir = "/p/user_pub/climate_work/durack1/Shared/"
 # inFile = "230412T104649_230321_CMIP6.mat" # "220803T175312_220729_CMIP6.mat"  # "220429T143503_220427_CMIP6.mat"
 # if diff is being used
 # "220429T143503_220427_sos_CMIP6_historical_1985_2015_mean.nc"
-histFile = "220804T215723_220729_sos_CMIP6_historical_1985_2015_mean.nc"
+# "220804T215723_220729_sos_CMIP6_historical_1985_2015_mean.nc"
+histFile = "230601T165519_230321_sos_CMIP6_historical_1985_2015_mean.nc"
 
 # %% function def
 
@@ -99,13 +107,13 @@ def writeGridAscii(matrix, outfile):
             for count2, latVal in enumerate(matrix[count, :]):
                 if np.isnan(latVal):
                     outStr = outStr + ' ' + str(noData)
-                    #print('nan found')
+                    # print('nan found')
                 elif latVal == 0.5:
                     outStr = outStr + ' ' + str(noData)
-                    #print('0.5 found')
+                    # print('0.5 found')
                 elif latVal == 1.0:
                     outStr = outStr + ' ' + str(noData)
-                    #print('1.0 found')
+                    # print('1.0 found')
                 else:
                     outStr = outStr + ' ' +\
                         str(strFormat.format(matrix[count, count2]))
@@ -130,10 +138,10 @@ parser.add_argument('-d', '--diff', type=str,
                     help='generate a change field, rather than absolute')
 args = parser.parse_args()
 print(args)
-#print('args.infile:', args.infile)
+# print('args.infile:', args.infile)
 infile = str(args.infile)
 print('infile: ', infile)
-#print('args.variable:', args.variable)
+# print('args.variable:', args.variable)
 varName = str(args.variable)
 print('varName: ', varName)
 outfile = str(args.infile).replace('.nc', '.txt')
@@ -158,7 +166,7 @@ print('var.shape:', var.shape)
 print('lat[0]:', lat[0])
 print('lon[0]:', lon[0])
 print('cellsize:', lat[1]-lat[0])
-#print('sos[0,:]:', sos[0,:])
+# print('sos[0,:]:', sos[0,:])
 fH.close()
 
 # %% regrid data
@@ -171,17 +179,17 @@ woaGrid = s.getGrid()  # Get WOA target grid
 woaLat = s.getLatitude()
 woaLon = s.getLongitude()
 woa.close()
-#var0p25 = var.regrid(woaGrid, regridTool='ESMF', regridMethod='linear')
-#print('s:\n', var.shape)
-#print('s025:\n', var0p25.shape)
+# var0p25 = var.regrid(woaGrid, regridTool='ESMF', regridMethod='linear')
+# print('s:\n', var.shape)
+# print('s025:\n', var0p25.shape)
 
 # Create 0p5 grid
 woaLat0p5 = woaLat.getData()[0::2]  # Extract every second lon
 woaLon0p5 = woaLon.getData()[0::2]
 # woaGrid0p5 = cdm.grid.createGenericGrid(woaLat0p5, woaLon0p5, latBounds=None, lonBounds=None, order='yx', mask=None) ## Returns a 0.5 but off set grid
 # -89.875, -89.375, -88.875, -88.375, -87.875, -87.375, -86.875,
-#sos05 = sos.regrid(woaGrid0p5,regridTool='ESMF',regridMethod='linear')
-#createUniformGrid(startLat, nlat, deltaLat, startLon, nlon, deltaLon, order='yx', mask=None)
+# sos05 = sos.regrid(woaGrid0p5,regridTool='ESMF',regridMethod='linear')
+# createUniformGrid(startLat, nlat, deltaLat, startLon, nlon, deltaLon, order='yx', mask=None)
 woaGrid0p5Uniform = cdm.grid.createUniformGrid(
     lat[0], 359, .5, lon[0], 719, .5, order='yx', mask=None)  # Returns a 0.5 grid
 # -89.5, -89. , -88.5, -88. , -87.5, -87. , -86.5, -86. , -85.5,
@@ -206,7 +214,7 @@ if diff == 'diff':
 # 1deg data
 # Flip upside down (N is on bottom, will be on top once flipped)
 var = np.flip(var, axis=0)
-#writeGridAscii(sos, outfile.replace('.txt', '-1p0deg.txt'))
+# writeGridAscii(sos, outfile.replace('.txt', '-1p0deg.txt'))
 # 0p5deg data
 var0p5 = np.flip(var0p5Uniform, axis=0)
 writeGridAscii(var0p5, outfile.replace('.txt', '-0p5deg.txt'))
