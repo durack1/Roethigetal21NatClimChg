@@ -30,6 +30,7 @@ PJD 20 Jun 2023     - Library cd315cdugencdtspy532mat352 required, as latter env
                       scipy.loadmat required; numpy quirk with cdms2.float32 works here, but not with earlier envs
                       bash-4.2$ python readMatWriteNc.py
 PJD 20 Jun 2023     - Updated histFile 220729 -> 230321
+PJD 28 Jun 2023     - Added lon check to write gridAscii to -180:180 lon space
 
                     TODO: ?
 
@@ -90,6 +91,18 @@ def writeGridAscii(matrix, outfile):
         print('writeGridAscii: lat step inconsistency, check inputs..')
         pdb.set_trace()
         sys.exit()
+
+    # check for global lon ranges, if 0:360 reorder to -180:180
+    # https://doc.arcgis.com/en/microsoft-365/latest/get-started/supported-notation-formats.htm
+    if np.any(lon[:] > 180):
+        lonMin = np.absolute(lon[:]-180)
+        lonInd = lonMin.argmin()
+        # create new matrix
+        matrix = np.concatenate(
+            (matrix[:, lonInd:], matrix[:, :lonInd]), axis=1)
+        # create new longitude
+        lon = lon[:]-180
+
     # create format defaults
     noData = -99999
     strFormat = '{:6.3f}'
